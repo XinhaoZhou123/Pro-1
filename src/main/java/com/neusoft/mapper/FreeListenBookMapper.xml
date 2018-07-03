@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.mapper.FreeListenBookMapper">
+	
+	
+	<select id="findAllReservation" resultType="com.neusoft.po.FreeListenBook" >
+			select * from freelistenbook
+	</select>
+	
+	<select id="findReservationByCondition" 
+		resultType="com.neusoft.po.FreeListenBook"	parameterType="com.neusoft.vo.ReservationCondition">
+			select * from freelistenbook where 1=1
+			<if test="condition.fid!=null">
+			and #{condition.fid}=fid
+			</if>
+			<if test="condition.nickName!=null and condition.nickName!=''">
+			and userName like '%${condition.nickName}%'
+			</if>
+			<if test="condition.status!=null and condition.status!=''">
+			and status = #{condition.status}
+			</if>
+			<if test="condition.startDate!=null and condition.startDate!=''">
+			and DATE_FORMAT(booktime, '%Y-%c-%d' )&gt;= STR_TO_DATE(#{condition.startDate},'%Y-%c-%d')
+			</if>
+			<if test="condition.endDate!=null and condition.endDate!=''">
+			and DATE_FORMAT(booktime, '%Y-%c-%d' )&lt;= STR_TO_DATE(#{condition.endDate},'%Y-%c-%d')			
+			</if>
+	
+	</select>
+	
+	<update id="dealReservation" parameterType="int">
+		update freelistenbook set status='已处理'
+		where id=#{id}
+	</update>
+
+	<select id="findReservationCountByCondition" 
+		parameterType="com.neusoft.vo.ReservationCondition" resultType="int">
+	
+		select count(*) from freelistenbook
+			where 1=1
+			<if test="condition!=null">
+				<if test="condition.fid!=null">
+				and #{condition.fid}=fid
+				</if>
+				<if test="condition.nickName!=null and condition.nickName!=''">
+				and userName like '%${condition.nickName}%'
+				</if>
+				<if test="condition.status!=null and condition.status!=''">
+				and status = #{condition.status}
+				</if>
+				<if test="condition.startDate!=null and condition.startDate!=''">
+				and DATE_FORMAT(booktime, '%Y-%c-%d' )&gt;= STR_TO_DATE(#{condition.startDate},'%Y-%c-%d')
+				</if>
+				<if test="condition.endDate!=null and condition.endDate!=''">
+				and DATE_FORMAT(booktime, '%Y-%c-%d' )&lt;= STR_TO_DATE(#{condition.endDate},'%Y-%c-%d')			
+				</if>
+			</if>
+		
+	</select>
+	
+	<select id="findPageByCondition" parameterType="map"
+		resultType="com.neusoft.po.FreeListenBook">
+		
+		
+			select * from freelistenbook
+			where 1=1
+			<if test="condition!=null">
+				<if test="condition.fid!=null">
+				and #{condition.fid}=fid
+				</if>
+				<if test="condition.nickName!=null and condition.nickName!=''">
+				and userName like '%${condition.nickName}%'
+				</if>
+				<if test="condition.status!=null and condition.status!=''">
+				and status = #{condition.status}
+				</if>
+				<if test="condition.startDate!=null and condition.startDate!=''">
+				and DATE_FORMAT(booktime, '%Y-%c-%d' )&gt;= STR_TO_DATE(#{condition.startDate},'%Y-%c-%d')
+				</if>
+				<if test="condition.endDate!=null and condition.endDate!=''">
+				and DATE_FORMAT(booktime, '%Y-%c-%d' )&lt;= STR_TO_DATE(#{condition.endDate},'%Y-%c-%d')			
+				</if>
+			</if>
+			limit #{rowStart},#{itemsOfPage}
+	</select>
+</mapper>
+

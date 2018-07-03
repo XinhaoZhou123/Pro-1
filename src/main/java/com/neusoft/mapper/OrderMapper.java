@@ -13,4 +13,9 @@ public interface OrderMapper {
 		public int getTotalNumOfUserOrders(Long tel) throws Exception;
 		public int getTotalNumOfUserOrdersByStatus(Long tel,String status) throws Exception;
 		public int getTotalNumOfUserRefunds(Long tel) throws Exception;	
+		
+		
+		
+		//后台
+		public List<Sorder> findPageByCondition() throws Exception;
 }
