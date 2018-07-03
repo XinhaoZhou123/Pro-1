@@ -1,12 +1,14 @@
 package com.neusoft.po;
 //教师
 public class Teacher {
-	int tid;				//教师id
-	String tname;			//姓名
-	String tphoto;			//照片路径
-	String introduction;	//简介
+	private int tid;				//教师id
+	private String tname;			//姓名
+	private String tphoto;			//照片路径
+	private String introduction;	//简介
 	
-	int qid;				//企业id
+	private int qid;				//企业id
+	
+	private Enterprise enterprise;
 
 	public int getTid() {
 		return tid;
@@ -46,6 +48,14 @@ public class Teacher {
 
 	public void setQid(int qid) {
 		this.qid = qid;
+	}
+
+	public Enterprise getEnterprise() {
+		return enterprise;
+	}
+
+	public void setEnterprise(Enterprise enterprise) {
+		this.enterprise = enterprise;
 	}
 	
 	

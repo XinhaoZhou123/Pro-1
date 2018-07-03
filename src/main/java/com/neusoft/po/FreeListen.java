@@ -1,14 +1,14 @@
 package com.neusoft.po;
 //免费试听课
 public class FreeListen {
-	int id;				//免费预约课程
-	String title;		//试听课title
-	String imgUrl;		//图片路径
-	String fdesc;		//富文本
-	String status;		//预约课状态	进行中
-	
-	int branchId;		//分部id
-	String pubTime;		//预约课发布时间
+	private int id;				//免费预约课程
+	private String title;		//试听课title
+	private String imgUrl;		//图片路径
+	private String fdesc;		//富文本
+	private String status;		//预约课状态	进行中
+	private String pubTime;		//预约课发布时间
+	private int branchid;		//分部id
+	private Address address;
 	public int getId() {
 		return id;
 	}
@@ -39,17 +39,24 @@ public class FreeListen {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public int getBranchId() {
-		return branchId;
-	}
-	public void setBranchId(int branchId) {
-		this.branchId = branchId;
-	}
+
 	public String getPubTime() {
 		return pubTime;
 	}
 	public void setPubTime(String pubTime) {
 		this.pubTime = pubTime;
+	}
+	public Address getAddress() {
+		return address;
+	}
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	public int getBranchid() {
+		return branchid;
+	}
+	public void setBranchid(int branchid) {
+		this.branchid = branchid;
 	}
 	
 	

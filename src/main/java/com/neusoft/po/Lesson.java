@@ -1,15 +1,16 @@
 package com.neusoft.po;
 //课程
 public class Lesson {
-	int lid;				//课程id
-	int lname;				//课程名
-	String imgUrl;			//图片url
-	float lprice;			//课程价格
-	String ldesc;			//课程富文本
-	String category;		//课程类别
+	private int lid;				//课程id
+	private int lname;				//课程名
+	private String imgUrl;			//图片url
+	private float lprice;			//课程价格
+	private String ldesc;			//课程富文本
+	private String category;		//课程类别
+	private String pubTime;			//发布时间
 	
-	int  qid;				//企业id
-	String pubTime;			//发布时间
+	private int  qid;				//企业id
+	private Enterprise enterprise;
 	public int getLid() {
 		return lid;
 	}
@@ -57,6 +58,12 @@ public class Lesson {
 	}
 	public void setPubTime(String pubTime) {
 		this.pubTime = pubTime;
+	}
+	public Enterprise getEnterprise() {
+		return enterprise;
+	}
+	public void setEnterprise(Enterprise enterprise) {
+		this.enterprise = enterprise;
 	}
 	
 	

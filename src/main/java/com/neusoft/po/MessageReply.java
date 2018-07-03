@@ -1,11 +1,12 @@
 package com.neusoft.po;
 //朋友圈评论
 public class MessageReply {	
-	int id;					//id
-	int mid;				//朋友圈id
-	String content;			//评论内容
-	String nickName;		//昵称
-	String stime;			//评论时间
+	private int id;					//id
+	private String content;			//评论内容
+	private String nickName;		//昵称
+	private String stime;			//评论时间
+	private int mid;				//朋友圈id
+	private Message message;
 	public int getId() {
 		return id;
 	}
@@ -35,6 +36,12 @@ public class MessageReply {
 	}
 	public void setStime(String stime) {
 		this.stime = stime;
+	}
+	public Message getMessage() {
+		return message;
+	}
+	public void setMessage(Message message) {
+		this.message = message;
 	}
 	
 	

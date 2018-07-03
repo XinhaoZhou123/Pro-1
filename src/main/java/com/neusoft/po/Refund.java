@@ -1,10 +1,11 @@
 package com.neusoft.po;
 //退款
 public class Refund {
-	int oid;				//订单id
-	String refundReason;	//退款理由
-	String refundTime;		//退款时间
-	String status;			//退款状态：待处理、已处理
+	private int oid;				//订单id
+
+	private String refundReason;	//退款理由
+	private String refundTime;		//退款时间
+	private String status;			//退款状态：待处理、已处理
 	public int getOid() {
 		return oid;
 	}
@@ -29,6 +30,7 @@ public class Refund {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
 	
 	
 }

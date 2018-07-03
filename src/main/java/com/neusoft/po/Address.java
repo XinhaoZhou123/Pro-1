@@ -1,22 +1,19 @@
 package com.neusoft.po;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Address {
-	int id;				//分部id
-	String branch;		//分部名称
-	String address;		//地址
-	long  tel;			//电话号码
-	double longtitude;	//经度
-	double latitude;	//纬度
-
-	int qid;			//企业id
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	private int aid;				//分部id
+	private String branch;		//分部名称
+	private String address;		//地址
+	private long  tel;			//电话号码
+	private double longtitude;	//经度
+	private double latitude;	//纬度
+	
+	private int qid;			//企业id
+	//private List<FreeListen> freelistens;
+	//private List<Lesson> lessons;
 
 	public String getBranch() {
 		return branch;
@@ -64,6 +61,15 @@ public class Address {
 
 	public void setQid(int qid) {
 		this.qid = qid;
+	}	
+
+
+	public int getAid() {
+		return aid;
+	}
+
+	public void setAid(int aid) {
+		this.aid = aid;
 	}
 	
 }

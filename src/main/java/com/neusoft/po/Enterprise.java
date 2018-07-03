@@ -1,13 +1,17 @@
 package com.neusoft.po;
 
+import java.util.List;
 
 //企业
 public class Enterprise {
-	int qid;
-	String name;
-	String videoPath;
-	String introduction;	//企业介绍
-	String jczs;			//富文本
+	private int qid;
+	private String name;
+	private String videoPath;
+	private String introduction;	//企业介绍
+	private String jczs;			//富文本
+	//private List<Teacher> teachers;
+	//private List<Lesson>  lessons;
+	//private List<Message> messages;
 	public int getQid() {
 		return qid;
 	}

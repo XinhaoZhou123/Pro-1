@@ -1,9 +1,10 @@
 package com.neusoft.po;
 
 public class MessageImg {
-	int id;				//id
-	int mid;			//朋友圈id
-	String imgUrl;		//图片的url
+	private int id;				//id
+	private String imgUrl;		//图片的url
+	private int mid;			//朋友圈id
+	private Message message;
 	public int getId() {
 		return id;
 	}
@@ -21,6 +22,12 @@ public class MessageImg {
 	}
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
+	}
+	public Message getMessage() {
+		return message;
+	}
+	public void setMessage(Message message) {
+		this.message = message;
 	}
 
 	
