@@ -1,27 +1,20 @@
 package com.neusoft.po;
 //后台管理员
 public class Admine {
-	String adName;
-	String adPassword;
-	int id;					//用户id
+	private String adname;
+	private String adpassword;
+	private int id;					//用户id
 	
-	int qid;				//对应企业的id
+	private int qid;				//对应企业的id
 
-	public String getAdName() {
-		return adName;
+	public String getAdname() {
+		return adname;
 	}
 
-	public void setAdName(String adName) {
-		this.adName = adName;
+	public void setAdname(String adname) {
+		this.adname = adname;
 	}
-
-	public String getAdPassword() {
-		return adPassword;
-	}
-
-	public void setAdPassword(String adPassword) {
-		this.adPassword = adPassword;
-	}
+	
 
 	public int getId() {
 		return id;
@@ -38,5 +31,15 @@ public class Admine {
 	public void setQid(int qid) {
 		this.qid = qid;
 	}
+
+	public String getAdpassword() {
+		return adpassword;
+	}
+
+	public void setAdpassword(String adpassword) {
+		this.adpassword = adpassword;
+	}
+
+
 	
 }

@@ -1,10 +1,11 @@
 package com.neusoft.po;
 //朋友圈点赞
 public class MessageLike {
-	int id;					//id
-	int mid;				//朋友圈id
-	String nickName;		//昵称
-	String stime;			//点赞时间
+	private int id;					//id
+	private String nickName;		//昵称
+	private String stime;			//点赞时间
+	private int mid;				//朋友圈id
+	private Message message;
 	public int getId() {
 		return id;
 	}
@@ -28,6 +29,12 @@ public class MessageLike {
 	}
 	public void setStime(String stime) {
 		this.stime = stime;
+	}
+	public Message getMessage() {
+		return message;
+	}
+	public void setMessage(Message message) {
+		this.message = message;
 	}
 	
 	

@@ -1,13 +1,16 @@
 package com.neusoft.po;
 //免费试听课预约
 public class FreeListenBook {
-	int id;				//预约id
-	int fid;			//试听课id
-	String userName;	//预约人姓名
-	long tel;			//预约人电话
-	String bookTime;	//预约时间
-	String status;		//预约状态{待处理、已处理、已取消}
-	String comment;		//预约留言
+	private int id;				//预约id
+	
+	private String userName;	//预约人姓名
+	private long tel;			//预约人电话
+	private String bookTime;	//预约时间
+	private String status;		//预约状态{待处理、已处理、已取消}
+	private String comment;		//预约留言
+	
+	private int fid;			//试听课id
+	private FreeListen freelisten;
 	public int getId() {
 		return id;
 	}
@@ -49,6 +52,12 @@ public class FreeListenBook {
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	public FreeListen getFreelisten() {
+		return freelisten;
+	}
+	public void setFreelisten(FreeListen freelisten) {
+		this.freelisten = freelisten;
 	}
 
 	

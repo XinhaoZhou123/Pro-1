@@ -1,10 +1,10 @@
 package com.neusoft.po;
-//企业首页的图片
+//轮播图的图片
 public class Swiper {
-	int id;
-	int qid;			//企业id
+	private int id;
+	private int qid;			//企业id
 	String imgUrl;		//图片路径
-	char category;		//科目类别
+	char category;		//位置类别
 	public int getId() {
 		return id;
 	}
@@ -29,6 +29,7 @@ public class Swiper {
 	public void setCategory(char category) {
 		this.category = category;
 	}
+
 	
 	
 }

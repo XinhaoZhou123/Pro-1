@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+<script type="text/javascript">
+		$(function(){		
+			//1.send ajax request
+			/*
+				相对 localhost:8080/SSM/getEmp.html --> localhost:8080/SSM/test/ajax.action
+				绝对 /SSM/test/ajax.action 前面ip＋端口可以省略 
+				
+				建议jsp写绝对路径，html可以相对
+			*/
+			
+			$.ajax({
+				url:"enterprise/getAllAddress",
+				success:function(data){
+					console.log(data);
+				}
+			});
+		});
+</script>
+</head>
+<body>	
+hello world
+</body>
+</html>
