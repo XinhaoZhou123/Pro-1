@@ -4,7 +4,7 @@ public class FreeListenBook {
 	private int id;				//预约id
 	
 	private String userName;	//预约人姓名
-	private long tel;			//预约人电话
+	private String tel;			//预约人电话
 	private String bookTime;	//预约时间
 	private String status;		//预约状态{待处理、已处理、已取消}
 	private String comment;		//预约留言
@@ -29,10 +29,10 @@ public class FreeListenBook {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public long getTel() {
+	public String getTel() {
 		return tel;
 	}
-	public void setTel(long tel) {
+	public void setTel(String tel) {
 		this.tel = tel;
 	}
 	public String getBookTime() {

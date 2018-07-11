@@ -38,5 +38,9 @@ public class ReservationCondition {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
+	public void display() {
+		System.out.println("ReservationCondition [fid=" + fid + ", nickName=" + nickName + ", status=" + status + ", startDate="
+				+ startDate + ", endDate=" + endDate + "]");
+	}
 	
 }

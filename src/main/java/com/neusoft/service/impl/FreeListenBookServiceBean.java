@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.neusoft.mapper.FreeListenBookMapper;
 import com.neusoft.po.FreeListenBook;
 import com.neusoft.service.FreeListenBookService;
-import com.neusoft.tools.PageReservationTool;
 import com.neusoft.tools.Page;
 import com.neusoft.vo.ReservationCondition;
 @Service
@@ -18,33 +17,58 @@ public class FreeListenBookServiceBean implements FreeListenBookService {
 	@Autowired
 	FreeListenBookMapper freeMapper;
 	@Override
-	public List<FreeListenBook> selectFreeListenBooks(Page page, long tel) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<FreeListenBook> selectFreeListenBooks(Page page, String tel, int qid) throws Exception {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("page", page);
+		map.put("tel", tel);
+		map.put("qid", qid);
+		return freeMapper.getFreeListenBook(map);
 	}
-
 	@Override
-	public List<FreeListenBook> selectFreeListenBooksByStatus(Page page, Long tel, String status) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<FreeListenBook> selectFreeListenBooksByStatus(Page page, String tel, String status, int qid)
+			throws Exception {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("page", page);
+		map.put("tel", tel);
+		map.put("qid", qid);
+		map.put("status", status);
+		return freeMapper.getFreeListenBookByStatus(map);
 	}
-
+	@Override
+	public int selectTotalNumOfFreeListenBook(String tel, int qid) throws Exception {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("qid", qid);
+		map.put("tel", tel);
+		//System.out.println(tel+"\t"+qid);
+		return freeMapper.getTotalNumOfFreeListenBooks(map);
+	}
+	@Override
+	public int selectTotalNumOfFreeListenBookByStatus(String tel, String status, int qid) throws Exception {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("tel", tel);
+		map.put("qid", qid);
+		map.put("status", status);
+		return freeMapper.getTotalNumOfFreeListenBooksByStatus(map);
+	}
 	@Override
 	public int updateFreeListenBook(int id, String status) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("status", status);
+		return freeMapper.updateFreeListenBook(map);
 	}
-
 	@Override
-	public int selectTotalNumOfFreeListenBook(Long tel) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int selectTotalNumOfFreeListenBookByStatus(Long tel, String status) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	public List<FreeListenBook> selectFreeListenBookBeyondTime(String tel, String status, String bookTime, int qid)
+			throws Exception {
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("tel",tel);
+		
+		map.put("status", status);
+		System.out.println("...FreeListenBookServiceBean...selectFreeListenBookBeyondTime...status:"+status);		
+		
+		map.put("bookTime", bookTime);
+		map.put("qid", qid);
+		return freeMapper.getFreeListenBookBeyondTime(map);
 	}
 	
 	
@@ -58,13 +82,12 @@ public class FreeListenBookServiceBean implements FreeListenBookService {
 	 * 通过条件查找一页预约
 	 */
 	@Override
-	public List<FreeListenBook> findPageByCondition(ReservationCondition condition, int rowStart)
+	public List<FreeListenBook> findPageByCondition(ReservationCondition condition, Page page,int qid)
 			throws Exception {
 		Map<String, Object> m = new HashMap<String,Object>();
 		m.put("condition",condition);
-		m.put("rowStart", rowStart-1);
-		m.put("itemsOfPage", PageReservationTool.itemsOfPage);
-		
+		m.put("page", page);
+		m.put("qid", qid);
 		return freeMapper.findPageByCondition(m);
 	}
 	/*
@@ -82,9 +105,11 @@ public class FreeListenBookServiceBean implements FreeListenBookService {
 	 * @see com.neusoft.service.ReservationService#findReservationCountByCondition(com.neusoft.vo.ReservationCondition)
 	 */
 	@Override
-	public int findReservationCountByCondition(ReservationCondition condition) throws Exception {
-		
-		return freeMapper.findReservationCountByCondition();
+	public int findReservationCountByCondition(ReservationCondition condition, int qid) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("condition", condition);
+		map.put("qid", qid);
+		return freeMapper.findReservationCountByCondition(map);
 	}
 	/*
 	 * (non-Javadoc)
@@ -92,8 +117,8 @@ public class FreeListenBookServiceBean implements FreeListenBookService {
 	 * @see com.neusoft.service.FreeListenBookService#findAllFreeListenBooks()
 	 */
 	@Override
-	public List<FreeListenBook> findAllFreeListenBooks() throws Exception {
-		List<FreeListenBook> frees = freeMapper.findAllReservation();
+	public List<FreeListenBook> findAllFreeListenBooks(int qid) throws Exception {
+		List<FreeListenBook> frees = freeMapper.findAllReservation(qid);
 		//System.out.println(frees);
 		return frees;
 	}

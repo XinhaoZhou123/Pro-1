@@ -58,6 +58,11 @@ public class FreeListen {
 	public void setBranchid(int branchid) {
 		this.branchid = branchid;
 	}
+	@Override
+	public String toString() {
+		return "FreeListen [id=" + id + ", title=" + title + ", imgUrl=" + imgUrl + ", fdesc=" + fdesc + ", status="
+				+ status + ", pubTime=" + pubTime + ", branchid=" + branchid + ", address=" + address + "]";
+	}
 	
 	
 }

@@ -7,7 +7,7 @@ public class Address {
 	private int aid;				//分部id
 	private String branch;		//分部名称
 	private String address;		//地址
-	private long  tel;			//电话号码
+	private String  tel;			//电话号码
 	private double longtitude;	//经度
 	private double latitude;	//纬度
 	
@@ -31,11 +31,11 @@ public class Address {
 		this.address = address;
 	}
 
-	public long getTel() {
+	public String getTel() {
 		return tel;
 	}
 
-	public void setTel(long tel) {
+	public void setTel(String tel) {
 		this.tel = tel;
 	}
 

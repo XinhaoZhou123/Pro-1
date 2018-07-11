@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Page {
-	private  int  pageNum;
-	private  int pageListNum;
+	private  int  pageNum;	//一页显示的个数
+	private  int pageListNum;//显示个数的页数
 	private int currentPage;
-	private int totalPage;
+	private int totalPage;//总页数
 	
-	private int startPage;
+	private int startPage;//显示的开始页数
 	
-	private int endPage;
-	
+	private int endPage;//显示的结束页数
+	//当前页的开始行数-1，以及end为行的个数
 	private int start;
 	private int end;
 	
@@ -56,13 +56,14 @@ public class Page {
 		return totalPage;
 	}
 	public int setTotalPage(int num) {
-		return num/pageNum+(num%pageNum==0?0:1);
+		int temp=num/pageNum+(num%pageNum==0?0:1);
+		return temp==0?1:temp;
 	}
 	public int getStart(){
-		return (currentPage-1)*pageNum+1;
+		return (currentPage-1)*pageNum;
 	}
 	public int getEnd(){
-		return currentPage*pageNum;
+		return currentPage*pageNum-getStart();
 	}	
 	public List<Integer> getPageSort(){
 		List<Integer> list = new ArrayList<Integer>();
@@ -122,4 +123,5 @@ public class Page {
 	public void setEnd(int end) {
 		this.end = end;
 	}
+	
 }
