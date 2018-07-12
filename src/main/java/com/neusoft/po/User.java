@@ -6,7 +6,14 @@ public class User {
 	String nickName;	//昵称
 	String iconUrl;		//头像url
 	int qid;			//企业id
+	String pwd;
 	
+	public String getPwd() {
+		return pwd;
+	}
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
 	public int getUid() {
 		return uid;
 	}
