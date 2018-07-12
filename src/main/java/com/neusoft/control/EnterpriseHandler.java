@@ -12,7 +12,7 @@ import com.neusoft.po.Address;
 import com.neusoft.service.EnterpriseService;
 
 @Controller
-public class EnterpriseHandle {
+public class EnterpriseHandler {
 		@Autowired
 		private EnterpriseService enterpriseService;
 		

@@ -56,13 +56,16 @@ public class Page {
 		return totalPage;
 	}
 	public int setTotalPage(int num) {
+		if(num==0){
+			return 1;
+		}
 		return num/pageNum+(num%pageNum==0?0:1);
 	}
 	public int getStart(){
-		return (currentPage-1)*pageNum+1;
+		return (currentPage-1)*pageNum;
 	}
 	public int getEnd(){
-		return currentPage*pageNum;
+		return currentPage*pageNum-start;
 	}	
 	public List<Integer> getPageSort(){
 		List<Integer> list = new ArrayList<Integer>();
@@ -108,7 +111,7 @@ public class Page {
 		return startPage;
 	}
 	public void setStartPage(int startPage) {
-		this.startPage = startPage;
+		this.startPage = startPage ;
 	}
 	public int getEndPage() {
 		return endPage;

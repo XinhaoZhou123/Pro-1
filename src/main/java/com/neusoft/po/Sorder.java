@@ -11,7 +11,7 @@ public class Sorder {
 	private int qid;				//企业id
 	private Enterprise enterprise;
 	private String transactionId;	//购买者流水号
-	private long tel;				//购买者id
+	private String tel;				//购买者id
 	private User user;
 	public int getOid() {
 		return oid;
@@ -55,10 +55,10 @@ public class Sorder {
 	public void setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
 	}
-	public long getTel() {
+	public String getTel() {
 		return tel;
 	}
-	public void setTel(long tel) {
+	public void setTel(String tel) {
 		this.tel = tel;
 	}
 	public Lesson getLesson() {

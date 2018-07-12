@@ -7,7 +7,9 @@ public class Message {
 	private int mid;				//朋友圈id
 	private String mtitle;			//朋友圈标题
 	private String mtime;			//朋友圈发布时间
-	private String qid;				//朋友圈发布企业
+	private int qid;				//朋友圈发布企业
+	private int likenum;  //点赞数
+	private int replynum;//评论数
 	private List<MessageImg> messageimgs; //朋友圈图片
 	private List<MessageLike> messagelikes; //朋友圈点赞;
 	private List<MessageReply> messagereplys;//朋友圈回复;
@@ -30,10 +32,10 @@ public class Message {
 	public void setMtime(String mtime) {
 		this.mtime = mtime;
 	}
-	public String getQid() {
+	public int getQid() {
 		return qid;
 	}
-	public void setQid(String qid) {
+	public void setQid(int qid) {
 		this.qid = qid;
 	}
 	public List<MessageImg> getMessageimgs() {
@@ -53,6 +55,18 @@ public class Message {
 	}
 	public void setMessagereplys(List<MessageReply> messagereplys) {
 		this.messagereplys = messagereplys;
+	}
+	public int getLikenum() {
+		return likenum;
+	}
+	public void setLikenum(int likenum) {
+		this.likenum = likenum;
+	}
+	public int getReplynum() {
+		return replynum;
+	}
+	public void setReplynum(int replynum) {
+		this.replynum = replynum;
 	}
 	
 	

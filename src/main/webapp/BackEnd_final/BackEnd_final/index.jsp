@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>企业信息页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -16,8 +17,7 @@
 			}
 			iframe {border: none; margin: 0 0 0 8%; width: 92%;}
 		</style>
-	</head>
-
+</head>	
 	<body class="layui-layout-body" style="font-family: '宋体'; background-color: #F8F8FF;">
 		<div class="layui-layout layui-layout-admin">
 			<div class="layui-header">
@@ -109,7 +109,7 @@
 						<a href="messageAdd.jsp" target="myFrame">&nbsp;发布消息</a>
 					  </dd>
 					  <dd>
-						<a href="messageView.jsp" target="myFrame">&nbsp;消息列表</a>
+						<a href="<%=request.getContextPath()%>/BackEnd/message/messagelist"  target="myFrame">&nbsp;消息列表</a>
 					  </dd>
 					  <dd>
 						<a href="firstPageOfMessages.jsp" target="myFrame">&nbsp;朋友圈首页图片</a>
@@ -137,5 +137,4 @@
 			});
 		</script>
 	</body>
-
 </html>

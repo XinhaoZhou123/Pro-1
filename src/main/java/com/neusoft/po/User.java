@@ -1,13 +1,13 @@
 package com.neusoft.po;
 //用户
 public class User {
-	long tel;			//手机号作为id
+	String tel;			//手机号作为id
 	String nickName;	//昵称
 	String iconUrl;		//头像url
-	public long getTel() {
+	public String getTel() {
 		return tel;
 	}
-	public void setTel(long tel) {
+	public void setTel(String tel) {
 		this.tel = tel;
 	}
 	public String getNickName() {
