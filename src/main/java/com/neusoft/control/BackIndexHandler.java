@@ -21,7 +21,7 @@ public class BackIndexHandler {
 	/*
 	 * 获得六个统计数据
 	 */
-	@RequestMapping(value="/index/getSixStatics")
+	@RequestMapping(value="/BackEnd/index/getSixStatics")
 	@ResponseBody
 	public Map<String,Object> initial(HttpServletRequest request) throws Exception{
 		HttpSession session = request.getSession();

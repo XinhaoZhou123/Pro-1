@@ -95,7 +95,7 @@ public class FreeListenBookHandler {
 	/*
 	 * 通过条件和分页查找预约
 	 */
-	@RequestMapping(value="/reserve/findPageByCondition")
+	@RequestMapping(value="/BackEnd/reserve/findPageByCondition")
 	@ResponseBody
 	public Map<String,Object> findPageByCondition(ReservationCondition condition,
 			Integer page,Integer limit,HttpServletRequest request) throws Exception{
@@ -128,7 +128,7 @@ public class FreeListenBookHandler {
 	/*
 	 * 处理预约
 	 */
-	@RequestMapping(value="/reserve/dealReservation")
+	@RequestMapping(value="BackEnd/reserve/dealReservation")
 	@ResponseBody
 	public Map<String,Object> dealReservation(int id) throws Exception{
 		

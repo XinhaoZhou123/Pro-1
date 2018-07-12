@@ -80,7 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				var status = $("#conditionSelect select[name='status']").val();
 				var startDate = $("#conditionSelect input[name='startDate']").val();
 				var endDate = $("#conditionSelect input[name='endDate']").val();
-				var url = '<%=request.getContextPath() %>/reserve/findPageByCondition';
+				var url = '<%=request.getContextPath() %>/BackEnd/reserve/findPageByCondition';
 				//第一个实例
 				table.render({
 					elem : '#reserv_table',
@@ -119,7 +119,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 				        	if(layEvent === 'edit'){ //查看
 				        		$.ajax({
-				        		url: '<%=request.getContextPath() %>/reserve/dealReservation',
+				        		url: '<%=request.getContextPath() %>/BackEnd/reserve/dealReservation',
 				        			type: 'post',
 				        			data: {id: data.id},
 				        			dataType: 'json',
