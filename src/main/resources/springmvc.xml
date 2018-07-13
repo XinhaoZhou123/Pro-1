@@ -28,13 +28,13 @@
 	<context:component-scan base-package="com.neusoft.control" />
 	
 		<!-- 拦截器的配置：只能拦截处理器路径-->
-	<mvc:interceptors>
+	<!-- <mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/BackEnd/*"/>
 			<mvc:exclude-mapping path="/userinfo/MyUserinfoHandle_Login"/>
 			<bean class="com.neusoft.interceptor.MyInterceptor"></bean>
 		</mvc:interceptor>
-	</mvc:interceptors>
+	</mvc:interceptors> -->
 	  
 	  <!-- 配置静态资源——html,css,js视频图片 -->
 	  <mvc:default-servlet-handler/>

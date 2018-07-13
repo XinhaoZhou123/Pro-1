@@ -48,10 +48,10 @@
 						<a href="summary.jsp" target="myFrame">&nbsp;后台统计</a>
 					  </dd>
 					  <dd>
-						<a href="enterprise.jsp" target="myFrame">&nbsp;企业基本信息</a>
+						<a href="<%=request.getContextPath()%>/BackEnd/Handler_findEnterpriseByQid?qid=1&method=enterprise" target="myFrame">&nbsp;企业基本信息</a>
 					  </dd>
 					  <dd>
-						<a href="branch.jsp" target="myFrame">&nbsp;企业分部信息</a>
+						<a href="<%=request.getContextPath()%>/BackEnd/Handler_selectAddressByQid"  target="myFrame">&nbsp;企业分部信息</a>
 					  </dd>
 					</dl>  
 				  </li>
@@ -59,10 +59,10 @@
 					<a href="javascript:;">师资管理</a>
 					<dl class="layui-nav-child">
 					  <dd>
-						<a href="teacherView.jsp" target="myFrame">&nbsp;师资力量</a>
+						<a href="<%=request.getContextPath()%>/BackEnd/Handler_selectTeacherByQid?curr=1&limit=3"  target="myFrame">&nbsp;师资力量</a>
 					  </dd>
 					  <dd>
-						<a href="firstPageOfTeachers.jsp" target="myFrame">&nbsp;师资首页图片</a>
+						<a href="<%= request.getContextPath() %>/BackEnd/Handler_selectFirstPageOfTeachers?qid=<%= request.getParameter("qid") %>" target="myFrame">&nbsp;师资首页图片</a>
 					  </dd>
 					</dl>
 				  </li>
@@ -81,10 +81,10 @@
 					<a href="javascript:;">预约管理</a>
 					<dl class="layui-nav-child">
 					  <dd>
-						<a href="reservationView.jsp" target="myFrame">&nbsp;预约课程查询</a>
+						<a href="#">&nbsp;预约课程查询</a>
 					  </dd>
-					  <dd>
-						<a href="reservationDeal.jsp" target="myFrame">&nbsp;预约课程处理</a>
+					  <dd>					  
+					  <a href="reservationDeal3.jsp" target="myFrame">&nbsp;预约课程处理</a>
 					  </dd>
 					</dl>
 				  </li>
@@ -136,5 +136,6 @@
 				var layer = layui.layer;
 			});
 		</script>
+		<script src="<%=request.getContextPath() %>/BackEnd_final/jquery-3.2.0.min.js"></script>
 	</body>
 </html>

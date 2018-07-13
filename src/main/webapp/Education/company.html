@@ -1,5 +1,5 @@
-﻿<html>
-
+﻿
+<html>
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -172,22 +172,28 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title" style="font-size: large;">企业简介</h1>
 		</header>
-		<div class="mui-content">
+	<!-- <div class="mui-content">
 			<div class="mui-content-padded">
 				<p align="center" style="font-size:medium; color: black;">
 					企业图片
 				</p>
 				
-				<p >
-					<img src="img/yuantiao.jpg" data-preview-src="" data-preview-group="1" />
-				</p>
-				<p>
-					<img src="img/muwu.jpg" data-preview-src="" data-preview-group="1" />
+				<p id="enterprise_img">
+					<!--<img id="enterprise_img" src="img/yuantiao.jpg" data-preview-src="" data-preview-group="1" />
 				</p>
 				
-				<p>
-					<img src="img/shuijiao.jpg" data-preview-src="" data-preview-group="1" />
+			</div>
+		</div> 
+	
+		<hr />
+		
+		-->	
+		<div class="mui-content" style="padding-top: 0;">
+			<div class="mui-content-padded">
+				<p align="center" style="font-size:medium; color: black;">
+					企业视频
 				</p>
+				<div style="width:100%; height:200px;"><video src="" id="enterprise_video" controls="controls" style="width:100%; margin-top:5%"></video></div>
 			</div>
 		</div>
 		<hr />
@@ -196,33 +202,52 @@
 				<p align="center" style="font-size:medium; color: black;">
 					企业介绍
 				</p>
-				<p>这是图片放大预览示例,点击如下图片体验全屏预览功能,图片全屏后，双击或双指缩放均可对图片进行放大、缩小操作，左右滑动可查看同组(data-preview-group相同的图片为一组)其它图片,点击会关闭预览,第三张图片，纯粹为了占位</p>
+				<p id="enterprise_introduction"></p>
 			</div>
 		</div>
 		<hr />
-		<div class="mui-content" style="padding-top: 0;">
-			<div class="mui-content-padded">
-				<p align="center" style="font-size:medium; color: black;">
-					企业视频
-				</p>
-				<p>这是图片放大预览示例,点击如下图片体验全屏预览功能,图片全屏后，双击或双指缩放均可对图片进行放大、缩小操作，左右滑动可查看同组(data-preview-group相同的图片为一组)其它图片,点击会关闭预览,第三张图片，纯粹为了占位</p>
-			</div>
-		</div>
-		<hr />
+		
 		<div class="mui-content" style="padding-top: 0;">
 			<div class="mui-content-padded">
 				<p align="center" style="font-size:medium; color: black;">
 					精彩展示
 				</p>
-				<p>这是图片放大预览示例,点击如下图片体验全屏预览功能,图片全屏后，双击或双指缩放均可对图片进行放大、缩小操作，左右滑动可查看同组(data-preview-group相同的图片为一组)其它图片,点击会关闭预览,第三张图片，纯粹为了占位</p>
+				<p id="enterprise_jczs"></p>
 			</div>
 		</div>
 	</body>
 	<script src="js/mui.min.js"></script>
 	<script src="js/mui.zoom.js"></script>
 	<script src="js/mui.previewimage.js"></script>
+	
+	<script src="../BackEnd_final/jquery-3.2.0.min.js"></script>
 	<script>
-		mui.previewImage();
-	</script>
+	
+	$(function(){
+		//var paraString = location.search;
+		//alert(paraString.substring(5,6));
+		//var qid= paraString.substring(5,6);
+		
+		
+		
+		$.ajax({
+			url:"../test/Handler_frontEndFindEnterpriseByQid",
+			type:"post",			
+			dataType:"json",
+			success:function(data){
+				console.log(data);
+				$("#enterprise_jczs").html(data.jczs);
+				$("#enterprise_introduction").html(data.introduction);
+			//	console.log(navigator.connection.type);
+				$("#enterprise_video").attr('src','/uploadVideo/'+data.videopath);
+			//	var str;
+			//	for(var i = 0; i< data.swiperList.length; i++){
+			//		str+= '<img src="http://localhost:8080/uploadImage/'+data.swiperList[i].imgurl+'"/><br/>';
+			//	}
 
+			//	$("#enterprise_img").append(str);
+			}
+		});
+	});
+	</script>
 </html>

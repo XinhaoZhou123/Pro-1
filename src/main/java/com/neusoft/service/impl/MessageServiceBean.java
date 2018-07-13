@@ -15,7 +15,7 @@ import com.neusoft.po.MessageImg;
 import com.neusoft.po.MessageLike;
 import com.neusoft.po.MessageReply;
 import com.neusoft.service.MessageService;
-import com.neusoft.tools.MorePage;
+import com.neusoft.tools.MoreMessagePage;
 import com.neusoft.tools.MoreReplyPage;
 import com.neusoft.tools.Page;
 
@@ -147,13 +147,13 @@ public class MessageServiceBean implements MessageService {
 		Map<String,Object> map = new HashMap<String,Object>();
 		if(type==0){  //响应上啦刷新
 			map.put("start", 0);
-			map.put("end", MorePage.uppageNum);
+			map.put("end", MoreMessagePage.uppageNum);
 			map.put("qid", qid);
 			map.put("type", type);
 			map.put("pubtime", pubtime);
 		}else{
 			map.put("start", 0);
-			map.put("end", MorePage.downpageNum);
+			map.put("end", MoreMessagePage.downpageNum);
 			map.put("qid", qid);
 			map.put("type", type);
 			map.put("pubtime", pubtime);

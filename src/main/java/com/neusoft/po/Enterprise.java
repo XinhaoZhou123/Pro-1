@@ -1,17 +1,17 @@
 package com.neusoft.po;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //企业
 public class Enterprise {
 	private int qid;
 	private String name;
-	private String videoPath;
-	private String introduction;	//企业介绍
-	private String jczs;			//富文本
-	//private List<Teacher> teachers;
-	//private List<Lesson>  lessons;
-	//private List<Message> messages;
+	private String videopath;
+	private String introduction;
+	private String jczs;
+    List<Swiper> swiperList = new ArrayList<Swiper>();
+	
 	public int getQid() {
 		return qid;
 	}
@@ -24,11 +24,11 @@ public class Enterprise {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getVideoPath() {
-		return videoPath;
+	public String getVideopath() {
+		return videopath;
 	}
-	public void setVideoPath(String videoPath) {
-		this.videoPath = videoPath;
+	public void setVideopath(String videopath) {
+		this.videopath = videopath;
 	}
 	public String getIntroduction() {
 		return introduction;
@@ -42,6 +42,10 @@ public class Enterprise {
 	public void setJczs(String jczs) {
 		this.jczs = jczs;
 	}
-	
-	
+	public List<Swiper> getSwiperList() {
+		return swiperList;
+	}
+	public void setSwiperList(List<Swiper> swiperList) {
+		this.swiperList = swiperList;
+	}
 }

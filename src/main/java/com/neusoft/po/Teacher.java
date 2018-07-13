@@ -1,15 +1,13 @@
 package com.neusoft.po;
-//教师
-public class Teacher {
-	private int tid;				//教师id
-	private String tname;			//姓名
-	private String tphoto;			//照片路径
-	private String introduction;	//简介
-	
-	private int qid;				//企业id
-	
-	private Enterprise enterprise;
 
+public class Teacher {
+	private int tid;				
+	private String tname;			
+	private String tphoto;			
+	private String introduction;	
+	
+	private int qid;				
+	
 	public int getTid() {
 		return tid;
 	}
@@ -49,14 +47,5 @@ public class Teacher {
 	public void setQid(int qid) {
 		this.qid = qid;
 	}
-
-	public Enterprise getEnterprise() {
-		return enterprise;
-	}
-
-	public void setEnterprise(Enterprise enterprise) {
-		this.enterprise = enterprise;
-	}
-	
 	
 }

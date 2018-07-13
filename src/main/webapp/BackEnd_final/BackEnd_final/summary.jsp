@@ -1,21 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
-    <%
-    	String path = request.getContextPath();
-    	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
-    	request.setAttribute("path", basePath);
-    %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
+  <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>数据统计页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="${path}/BackEnd_final/layui/css/layui.css">
-		<link rel="stylesheet" href="${path}/BackEnd_final/assets/css/amazeui.min.css" />
-	    <link rel="stylesheet" href="${path}/BackEnd_final/assets/css/admin.css">
-	    <link rel="stylesheet" href="${path}/BackEnd_final/assets/css/app.css">
+		<link rel="stylesheet" href="../layui/css/layui.css">
+		<link rel="stylesheet" href="../assets/css/amazeui.min.css" />
+	    <link rel="stylesheet" href="../assets/css/admin.css">
+	    <link rel="stylesheet" href="../assets/css/app.css">
+	    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
 		<style>
 			.layui-card {
 				margin: 35px 45px 45px 0; 
@@ -24,8 +24,25 @@
 				padding: 20px 10px;
 			}
 
-			body {font-family: '宋体'; background-color: #F8F8FF; height: 1300px;}
+			body {font-family: '宋体'; background-color: #F8F8FF; height: 1000px;}
 		</style>
+		<script>
+			$(function(){
+				$.ajax({
+					url:'<%=request.getContextPath()%>/BackEnd/index/getSixStatics',
+					success:function(data){
+						console.log(data);
+						$(".number")[0].append(data.userNumbers);
+						$(".number")[1].append(data.todayReserv);
+						$(".number")[2].append(data.todayOrder);
+						$(".number")[3].append(data.todayGood);
+						$(".number")[4].append(data.monthProfit);
+						$(".number")[5].append(data.monthMessage);
+					}
+				})
+			})
+		
+		</script>
 		<script type="text/javascript">
             function IFrameResize()
             {
@@ -51,7 +68,7 @@
 				                            <i class="am-icon-user"></i>
 				                        </div>
 				                        <div class="details">
-				                            <div class="number"> 1,349 </div>
+				                            <div class="number"> </div>
 				                            <div class="desc"> 用户总数 </div>
 				                        </div>
 				                        <div class="more" href="#"> &nbsp;</div>
@@ -63,7 +80,7 @@
 				                            <i class="am-icon-shopping-basket"></i>
 				                        </div>
 				                        <div class="details">
-				                            <div class="number"> 134 </div>
+				                            <div class="number">  </div>
 				                            <div class="desc"> 今日预约数 </div>
 				                        </div>
 				                        <div class="more" href="#"> &nbsp;</div>
@@ -75,7 +92,7 @@
 				                            <i class="am-icon-shopping-bag"></i>
 				                        </div>
 				                        <div class="details">
-				                            <div class="number"> 786 </div>
+				                            <div class="number">  </div>
 				                            <div class="desc"> 今日订单数 </div>
 				                        </div>
 				                        <div class="more" href="#"> &nbsp;</div>
@@ -87,7 +104,7 @@
 				                            <i class="am-icon-wechat"></i>
 				                        </div>
 				                        <div class="details">
-				                            <div class="number"> 653 </div>
+				                            <div class="number">  </div>
 				                            <div class="desc"> 今日获赞数 </div>
 				                        </div>
 				                        <div class="more" href="#"> &nbsp;</div>
@@ -100,7 +117,7 @@
 				                            <i class="am-icon-money"></i>
 				                        </div>
 				                        <div class="details">
-				                            <div class="number"> 13,589 </div>
+				                            <div class="number">  </div>
 				                            <div class="desc"> 本月流水 </div>
 				                        </div>
 				                        <div class="more" href="#"> &nbsp;</div>
@@ -112,7 +129,7 @@
 				                            <i class="am-icon-pencil"></i>
 				                        </div>
 				                        <div class="details">
-				                            <div class="number"> 20 </div>
+				                            <div class="number"> </div>
 				                            <div class="desc"> 本月朋友圈条数 </div>
 				                        </div>
 				                        <div class="more" href="#"> &nbsp;</div>
@@ -126,3 +143,4 @@
 		</div>
 	</body>
 </html>
+

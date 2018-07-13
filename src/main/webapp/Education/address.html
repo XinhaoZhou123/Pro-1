@@ -7,17 +7,7 @@
 	<style type="text/css">
 		* { touch-action: none; }
 
-		#allmap {
-			position: absolute;
-			width: 100%;
-			height: 40%;
-			top:60%;
-			left:5%;
-			margin-right: 5%;
-			overflow: hidden;
-			margin:0;
-			font-family:"微软雅黑";
-			}
+		#allmap{height:350px;width:100%;}
 	</style>
 	<!--标准mui.css-->
 		<link rel="stylesheet" href="css/mui.min.css">
@@ -26,7 +16,7 @@
 		
 	<script type="text/javascript" src="js/mui.min.js"></script>
 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=zc1Swmc3cv8fUObkLVtjI484vacULQ4B"></script>
-	<title>3</title>
+	<title></title>
 </head>
 <body>
 		<header class="mui-bar mui-bar-nav">
@@ -35,40 +25,73 @@
 		</header>
 		<div class="mui-content">
 		
-		<div align="center">门店地址</div>
-			<div class="detail_info">
-						<br/><div class="detail_info_name" align="center">东软实训中心</div>
-						<div class="mui-card">
-							<div class="mui-card-content">
-								<div class="mui-card-content-inner">
-									东软睿道工程教育，是东软睿道教育信息技术有限公司（简称东软睿道）的重要组成业务，是大学生及大学后提高职业技能的平台。
-								</div>
-							</div>
-						</div>
-						<br/><div class="detail_info_address" align="center">世纪路51附近 </div>
-						<br/><div class="detail_info_tel" align="center">联系电话：15940471397</div>
-			</div>
-			<div id="allmap" style="padding: 0px,0px;"></div>
+		<div id="allmap"></div>
+		
+		<div id="branch_detail">
+			
+		</div>
+			
+		<div id="r-result"></div>
 	</div>
 	
 	
 	
 </body>
 </html>
-<script type="text/javascript">
-	// 百度地图API功能
-	var map = new BMap.Map("allmap");
-	var longitude=123.4460680885;
-	var latitude=41.7116368570;
-	map.centerAndZoom(new BMap.Point(longitude,latitude),16);
-	map.enableScrollWheelZoom(true);
-	
-	// 用经纬度设置地图中心点
-	function theLocation(){
-		if(document.getElementById("longitude").value != "" && document.getElementById("latitude").value != ""){
-			map.clearOverlays(); 
-			map.addOverlay(marker);              // 将标注添加到地图中
-			map.panTo(new_point);      
-		}
-	}
+
+
+
+<script src="../BackEnd_final/jquery-3.2.0.min.js"></script>
+<script>
+	$(function(){		
+		var paraString = location.search;
+		//alert(paraString.substring(5,6));
+		//var qid= paraString.substring(5,6);
+		var aid = paraString.substring(5,6);
+		$.ajax({
+			url:"../test/Handler_frontEndSelectAddressByQidId",
+			type:"post",
+			data:{
+				aid:aid
+			},
+			dataType:"json",
+			success:function(data){
+				console.log(data);
+				var li = document.getElementById("branch_detail");
+				li.innerHTML += '<div align="center">分部详情介绍</div>';
+				li.innerHTML += '<div class="detail_info"><br/><div class="detail_info_name" align="center">'+data.branch+'</div><br>';
+				li.innerHTML += '<div class="mui-card"><div class="mui-card-content"><div class="mui-card-content-inner"> 具体地址:'+data.address+'</div></div></div>';
+				li.innerHTML += '<br/><div class="detail_info_tel" align="center">联系电话:'+data.tel+'</div></div><br>';			
+			
+				var map = new BMap.Map("allmap");
+				
+				var longitude=data.longitude;
+				var latitude=data.latitude;
+				//var startpoint = new BMap.Point(longitude,latitude);
+				
+				var geolocation = new BMap.Geolocation();
+				geolocation.getCurrentPosition(function(r){
+					if(this.getStatus() == BMAP_STATUS_SUCCESS){
+						//alert('您的位置：'+r.point.lng+','+r.point.lat);
+						 startpoint = new BMap.Point(r.point.lng,r.point.lat);
+						 console.log(startpoint);
+						 
+							var endpoint = new BMap.Point(longitude,latitude);
+							map.centerAndZoom(endpoint, 12); 
+							map.enableScrollWheelZoom(true);
+							console.log(endpoint);
+							var walking = new BMap.WalkingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});
+							walking.search(startpoint, endpoint);
+					}
+					else {
+						alert('failed'+this.getStatus());
+					}        
+				},{enableHighAccuracy: true})
+				
+				//console.log(startpoint);
+			
+				
+			}
+		});
+	});
 </script>

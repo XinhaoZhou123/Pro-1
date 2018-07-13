@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.neusoft.po.Message;
 import com.neusoft.po.MessageLike;
 import com.neusoft.po.MessageReply;
-import com.neusoft.tools.MorePage;
+import com.neusoft.tools.MoreMessagePage;
 import com.neusoft.tools.Page;
 
 
