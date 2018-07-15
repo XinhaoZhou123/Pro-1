@@ -4,14 +4,47 @@ import java.util.List;
 
 import com.neusoft.po.FreeListen;
 import com.neusoft.po.Lesson;
-import com.neusoft.tools.Page;
+import com.neusoft.vo.CourseCategoryVo;
+import com.neusoft.vo.CoursePageVo;
+import com.neusoft.vo.FreeListenPageVo;
+import com.neusoft.vo.TotalCoursePageVo;
+import com.neusoft.vo.TotalFreeListenPageVo;
+import com.neusoft.po.LessonBranch;
 
 public interface CourseService {
-		public List<Lesson> selectAllLessons(Page page,int qid) throws Exception;
-		public List<Lesson> selectBranchLessons(Page page,int aid) throws Exception;//aid分部id
-		public List<FreeListen> selectAllFreeListens(Page page,int qid) throws Exception;
-		public List<Lesson> selectLessonsByCategory(Page page,String category,int qid);
+		public List<Lesson> selectAllLessons(TotalCoursePageVo t) throws Exception;
+		public List<Lesson> selectBranchLessons(CoursePageVo cpv) throws Exception;//aid分部id
+		public List<FreeListen> selectBranchFreeListens(FreeListenPageVo fpv) throws Exception;
+		public List<FreeListen> selectAllFreeListens(TotalFreeListenPageVo fpv) throws Exception;
+		public List<Lesson> selectLessonsByCategory(CourseCategoryVo ccv) throws Exception;
 		public int selectTotalNumOfLessons(int qid) throws Exception;
 		public int selectToalNumOfFreeListens(int qid) throws Exception;
 		public int selectTotalNumOfBranchLessons(int aid) throws Exception;
+		
+		
+	
+		
+		
+		
+		
+		public void saveLesson(Lesson l) throws Exception;
+		
+		public void saveLessonBranch(LessonBranch lb) throws Exception;
+	
+		public void updateLesson(Lesson l) throws Exception;
+		
+		public void updateLessonBranch(LessonBranch lb) throws Exception;
+	
+		public Lesson getLession(int lid) throws Exception;
+	
+		
+		public void saveFreeListen(FreeListen l) throws Exception;
+			
+		public void updateFreeListen(FreeListen l) throws Exception;
+	
+		public FreeListen getFreeListen(int lid) throws Exception;
+		
+		public void deleteCourse(int lid) throws Exception;
+		
+		public void deleteFreeListen(int id) throws Exception;
 }

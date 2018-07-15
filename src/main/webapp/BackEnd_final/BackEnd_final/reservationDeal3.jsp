@@ -96,7 +96,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   					{field : 'title', title : '课程标题', width : 300, sort : true, align : 'center',templet: '<div>{{d.freelisten.title}}</div>' }, 
 	   					{field : 'userName', title : '用户昵称', width : 100, align : 'center'}, 
 	   					{field : 'tel', title : '用户电话', width : 110, align : 'center' }, 
-	   					{field : 'status', title : '订单金额', width : 100, sort : true, align : 'center'}, 
+	   					{field : 'status', title : '预约状态', width : 100, sort : true, align : 'center'}, 
 	   					{field : 'bookTime', title : '预定时间', width : 300, align : 'center'}, 
 	   					{field : 'comment', title : '留言', width : 110, align : 'center' }, 
 	   					{field : 'check', title: '操作', width:100,toolbar:"#barDemo", align: 'center'}

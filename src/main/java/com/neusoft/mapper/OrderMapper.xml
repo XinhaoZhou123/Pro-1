@@ -58,7 +58,7 @@
 			<result property="imgUrl" column="imgurl" />
 		</association>
 	</resultMap>
-	
+
 	<select id="getOrders" resultMap="order_lesson_map" parameterType="Map">
 		select sorder.*,lname,lprice,imgurl 
 		from sorder left join lesson
@@ -70,6 +70,7 @@
 		<if test="status != null and status == '取消和退款'">
 			and (status = '已取消' or status = '退款中' or status = '已退款')
 		</if>
+		limit #{page.start},#{page.end}
 	</select>
 	
 	<select id="getOrdersCount" resultType="int" parameterType="Map">
@@ -122,4 +123,46 @@
 		set status = '已使用' 
 		where oid = #{oid}
 	</update>
+	
+	<update id="changePaidToRefunding" parameterType="int">
+		update sorder 
+		set status = '退款中' 
+		where oid = #{oid}
+	</update>
+	
+	<update id="changeUnpaidToCanceled" parameterType="int">
+		update sorder 
+		set status = '已取消' 
+		where oid = #{oid}
+	</update>
+	
+	<update id="changeUnpaidToPaid" parameterType="int">
+		update sorder 
+		set status = '已付款' 
+		where oid = #{oid}
+	</update>
+	
+	<update id="addRating" parameterType="Map">
+		update sorder
+		set rating = #{rating}
+		where oid = #{oid}
+	</update>
+	
+	<select id="getRating" parameterType="int" resultType="float">
+		select rating
+		from sorder
+		where oid = #{oid}
+	</select>
+	
+	<select id="getUidAndLidByOid" parameterType="int" resultType="com.neusoft.vo.RatingItem">
+		select uid, lid
+		from sorder, user
+		where sorder.tel = user.tel and oid = #{oid}
+	</select>
+	
+	<select id="getTotal" parameterType="int" resultType="float">
+		select total
+		from sorder
+		where oid=#{oid}
+	</select>
 </mapper>

@@ -24,12 +24,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				padding: 20px 10px;
 			}
 
-			body {font-family: '宋体'; background-color: #F8F8FF; height: 1000px;}
+			body {font-family: '宋体'; background-color: #F8F8FF; height: 1050px;}
 		</style>
 		<script>
 			$(function(){
 				$.ajax({
-					url:'<%=request.getContextPath()%>/index/getSixStatics',
+					url:'<%=request.getContextPath()%>/BackEnd/index/getSixStatics',
 					success:function(data){
 						console.log(data);
 						$(".number")[0].append(data.userNumbers);
@@ -143,3 +143,4 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 	</body>
 </html>
+

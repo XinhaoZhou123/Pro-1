@@ -1,10 +1,11 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
+<%@ page language="java" pageEncoding="utf-8"%>  
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%  
+String path = request.getContextPath();  
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
+request.setAttribute("path", basePath);  
+%> 
 <html>
 
 	<head>
@@ -12,9 +13,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<title>添加课程页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
-		<script type="text/javascript" charset="utf-8" src="../js/ueditor.config.js"></script>
-		<script type="text/javascript" charset="utf-8" src="../js/ueditor.all.min.js"></script>
+		<link rel="stylesheet" href="${path}BackEnd_final/layui/css/layui.css">
+	    <script type="text/javascript" charset="utf-8" src="${path}BackEnd_final/utf8-jsp/ueditor.config.js"></script>
+		<script type="text/javascript" charset="utf-8" src="${path}BackEnd_final/utf8-jsp/ueditor.all.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+		<script type="text/javascript" charset="utf-8" src="${path}BackEnd_final/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
+		<script src="${path}BackEnd_final/layui/layui.js" charset="utf-8"></script>
+
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; text-align: center; border-radius: 10px;}
 			.layui-card-header {
@@ -32,6 +37,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
                 obj.height = this.document.body.scrollHeight;
+            
+                //看看这个是修改页面还是上传页面    
+                var ldesc = '<%=request.getAttribute("ldesc")%>';
+    			
+    			if(ldesc!="null"){
+    				UE.getEditor('editor').setContent(ldesc);
+    			}
             } 
         </script>
 	</head>
@@ -42,7 +54,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<!-- 内容主体区域 -->
 		  <div style="background-color: white; 
 			  	margin: 0px 50px 0px 0px; background-color: #F8F8FF;">
-			<form class="layui-form">
+			<form class="layui-form" action="<%=request.getContextPath() %>/BackEnd/upload/lesson" method="post" id="upload_lesson" >
 			  <div class="layui-col-md6">
 			  	<div class="layui-row">
 			  		<div class="layui-collapse">
@@ -52,10 +64,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<div class="layui-card-header layui-colla-title">课程图片</div>
 								<div class="layui-card-body layui-colla-content layui-show" style="padding-left: 3%;">
 									<div class="layui-upload-list">
-										<img class="layui-upload-img" id="demo1" 
-											style="width:100%;height:400px;">
+										<c:if test="${cover!=null}">
+											<img class="layui-upload-img" style="width:100%;height:400px;" id="cover" name="cover1" src="/webapps/../upload/cover/${cover}" }>
+											<p id="demoText"></p>
+											<input type="hidden" name="imgurl" id="coverurl" value="${cover}"/>
+										</c:if>
+										<c:if test="${cover==null}">
+											<img class="layui-upload-img" style="width:100%;height:400px;" id="cover" name="cover1">
+											<p id="demoText"></p>
+											<input type="hidden" name="imgurl" id="coverurl" />
+										</c:if>
 									 </div>
-									<button type="button" class="layui-btn" id="btn_upload">选择图片</button>
+									<button type="button" class="layui-btn" id="choose">选择图片</button>
 									<div class="layui-inline layui-word-aux">
 										文件最大限制为1M
 									</div><br /><br />
@@ -64,32 +84,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</div>
 						<div class="layui-col-md12 layui-colla-item">
 							<div class="layui-card">
-								<div class="layui-card-header layui-colla-title">课程描述</div>
-								<div class="layui-card-body layui-colla-content layui-show">
-									<script id="editor" type="text/plain"></script>
+								<div class="layui-card-header layui-colla-title"  style="width:1024px;">课程描述</div>
+								<div class="layui-card-body layui-colla-content layui-show"  style="width:1024px;height:300px;">
+									<script id="editor" name="editor" type="text/plain"  style="width:1024px;height:300px;"></script>
 								</div>
 							</div>
 						</div>
 			  		</div>
 			  	</div>
 			  </div>
-			  	
+			 	
 			  <div class="layui-col-md6">
 			  	<div class="layui-row">
 			  		<div class="layui-collapse">
-			  		<div class="layui-col-md12 layui-colla-item">
-						<div class="layui-card">
-							<div class="layui-card-header layui-colla-title">课程编号</div>
-							<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
-								<input class="layui-input" readonly="true" type="text" />
+			  		<c:if test="${lid!=null}">
+				  		<div class="layui-col-md12 layui-colla-item">
+							<div class="layui-card">
+								<div class="layui-card-header layui-colla-title">课程编号</div>
+								<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
+									<input class="layui-input" readonly="true" type="text" value="${lid}"/>
+								</div>
 							</div>
 						</div>
-					</div>
+					</c:if>
 					<div class="layui-col-md12 layui-colla-item">
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">课程名称</div>
 							<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
-								<input class="layui-input" type="text" />
+								<c:if test="${lname!=null}">
+									<input type="text" id="lname" name="c_name" class="layui-input" placeholder="请输入课程的名称" value=${lname} width="200px" />
+								</c:if>
+								<c:if test="${lname==null}">
+									<input type="text" id="lname" name="c_name" class="layui-input" placeholder="请输入课程的名称" width="200px" />
+								</c:if>
 							</div>
 						</div>
 					</div>
@@ -97,7 +124,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">课程价格</div>
 							<div class="layui-card-body layui-colla-content layui-show" style="text-align: left;">
-								<input type="number" id="c_price" class="layui-input" />
+								<c:if test="${lprice!=null}">
+									<input type="number" id="c_price" name="lprice" class="layui-input" placeholder="请输入课程的价钱￥" value=${lprice} />
+								</c:if>
+								<c:if test="${lprice==null}">
+										<input type="number" id="c_price" name="lprice" class="layui-input" placeholder="请输入课程的价钱￥" />
+								</c:if>
 							</div>
 						</div>
 					</div>
@@ -106,42 +138,82 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<div class="layui-card-header layui-colla-title">课程分类</div>
 							<div class="layui-card-body layui-colla-content layui-show" style="text-align: left;">
 								<div class="layui-form-item">
-									<select id="classification">
-										<option value="handled">PHP</option>
-										<option>Java</option>
-										<option>Python</option>
-										<option>C#</option>
+									<select name="classification" id="selectclass">
+										<c:if test="${category==null}">
+											<option id="JAVA" value="JAVA" >JAVA</option>
+											<option id="HTML5" value="HTML5">HTML5</option>
+											<option id="Python" value="Python">Python</option>
+											<option id="C++" value="C++">C++</option>
+										</c:if>
+										<c:if test="${category=='JAVA'}">
+												<option id="JAVA" value="JAVA" selected=true>JAVA</option>
+												<option id="HTML5" value="HTML5">HTML5</option>
+												<option id="Python" value="Python">Python</option>
+												<option id="C++" value="C++">C++</option>
+										</c:if>
+											<c:if test="${category=='HTML5'}">
+												<option id="JAVA" value="JAVA">JAVA</option>
+												<option id="HTML5" value="HTML5" selected=true>HTML5</option>
+												<option id="Python" value="Python">Python</option>
+												<option id="C++" value="C++">C++</option>
+										</c:if>
+											<c:if test="${category=='Python'}">
+												<option id="JAVA" value="JAVA">JAVA</option>
+												<option id="HTML5" value="HTML5">HTML5</option>
+												<option id="Python" value="Python" selected=true>Python</option>
+												<option id="C++" value="C++">C++</option>
+										</c:if>
+										<c:if test="${category=='C++'}">
+												<option id="JAVA" value="JAVA">JAVA</option>
+												<option id="HTML5" value="HTML5">HTML5</option>
+												<option id="Python" value="Python">Python</option>
+												<option id="C++" value="C++" selected=true>C++</option>
+										</c:if>
 									</select>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="layui-col-md12 layui-colla-item">
-						<div class="layui-card">
-							<div class="layui-card-header layui-colla-title">开设分部</div>
-							<div class="layui-card-body layui-colla-content layui-show">
-							  <div class="layui-form-item">
-									<input type="radio" name="sub" value="train_center" title="实训中心" id="train_center" />
-									<input type="radio" name="sub" value="art_center" id="art_center" title="艺术中心" />
-									<input type="radio" name="sub" value="hengda" id="hengda" title="恒大名都" />
-							  </div>
-							</div>
-						</div>
-					</div>
+								<div class="layui-col-md12 layui-colla-item">
+									<div class="layui-card">
+										<div class="layui-card-header layui-colla-title">开设分部</div>
+										<div class="layui-card-body layui-colla-content layui-show">
+										  <div class="layui-form-item">
+													<c:if test="${branches==null}">
+														<c:redirect url="/BackEnd/initBranch" />
+													</c:if>
+													<c:forEach items="${requestScope.branches }" var="b">
+														<c:if test="${branch!=null}">
+															<c:if test="${branch!=b.radioID}">
+																<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" />
+															</c:if>
+															<c:if test="${branch==b.radioID}">
+																<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" checked=true/>
+															</c:if>
+														</c:if>
+														<c:if test="${branch==null}">
+															<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" />
+														</c:if>
+													</c:forEach>
+										  </div>
+										</div>
+									</div>
+								</div>
+								
 				  </div>
 			  	</div>
 			  </div>
 
 			  <div class="layui-form-item">
-				<button class="layui-btn" style="margin: 5% 0 0 45%;">
-					<a href="enterpriseModify.jsp" style="color: white;">保存课程信息</a>
+				<button class="layui-btn" style="margin: 20% 0 0 0;" type="submit" id="submitBtn">
+					保存课程信息
 				</button>
-			  </div>	
+			  </div>
 			</form>
 		  </div>
 		</div>
 		
-		<script type="text/javascript" src="../layui/layui.js"></script>
+		<script type="text/javascript" src="layui/layui.js"></script>
 		<script>
 			layui.use('carousel', function(){
 			  var carousel = layui.carousel;
@@ -169,29 +241,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</script>
 
 		<script>
-			layui.use(['form', 'upload'], function() {
-				var form = layui.form,
-					layer = layui.layer,
-					$ = layui.jquery,
+		
+			layui.use('upload', function() {
+				var $ = layui.jquery,
 					upload = layui.upload;
 
-				//监听提交
-				form.on('submit(demo1)', function(data) {
-					layer.alert(JSON.stringify(data.field), {
-						title: '最终的提交信息'
-					})
-					return false;
-				});
-
-				upload.render({
-					elem: '#btn_upload',
-					url: '/upload/',
-					size: 1024,
+				//普通图片上传
+				var uploadInst = upload.render({
+					elem: '#choose',
+					url: '<%=request.getContextPath()%>/BackEnd/upload/cover.do',
+					//auto:false,
+					//bindAction: '#submitBtn',
+					accept: 'file',
+		
 					before: function(obj) {
 						//预读本地文件示例，不支持ie8
 						obj.preview(function(index, file, result) {
-							$('#demo1').attr('src', result); //图片链接（base64）
-
+							$('#cover').attr('src', result); //图片链接（base64）
 						});
 					},
 					done: function(res) {
@@ -199,8 +265,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						if(res.code > 0) {
 							return layer.msg('上传失败');
 						}
-
 						//上传成功
+						else{
+			
+							alert(res.url);
+							document.getElementById("coverurl").value=res.url;
+						}
 					},
 					error: function() {
 						//演示失败状态，并实现重传
@@ -210,6 +280,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							uploadInst.upload();
 						});
 					}
+				});
+
+				layui.use(['form', 'layedit', 'laydate'], function() {
+					var form = layui.form,
+						layer = layui.layer,
+						layedit = layui.layedit,
+						laydate = layui.laydate;
 				});
 			});
 		</script>

@@ -1,10 +1,7 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+<!DOCTYPE html>
 <html>
 
 	<head>
@@ -12,7 +9,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<title>分部查看页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
+		<link rel="stylesheet" href="<%=request.getContextPath() %>/BackEnd_final/layui/css/layui.css">
+		<script type="text/javascript" src="<%=request.getContextPath() %>/BackEnd_final/layui/layui.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath() %>/BackEnd_final/layui/layui.all.js"></script>
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; border-radius: 10px; text-align: center;}
 			.layui-card-header {
@@ -34,7 +33,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     //得到父页面的iframe框架的对象
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
-                obj.height = this.document.html.height;
+                //.height = 'auto';
+                var height = getComputedStyle(window.parent.document.getElementsByClassName("layui-body")[0],null).height;
+                console.log(height); 
+                obj.height = height;
             } 
         </script>
 	</head>
@@ -49,13 +51,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				  <div class="layui-card-header">
 				  	<span>分部信息表</span>
 				  	<span style="float: right;">
-				  		<a href="branchAdd.jsp" id="a_branchAdd">
+				  		<a href="<%=request.getContextPath() %>/BackEnd_final/BackEnd_final/branchAdd.jsp?qid=<%=request.getAttribute("qid") %>" id="a_branchAdd">
 				  			<i class="layui-icon layui-icon-add-1"></i>
 				  			添加分部
 				  		</a>
 				  	</span>
 				  </div>
-				  <div class="layui-card-body" style="margin-top: 1%;">
+				  <div class="layui-card-body" style="margin: 1%;">
 					<table class="layui-table" lay-skin="nob" lay-even>
 						<thead align="center">
 							<tr>
@@ -67,45 +69,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</tr>
 						</thead>
 						<tbody style="font-size: 15px;">
-							<tr style="background-color:">
-								<td><div class="tbody table-cell-id">1</div></td>
-								<td><div class="tbody table-cell-name">实训中心</div></td>
-								<td><div class="tbody table-cell-address">东软实训中心</div></td>
-								<td><div class="tbody table-cell-tel">15940471397</div></td>
-								<td>
-									<div class="tbody table-cell-opt">
-										<a href="branchView.jsp"><i class="layui-icon layui-icon-location">&emsp;</i></a>
-										<a href="branchModify.jsp"><i class="layui-icon layui-icon-edit">&emsp;</i></a>
-										<a href="#"><i class="layui-icon layui-icon-delete">&emsp;</i></a>
-									</div>
-								</td>
-							</tr>
-							<tr style="background-color:#F1F4F5">
-								<td><div class="tbody table-cell-id">2</div></td>
-								<td><div class="tbody table-cell-name">艺术中心</div></td>
-								<td><div class="tbody table-cell-address">多才艺术中心</div></td>
-								<td><div class="tbody table-cell-tel">15940471397</div></td>
-								<td>
-									<div class="tbody table-cell-opt">
-										<a href="branchView.jsp"><i class="layui-icon layui-icon-location">&emsp;</i></a>
-										<a href="branchModify.jsp"><i class="layui-icon layui-icon-edit">&emsp;</i></a>
-										<a href="#"><i class="layui-icon layui-icon-delete">&emsp;</i></a>
-									</div>
-								</td>
-							</tr>
-							<tr style="background-color:">
-								<td><div class="tbody table-cell-id">3</div></td>
-								<td><div class="tbody table-cell-name">恒大名都</div></td>
-								<td><div class="tbody table-cell-address">恒大名都</div></td>
-								<td><div class="tbody table-cell-tel">15940471397</div></td>
-								<td>
-									<div class="tbody table-cell-opt">
-										<a href="branchView.jsp"><i class="layui-icon layui-icon-location">&emsp;</i></a>
-										<a href="branchModify.jsp"><i class="layui-icon layui-icon-edit">&emsp;</i></a>
-										<a href="#"><i class="layui-icon layui-icon-delete">&emsp;</i></a>
-									</div>
-								</td>
-							</tr>
+						<c:forEach items="${addresslist }" var="s">
+											
+							<c:if test="${s.isDeleted == 0 }">
+								<tr style="background-color:">
+									<td><div class="tbody table-cell-id">${s.aid }</div></td>
+									<td><div class="tbody table-cell-name">${s.branch }</div></td>
+									<td><div class="tbody table-cell-address">${s.address }</div></td>
+									<td><div class="tbody table-cell-tel">${s.tel }</div></td>
+									<td>
+										<div class="tbody table-cell-opt">
+											<a href='<%=request.getContextPath()%>/BackEnd/Handler_viewSingleAddressByQidId?aid=${s.aid}&method=branch'><i class="layui-icon layui-icon-location">&emsp;</i></a>
+											<a href='<%=request.getContextPath()%>/BackEnd/Handler_viewSingleAddressByQidId?aid=${s.aid}&method=branchModify'><i class="layui-icon layui-icon-edit">&emsp;</i></a>
+											<a href="#" id="deleteBranchInfo" onClick="deleteRow(this)"><i class="layui-icon layui-icon-delete">&emsp;</i></a>
+										</div> 
+									</td>
+								</tr>
+							</c:if>
+						</c:forEach>
 						</tbody>
 					</table>
 				  </div>
@@ -113,5 +94,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</div>
 	</body>
+
+	<script src="<%=request.getContextPath() %>/BackEnd_final/jquery-3.2.0.min.js"></script>
+	<script>
+		var aid;
+		function deleteRow(obj){
+			var res = confirm("确定要删除该分部吗？");
+			if(res == true){
+				aid = $(obj).parents("tr").children("td").eq(0).text();
+				$(obj).parents("tr").remove();
+				$.ajax({
+					url: "Handler_deleteBranchByQidId",
+					type:"post",
+					data:{
+						aid:aid
+					},
+					dataType:"json",
+					success:function(data){
+						alert(data.result);
+					}
+				});
+			}
+		}		
+	</script>
 
 </html>

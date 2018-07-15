@@ -23,8 +23,8 @@
 			<property name="url"  value="jdbc:mysql://localhost:3306/team?characterEncoding=utf-8">
 			<!-- jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8 -->
 			</property>
-			<property name="username" value="chen" />
-			<property name="password" value="cy19970611" />
+			<property name="username" value="root" />
+			<property name="password" value="1997" />
 	</bean>
 	
 	<!-- 配置session工厂 -->

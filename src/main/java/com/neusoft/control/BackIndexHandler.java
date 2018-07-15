@@ -27,7 +27,7 @@ public class BackIndexHandler {
 		HttpSession session = request.getSession();
 		Integer qid = (Integer)session.getAttribute("qid");
 		
-		qid=1;
+		//qid=1;
 		
 		/*	Controller里没有事务回滚
 		 * Map<String,Object> map = new HashMap<String, Object>();

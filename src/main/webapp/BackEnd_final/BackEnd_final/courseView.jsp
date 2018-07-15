@@ -1,10 +1,12 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%  
+String path = request.getContextPath();  
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
+request.setAttribute("path", basePath);  
+%> 
+<!DOCTYPE html>
 <html>
 
 	<head>
@@ -12,7 +14,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<title>课程信息</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+		<link rel="stylesheet" href="${path}BackEnd_final/layui/css/layui.css">
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; border-radius: 10px; text-align: center;}
 			.layui-card-header {
@@ -41,6 +44,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     //把当前页面内容的高度动态赋给iframe框架的高
                 obj.height = this.document.html.height;
             } 
+        
         </script>
 	</head>
 
@@ -51,14 +55,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="layui-card-header">
 					<span>课程信息表</span>
 					<div id="selectStyle">
-						<select id="branch" name="branch" >    
-						    <option value="1">实训中心</option> 
-					      	<option value="2">艺术中心</option>   
-					      	<option value="3">恒大名都</option>    
+						<select id="branch" name="branch"  >    
+						   	<c:forEach items="${requestScope.branches }" var="b">
+										<option value="${b.aid }">${b.branch }</option>
+							</c:forEach>
+
 					    </select>
 				    </div>
 					<span style="float: right;">
-						<a href="courseAdd.jsp" id="a_courseAdd">
+						<a href="<%=request.getContextPath() %>/BackEnd_final/BackEnd_final/courseAdd.jsp" id="a_courseAdd">
 							<i class="layui-icon layui-icon-add-1"></i>添加课程
 						</a>
 					</span>
@@ -75,49 +80,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						        <th>操作</th>
 						    </tr> 
 						</thead>
-						<tbody style="font-size: 15px;">
-							<tr>
-						      <td>1</td>
-						      <td>体验课：Java 12天冲刺</td>
-						      <td >    	 
-						        <img src="../images/lesson3.jpg" id="img" />
-						      </td>
-						      <td>0.01</td>
-							    <td>java</td>
-							    <td>
-								    <button><a href="courseDetail.jsp"><i class="layui-icon layui-icon-right"></i>&nbsp;</a></button>
-									<button><a href="courseModify.jsp"><i class="layui-icon layui-icon-edit" ></i>&nbsp;</a></button>
-									<button><a href="#"><i class="layui-icon layui-icon-delete"></i></a></button>
-							    </td>
-						    </tr> 
-						    <tr>
-							    <td>2</td>
-							    <td>体验课：Python 快速上手</td>
-							    <td>	      	 
-							        <img src="../images/2.jpg" id="img" /> 	
-							    </td>
-							    <td>0.01</td>
-							    <td>Python</td>
-							    <td>
-							    	<button><a href="courseDetail.jsp"><i class="layui-icon layui-icon-right"></i>&nbsp;</a></button>
-									<button><a href="courseModify.jsp"><i class="layui-icon layui-icon-edit" ></i>&nbsp;</a></button>
-									<button><a href="#"><i class="layui-icon layui-icon-delete"></i></a></button>
-							    </td>
-						    </tr> 
-						    <tr>
-							    <td>3</td>
-							    <td>体验课：C++ 从入门到弃坑</td>
-							    <td >	      	 
-							        <img src="../images/course1.jpg" id="img" />	
-							    </td>
-							    <td>0.01</td>
-							    <td>C++</td>
-							    <td>
-							    	<button><a href="courseDetail.jsp"><i class="layui-icon layui-icon-right"></i>&nbsp;</a></button>
-									<button><a href="courseModify.jsp"><i class="layui-icon layui-icon-edit" ></i>&nbsp;</a></button>
-									<button><a href="#"><i class="layui-icon layui-icon-delete"></i></a></button>
-							    </td>
-						    </tr>
+						<tbody style="font-size: 15px;" id="courseinfo">
+							<c:forEach items="${lessons }" var="c">
+								<tr>
+							      <td>${c.lid }</td>
+							      <td>${c.lname }</td>
+							      <td >    	 
+							        <img src="webapps/../upload/cover/${c.imgUrl}" id="img" />
+							      </td>
+							      <td>${c.lprice }</td>
+								    <td>${c.category }</td>
+								    <td>
+									    <button onClick="viewCourseDetail(${c.lid})"><i class="layui-icon layui-icon-right"></i>&nbsp;</button>
+										<button onClick="modifyCourseDetail(${c.lid})"><i class="layui-icon layui-icon-edit" ></i>&nbsp;</button>
+										<button onclick="deleteRow(this)"><i class="layui-icon layui-icon-delete"></i></button>
+								    </td>
+							    </tr> 
+						  
+							</c:forEach>
 						</tbody>
 					</table>
 					<div id="test1" style="margin-top: 40px; margin-left: 8%"></div>
@@ -125,16 +105,118 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>	
 		</div>
 	</body>
-	<script src="../layui/layui.js"></script>
+	<script src="${path}BackEnd_final/layui/layui.js"></script>
 	<script>
 	layui.use('laypage', function(){
-	  var laypage = layui.laypage;
-	  
-	  //执行一个laypage实例
-	  laypage.render({
-	    elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
-	    ,count: 50 //数据总数，从服务端得到
-	  });
-	});
+		  var laypage = layui.laypage;
+		  var branchid = parseInt($("branch").val());
+		  $("#branch option:first").prop("selected", 'selected');
+		  $("#branch").change(function(){
+		        console.log($(this).val());//可以在这里做判断选中值
+		     
+		        branchid=$(this).val();
+		        $.ajax({
+		        	url:"<%=request.getContextPath()%>/BackEnd/selectCourseByPage",
+		        	type:"get",
+		        	data:{
+		        		branchid:branchid,
+	    				curr:1,
+	    				limit:5
+		        	},
+			        dataType:"json",
+	    			success:function(data){
+	    				console.log(data);
+	    				$("#courseinfo").empty();
+	    				var trStr = '';//动态拼接table
+	    				 for (var i = 0; i < data.length; i++) {//循环遍历出json对象中的每一个数据并显示在对应的td中
+	    				 trStr += '<tr>';//拼接处规范的表格形式
+	    				 trStr += '<td>' + data[i].lid + '</td>';//数据表的主键值
+	    				 trStr += '<td>'+data[i].lname+'</td>';
+	    				 trStr += '<td><img src="/webapps/upload/cover/' + data[i].imgUrl + ' "/></td>';//对应数组表的字段值
+	    				 trStr += '<td>' + data[i].lprice + '</td>';
+	    				 trStr +='<td><button onClick="viewCourseDetail('+data[i].lid+')"><i class="layui-icon layui-icon-right"></i>&nbsp;</button></td>';
+	    				 trStr +='<button onClick="modifyCourseDetail('+data[i].lid+')"><i class="layui-icon layui-icon-edit" ></i>&nbsp;</button>';
+	    				 trStr += '<button onclick="deleteRow(this)"><i class="layui-icon layui-icon-delete"></i></button>';
+	    				 trStr += '</td></tr>'
+	    				 } 
+	    				$("#courseinfo").html(trStr);
+	    			}
+		        });
+		    });
+		  
+		  //执行一个laypage实例
+		  laypage.render({
+		    elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+		    ,count: <%= request.getAttribute("count")%> //数据总数，从服务端得到
+		    ,limit:5
+		    ,jump:function(obj,first){
+		    	if(!first){
+		    		//alert("not first");
+		    		$.ajax({
+		    			url:"<%=request.getContextPath()%>/BackEnd/selectCourseByPage",
+		    			type:"post",
+		    			data:{
+		    				branchid:branchid,
+		    				curr:obj.curr,
+		    				limit:5
+		    			},
+		    			dataType:"json",
+		    			success:function(data){
+		    				console.log(data);
+		    				$("#courseinfo").empty();
+		    				var trStr = '';//动态拼接table
+		    				 for (var i = 0; i < data.length; i++) {//循环遍历出json对象中的每一个数据并显示在对应的td中
+		    				 trStr += '<tr>';//拼接处规范的表格形式
+		    				 trStr += '<td>' + data[i].lid + '</td>';//数据表的主键值
+		    				 trStr += '<td>'+data[i].lname+'</td>';
+		    				 trStr += '<td><img src="/webapps/../upload/cover/' + data[i].imgUrl + ' "/></td>';//对应数组表的字段值
+		    				 trStr += '<td>' + data[i].lprice + '</td>';
+		    				 alert(data[i].lid);
+		    				 trStr +='<td><button onClick="viewCourseDetail('+data[i].lid+')"><i class="layui-icon layui-icon-right"></i>&nbsp;</button></td>';
+		    				 trStr +='<button onClick="modifyCourseDetail('+data[i].lid+')"><i class="layui-icon layui-icon-edit" ></i>&nbsp;</button>';
+		    				 trStr += '<button onclick="deleteRow(this)"><i class="layui-icon layui-icon-delete"></i></button>';
+		    				 trStr += '</td></tr>'
+		    				 } 
+		    				$("#courseinfo").html(trStr);
+		    			}
+		    		});
+		    	}
+					
+		    }
+		  });
+		});
+	</script>
+
+	<script>
+		var lid;
+	function deleteRow(obj){
+		var res = confirm("确定要删除该课程信息吗？");
+		if(res == true){
+			lid = $(obj).parents("tr").children("td").eq(0).text();
+			$(obj).parents("tr").remove();
+			$.ajax({
+				url: "<%= request.getContextPath()%>/BackEnd/deleteCourseByLid",
+				type:"post",
+				data:{
+					lid:lid,
+				},
+				dataType:"json",
+				success:function(data){
+					alert(data.result);
+				}
+			});
+		}
+	}	
+	
+	function viewCourseDetail(obj){
+		alert(obj);
+	
+		window.location.href="<%= request.getContextPath()%>/BackEnd/detail/lesson?lid="+obj;
+	}
+	
+	function modifyCourseDetail(obj){
+	
+		window.location.href="<%= request.getContextPath()%>/BackEnd/edit?lid="+obj;
+	}
 	</script>
 </html>

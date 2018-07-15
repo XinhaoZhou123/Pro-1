@@ -1,10 +1,6 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html>
 <html>
 
 	<head>
@@ -12,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<title>教师信息修改页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
+		<link rel="stylesheet" href="<%=request.getContextPath() %>/BackEnd_final/layui/css/layui.css">
 		
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; text-align: center; border-radius: 10px;}
@@ -31,7 +27,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     //得到父页面的iframe框架的对象
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
-                obj.height = this.document.html.height;
+                var height = getComputedStyle(window.parent.document.getElementsByClassName("layui-body")[0],null).height;
+                console.log(height); 
+                obj.height = height;
             } 
         </script>
 	</head>
@@ -44,7 +42,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<!-- 内容主体区域 -->
 			  <div style="background-color: white; 
 			  	margin: 0px 50px 0px 0px; background-color: #F8F8FF;">
-			  	<form class="layui-form"  lay-filter="example" style="font-family: '宋体';">
 				  	<div class="layui-col-md6">
 				      <div class="layui-row">
 				      	<div class="layui-collapse">
@@ -54,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									<div class="layui-card-body layui-colla-content layui-show" 
 										style="padding-left: 3%;">
 									  
-										<img src="" name="teacher_img" class="layui-upload-img" 
+										<img src="/uploadImage/${teacher.tphoto }" name="teacher_img" class="layui-upload-img" 
 											id="demo1" style="width: 100%;"><br /><br />
 										<button type="button" class="layui-btn" id="btn_delete">
 											删除图片</button>
@@ -78,7 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									<div class="layui-card-header layui-colla-title">教师姓名</div>
 									<div class="layui-card-body layui-colla-content layui-show" 
 										style="height: 50px; line-height: 50px;">
-										<input name="teacher_name" type="text" class="layui-input" />
+										<input id="teacher_name" type="text" class="layui-input" value="${teacher.tname }"/>
 									</div>
 								</div>
 							</div>
@@ -87,71 +84,64 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									<div class="layui-card-header layui-colla-title">教师简介</div>
 									<div class="layui-card-body layui-colla-content layui-show" 
 										style="text-align: left;">
-										<textarea name="teacher_intro" class="layui-textarea" 
-											style="overflow-x: hidden;"></textarea>
+										<textarea id="teacher_intro" class="layui-textarea" 
+											style="overflow-x: hidden;">${teacher.introduction }</textarea>
 									</div>
 								</div>
 							</div>
-						  </form>
 					  	</div>
-					  	<div class="layui-form-item">
-							<button type="submit" class="layui-btn" style="margin: 25% 0 0 36%;">
-								<a href="enterpriseModify.jsp" style="color: white;">保存教师信息</a>
+					 
+							<button type="submit" class="layui-btn" style="margin: 25% 0 0 36%;" id="saveteacherinfo">
+								保存教师信息
 							</button>
-						</div>	
+						
 					  </div>
 					</div>	
-				</form>
 			  </div>
 		</div>
 		 
-		<script type="text/javascript" src="../layui/layui.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath() %>/BackEnd_final/layui/layui.js"></script>
 		<script>
 		//JavaScript代码区域
-		layui.use('layer ', function(){
-			var layer = layui.layer ;
-		});
+		
 		layui.use('element', function(){
 		  var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 		});
 		</script>
 		<script>
-			layui.use(['form', 'upload'], function() {
-				var form = layui.form,
-					layer = layui.layer,
-					$ = layui.jquery,
+			layui.use('upload', function() {
+				var $ = layui.jquery,
 					upload = layui.upload;
 
-				//监听提交
-				form.on('submit(demo1)', function(data) {
-					layer.alert(JSON.stringify(data.field), {
-						title: '最终的提交信息'
-					})
-					return false;
+		
+				$("#btn_delete").click(function(){
+					$.ajax({
+						url:"Handler_deleteTeacherPhotoByQidTId",
+						type:"post",
+						data:{
+							qid:<%=request.getParameter("qid")%>,
+							tid:<%=request.getParameter("tid")%>
+						},
+						dataType:"json",
+						success:function(data){
+							alert(data.result);
+							$("#demo1").attr('src','');
+						}
+					});
 				});
-
-				$("#btn_delete").click(function() {
-					$("#demo1").attr("src", "");
-					$("#demo1").hide();
-				});
-
-				$("#demo1").attr("src", "../images/teacher4.jpg");
-
-				form.val('example', {
-					"teacher_name": "费园园" // "name": "value"
-						,
-					"teacher_intro": "主要从事HTML5、Java开源领域及Android移动开发，在东软集团担任过6年的软件工程师，2年半的HTML5、JAVA培训讲师，承担过东北大学，北交大等重点高校培训项目。"
-				});
-
-				//if(document.getElementById("#demo1").getAttribute('src')!=""){
-				//	$("#btn_upload").DISABLED;
-				//}
-
+				
+				
 				upload.render({
 					elem: '#btn_upload',
-					url: '/upload/',
+					url: 'Handler_updateTeacherPhotoByQidTid',
 					size: 1024,
-					before: function(obj) {
+					auto:false,
+					bindAction:"#saveteacherinfo",
+					data:{
+						qid:<%=request.getParameter("qid")%>,
+						tid:<%=request.getParameter("tid")%>
+					},
+					choose: function(obj) {
 						//预读本地文件示例，不支持ie8
 						obj.preview(function(index, file, result) {
 							$('#demo1').attr('src', result); //图片链接（base64）
@@ -163,8 +153,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						if(res.code > 0) {
 							return layer.msg('上传失败');
 						}
-
-						//上传成功
+						alert("成功修改信息");				
 					},
 					error: function() {
 						//演示失败状态，并实现重传
@@ -176,6 +165,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}
 				});
 			});
+		</script>
+		<script src="<%=request.getContextPath() %>/BackEnd_final/jquery-3.2.0.min.js"></script>
+		<script>
+		$("#saveteacherinfo").click(function(){
+			var tname = $("#teacher_name").val();
+			var introduction = $("#teacher_intro").val();
+			
+			$.ajax({
+				url:"Handler_updateTeacherInfoByQidTid",
+				type:"post",
+				data:{
+					qid:<%=request.getParameter("qid")%>,
+					tid:<%=request.getParameter("tid")%>,
+					tname:tname,
+					introduction:introduction
+				},
+				dataType:"json",
+				success:function(data){
+					alert(data.result);
+				}
+
+			});
+			
+		});
 		</script>
 	</body>
 </html>

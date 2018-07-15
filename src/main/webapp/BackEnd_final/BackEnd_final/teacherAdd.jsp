@@ -1,10 +1,6 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html>
 <html>
 
 	<head>
@@ -12,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<title>教师添加页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
+		<link rel="stylesheet" href="<%=request.getContextPath() %>/BackEnd_final/layui/css/layui.css">
 		
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; text-align: center; border-radius: 10px;}
@@ -44,7 +40,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<!-- 内容主体区域 -->
 			  <div style="background-color: white; 
 			  	margin: 0px 50px 0px 0px; background-color: #F8F8FF;">
-			  	<form class="layui-form"  lay-filter="example" style="font-family: '宋体';">
 				  	<div class="layui-col-md6">
 				      <div class="layui-row">
 				      	<div class="layui-collapse">
@@ -76,7 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									<div class="layui-card-header layui-colla-title">教师姓名</div>
 									<div class="layui-card-body layui-colla-content layui-show" 
 										style="height: 50px; line-height: 50px;">
-										<input type="text" class="layui-input" />
+										<input type="text" class="layui-input" id="teacher_name"/>
 									</div>
 								</div>
 							</div>
@@ -85,23 +80,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									<div class="layui-card-header layui-colla-title">教师简介</div>
 									<div class="layui-card-body layui-colla-content layui-show" 
 										style="text-align: left;">
-										<textarea class="layui-textarea" style="overflow-x: hidden;"></textarea>
+										<textarea class="layui-textarea" style="overflow-x: hidden;" id="teacher_introduction"></textarea>
 									</div>
 								</div>
 							</div>
 					  	</div>
 					  	<div class="layui-form-item">
-							<button class="layui-btn" type="submit" style="margin: 25% 0 0 36%;">
-								<a href="enterpriseModify.jsp" style="color: white;">保存教师信息</a>
+							<button class="layui-btn" type="button" style="margin: 25% 0 0 36%;" id="addTeacherInfo">
+								保存教师信息
 							</button>
 						</div>	
 					  </div>
 					</div>	
-				</form>
 			  </div>
 		</div>
 		 
-		<script type="text/javascript" src="../layui/layui.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath() %>/BackEnd_final/layui/layui.js"></script>
 		<script>
 		//JavaScript代码区域
 		layui.use('layer ', function(){
@@ -114,37 +108,53 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script>
 		layui.use('upload', function(){
 		    var $ = layui.jquery
-		    ,upload = layui.upload;
-	   
-			var uploadInst = upload.render({
-		     elem: '#test1'
-		    ,size:1024
-		    ,url: '/upload/'
-		    ,before: function(obj){
-		      //预读本地文件示例，不支持ie8
-		      obj.preview(function(index, file, result){
-		        $('#demo1').attr('src', result); //图片链接（base64）
-		       
-		      });
-		    }
-		    ,done: function(res){
-		      //如果上传失败
-		      if(res.code > 0){
-		        return layer.msg('上传失败');
-		      }
-	
-		      //上传成功
-		    }
-		    ,error: function(){
-		      //演示失败状态，并实现重传
-		      var demoText = $('#demoText');
-		      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
-		      demoText.find('.demo-reload').on('click', function(){
-		        uploadInst.upload();
-		      });
-		    }
-	 		});
+		    ,upload = layui.upload
+		   
+		    var tname = $("#teacher_name").val();
+			var introduction = $("#teacher_introduction").val();
+			
+			console.log(tname);
+			console.log(introduction);
+			 var uploadInst = upload.render({
+			     elem: '#test1'
+			    ,size:1024
+			    ,url: '<%=request.getContextPath()%>/BackEnd/Handler_insertTeacherByQid'
+			    ,data:{
+			    	qid:<%= request.getParameter("qid")%>,
+			    	tname:function(){
+			    		return $("#teacher_name").val();
+			    	},
+			    	introduction:function(){
+			    		return $("#teacher_introduction").val();
+			    	}
+			    }
+			    ,auto:false
+			    ,bindAction:'#addTeacherInfo'
+			    ,choose: function(obj){
+			      //预读本地文件示例，不支持ie8
+			      obj.preview(function(index, file, result){
+			    	  $('#demo1').attr('src', result); //图片链接（base64）			       
+			      });
+			    },done: function(res) {
+					//如果上传失败
+					if(res.code > 0) {
+						return layer.msg('上传失败');
+					}
+						alert("成功上传图片");
+				},
+				error: function() {
+					//演示失败状态，并实现重传
+					var demoText = $('#demoText1');
+					demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+					demoText.find('.demo-reload').on('click', function() {
+						uploadInstVideo.upload();
+					});
+				}
+		 		});	
+		    
  		});
 		</script>
+		<script src="<%=request.getContextPath() %>/BackEnd_final/jquery-3.2.0.min.js"></script>
+		
 	</body>
 </html>

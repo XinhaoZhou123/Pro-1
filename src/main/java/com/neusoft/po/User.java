@@ -1,10 +1,13 @@
 package com.neusoft.po;
 //用户
 public class User {
+
 	int uid;			//用户id
+
 	String tel;			//手机号作为id
 	String nickName;	//昵称
 	String iconUrl;		//头像url
+
 	int qid;			//企业id
 	String pwd;
 	
@@ -26,6 +29,7 @@ public class User {
 	public void setQid(int qid) {
 		this.qid = qid;
 	}
+
 	public String getTel() {
 		return tel;
 	}

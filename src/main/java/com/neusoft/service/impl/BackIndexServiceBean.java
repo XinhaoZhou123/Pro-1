@@ -45,6 +45,7 @@ public class BackIndexServiceBean implements BackIndexService {
 		Integer todayOrder=backmapper.findTodayOrderNum(qid);
 		Integer todayGood=backmapper.findTodayGoodNum(qid);
 		Double monthProfit=backmapper.findMonthProfit(qid);
+		monthProfit = (monthProfit==null?0:monthProfit);
 		Integer monthMessage=backmapper.findMonthMessageNum(qid);
 		map.put("userNumbers", userNumbers);
 		map.put("todayReserv", todayReserv);

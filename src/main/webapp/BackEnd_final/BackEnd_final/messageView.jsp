@@ -1,23 +1,31 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java"  contentType="text/html; charset=utf-8" import="java.io.File"
+    pageEncoding="utf-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+    	String path = request.getContextPath();
+    	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
+    	request.setAttribute("path", basePath);   	
+    	
+    	String imgpath = request.getServletContext().getRealPath("/");
+    	String ppath = new File(imgpath).getParent();
+    	imgpath = ppath+"/upload/messageimgs";
+    	request.setAttribute("imgpath", imgpath);
+ %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>课程首页图片页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
-		<link rel="stylesheet" href="../assets/css/amazeui.min.css" />
-	    <link rel="stylesheet" href="../assets/css/admin.css">
-	    <link rel="stylesheet" href="../assets/css/app.css">
-		<script src="../assets/js/jquery.min.js"></script>
-    	<script src="../assets/js/amazeui.min.js"></script>
-    	<script src="../assets/js/app.js"></script>
+		<link rel="stylesheet" href="${path}/BackEnd_final/layui/css/layui.css">
+		<link rel="stylesheet" href="${path}/BackEnd_final/assets/css/amazeui.min.css" />
+	    <link rel="stylesheet" href="${path}/BackEnd_final/assets/css/admin.css">
+	    <link rel="stylesheet" href="${path}/BackEnd_final/assets/css/app.css">
+		<script src="${path}/BackEnd_final/assets/js/jquery.min.js"></script>
+    	<script src="${path}/BackEnd_final/assets/js/amazeui.min.js"></script>
+    	<script src="${path}/BackEnd_final/assets/js/app.js"></script>
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; border-radius: 10px;}
 			.layui-card-header {
@@ -39,6 +47,75 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 obj.height = this.document.html.height;
             } 
         </script>
+ <style type="text/css">
+ /*CSS grayr style pagination*/ 
+DIV.yahoo { 
+    PADDING-RIGHT: 3px; 
+    PADDING-LEFT: 3px; 
+    PADDING-BOTTOM: 3px; 
+    MARGIN: 3px; 
+    PADDING-TOP: 3px; 
+    TEXT-ALIGN: center 
+} 
+
+DIV.yahoo A { 
+    BORDER-RIGHT: #fff 1px solid; 
+    PADDING-RIGHT: 5px; 
+    BORDER-TOP: #fff 1px solid; 
+    PADDING-LEFT: 5px; 
+    PADDING-BOTTOM: 2px; 
+    MARGIN: 2px; 
+    BORDER-LEFT: #fff 1px solid; 
+    COLOR: #000099; 
+    PADDING-TOP: 2px; 
+    BORDER-BOTTOM: #fff 1px solid; 
+    TEXT-DECORATION: underline 
+} 
+
+DIV.yahoo A:hover { 
+    BORDER-RIGHT: #000099 1px solid; 
+    BORDER-TOP: #000099 1px solid; 
+    BORDER-LEFT: #000099 1px solid; 
+    COLOR: #000; 
+    BORDER-BOTTOM: #000099 1px solid 
+} 
+
+DIV.yahoo A:active { 
+    BORDER-RIGHT: #000099 1px solid; 
+    BORDER-TOP: #000099 1px solid; 
+    BORDER-LEFT: #000099 1px solid; 
+    COLOR: #f00; 
+    BORDER-BOTTOM: #000099 1px solid 
+} 
+
+DIV.yahoo SPAN.current { 
+    BORDER-RIGHT: #fff 1px solid; 
+    PADDING-RIGHT: 5px; 
+    BORDER-TOP: #fff 1px solid; 
+    PADDING-LEFT: 5px; 
+    FONT-WEIGHT: bold; 
+    PADDING-BOTTOM: 2px; 
+    MARGIN: 2px; 
+    BORDER-LEFT: #fff 1px solid; 
+    COLOR: #000; 
+    PADDING-TOP: 2px; 
+    BORDER-BOTTOM: #fff 1px solid; 
+    BACKGROUND-COLOR: #fff 
+} 
+
+DIV.yahoo SPAN.disabled { 
+    BORDER-RIGHT: #eee 1px solid; 
+    PADDING-RIGHT: 5px; 
+    BORDER-TOP: #eee 1px solid; 
+    PADDING-LEFT: 5px; 
+    PADDING-BOTTOM: 2px; 
+    MARGIN: 2px; 
+    BORDER-LEFT: #eee 1px solid; 
+    COLOR: #ddd; 
+    PADDING-TOP: 2px; 
+    BORDER-BOTTOM: #eee 1px solid 
+} 
+</style>
 	</head>
 
 	<body class="layui-layout-body" onload="IFrameResize();">
@@ -48,263 +125,78 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="layui-card-header layui-colla-title">朋友圈消息列表</div>
 					  <div class="am-g">
                         <div class="tpl-table-images">
-                            <div class="am-u-sm-12 am-u-md-6 am-u-lg-7">
+                        
+                        <c:forEach items="${requestScope.messages }" var="m">
+                            <div class="layui-col-md4"><!--am-u-sm-4 am-u-md-4 am-u-lg-4-->
                                 <div class="tpl-table-images-content">
-                                    <div class="tpl-table-images-content-i-time">发布时间：2016-09-12</div>
+                                    <div class="tpl-table-images-content-i-time" style="display: inline-block;width: 60%;">发布时间：${m.mtime }</div>
+                                    <div class="am-btn-toolbar" style="margin-left: 15%;display: inline-block;">
+                                            <div class="am-btn-group am-btn-group-xs ">
+                                                <button type="button" class="am-btn am-btn-default am-btn-danger">
+                                                	<a href="<%=request.getContextPath()%>/BackEnd/message/messagedelete?currentPage=${page.currentPage }&mid=${m.mid}"  style="color:white"><span class="am-icon-trash-o"></span> 删除</a>
+                                                </button>
+                                               <!-- <button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-archive"></span>查看评论</button>-->
+                                            </div>
+                                    </div>
                                     <div class="tpl-i-title">
-                                                                                无阅读，不生活
+                                        <span>${m.mtitle }</span>
                                     </div>
                                     <a href="javascript:;" class="tpl-table-images-content-i">
-                                      <div class="layui-row layui-col-space10">
-                                    	<div class="layui-col-md6">
-                                        <img src="../images/6.jpg" style="height: 200px;">
-                                        </div>
-                                        <div class="layui-col-md6">
-                                        <img src="../images/yuantiao.jpg" style="height: 200px;">
-                                        </div>
+                                      <div class="layui-row layui-col-space10" style="height: 350px;">
+                                      	<c:if test="${fn:length(m.messageimgs)==1 }">
+                                      		<c:forEach items="${m.messageimgs }"  var="img">
+		                                    	<div class="layui-col-md12">
+	                                       			 <img src="../../../upload/messageimgs/${img.imgUrl}" style="height: 326px;">
+	                                        	</div>
+                                       		 </c:forEach>
+                                      	</c:if>
+                                      	<c:if test="${fn:length(m.messageimgs)>1 }">
+	                                       	<c:forEach items="${m.messageimgs }"  var="img">
+		                                    	<div class="layui-col-md6">
+		                                        	<img src="../../../upload/messageimgs/${img.imgUrl}" style="height: 163px;">
+		                                        </div>
+	                                        </c:forEach>
+                                        </c:if>
                                       </div>
                                     </a>
                                     <div class="tpl-table-images-content-block">
                                         <div class="tpl-i-more">
                                             <ul>
-                                                <li><span class="layui-icon layui-icon-praise"> 100+</span></li>
-                                                <li><span class="layui-icon layui-icon-reply-fill"> 235+</span></li>     
-                                                <li><a href="messageReview.jsp"><span class="layui-icon layui-icon-right">查看评论</a></li>
+                                                <li><span class="layui-icon layui-icon-praise"> ${m.likenum }</span></li>
+                                                <li><span class="layui-icon layui-icon-reply-fill"> ${m.replynum }</span></li>     
+                                                <li><a href="<%=request.getContextPath()%>/BackEnd/message/messagereview?messagePage=${page.currentPage}&mid=${m.mid}"><span class="layui-icon layui-icon-right">查看评论</a></li>
                                             </ul>
-                                        </div>
-                                        <br />
-                                        <div class="am-btn-toolbar" style="margin-left: 42%;">
-                                            <div class="am-btn-group am-btn-group-xs tpl-edit-content-btn">
-                                                <button type="button" class="am-btn am-btn-default am-btn-danger">
-                                                	<span class="am-icon-trash-o"></span> 删除
-                                                </button>
-                                               <!-- <button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-archive"></span>查看评论</button>-->
-                                            </div>
-                                        </div>
+                                       </div>       
                                     </div>
                                 </div>
                             </div>
-                            <div class="am-u-sm-12 am-u-md-6 am-u-lg-5">
-                            	<div class="tpl-portlet-components">
-					            	<div class="portlet-title">
-					                    <div class="caption" style="font-family: '宋体';">
-					                       		 评论列表
-					                    </div>
-					                </div>
-					                <div class="tpl-block">
-					                    <div class="am-g" style="margin-left: 80%;">
-					                        <div class="am-u-sm-12 am-u-md-6">
-					                            <div class="am-btn-toolbar">
-					                                <div class="am-btn-group am-btn-group-xs">
-					                                  
-					                                    <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除</button>
-					                                </div>
-					                            </div>
-					                        </div>
-					                    </div>
-					
-					                    <ul class="tpl-task-list">
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> 梅西：我今晚回家了</span>
-					                            </div>
-					                        </li>
-					
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> C罗：我跟你一起</span>
-					                            </div>
-					                        </li>
-					
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> 内马尔：等我一晚上，我跟你们一起 </span>
-					                            </div>
-					                        </li>            
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> 姆巴佩：红红火火恍恍惚惚 </span>
-					                            </div>
-					                        </li>  
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> 姆巴佩：红红火火恍恍惚惚 </span>
-					                            </div>
-					                        </li>  
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> 姆巴佩：红红火火恍恍惚惚 </span>
-					                            </div>
-					                        </li>  
-					                    </ul>
-					               	</div>
-									<div id="test1" style="margin-top: 10px; margin-left: 10%;"></div>
-					            </div>
-                            </div>
-                            <div class="am-u-sm-12 am-u-md-6 am-u-lg-7">
-                                <div class="tpl-table-images-content">
-                                    <div class="tpl-table-images-content-i-time">发布时间：2016-09-12</div>
-                                    <div class="tpl-i-title">
-                                                                                无阅读，不生活
-                                    </div>
-                                    <a href="javascript:;" class="tpl-table-images-content-i">
-                                      <div class="layui-row layui-col-space10">
-                                    	<div class="layui-col-md6">
-                                        <img src="../images/6.jpg" style="height: 200px;">
-                                        </div>
-                                        <div class="layui-col-md6">
-                                        <img src="../images/yuantiao.jpg" style="height: 200px;">
-                                        </div>
-                                      </div>
-                                    </a>
-                                    <div class="tpl-table-images-content-block">
-                                        <div class="tpl-i-more">
-                                            <ul>
-                                                <li><span class="layui-icon layui-icon-praise"> 100+</span></li>
-                                                <li><span class="layui-icon layui-icon-reply-fill"> 235+</span></li>     
-                                                <li><a href="messageReview.jsp"><span class="layui-icon layui-icon-right">查看评论</a></li>
-                                            </ul>
-                                        </div>
-                                        <br />
-                                        <div class="am-btn-toolbar" style="margin-left: 42%;">
-                                            <div class="am-btn-group am-btn-group-xs tpl-edit-content-btn">
-                                                <button type="button" class="am-btn am-btn-default am-btn-danger">
-                                                	<span class="am-icon-trash-o"></span> 删除
-                                                </button>
-                                               <!-- <button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-archive"></span>查看评论</button>-->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="am-u-sm-12 am-u-md-6 am-u-lg-5">
-                            	<div class="tpl-portlet-components">
-					            	<div class="portlet-title">
-					                    <div class="caption" style="font-family: '宋体';">
-					                       		 评论列表
-					                    </div>
-					                </div>
-					                <div class="tpl-block">
-					                    <div class="am-g" style="margin-left: 80%;">
-					                        <div class="am-u-sm-12 am-u-md-6">
-					                            <div class="am-btn-toolbar">
-					                                <div class="am-btn-group am-btn-group-xs">
-					                                  
-					                                    <button type="button" class="am-btn am-btn-default am-btn-danger">
-					                                    	<span class="am-icon-trash-o"></span> 删除
-					                                    </button>
-					                                </div>
-					                            </div>
-					                        </div>
-					                    </div>
-					
-					                    <ul class="tpl-task-list">
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> 梅西：我今晚回家了</span>
-					                            </div>
-					                        </li>
-					
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> C罗：我跟你一起</span>
-					                            </div>
-					                        </li>
-					
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> 内马尔：等我一晚上，我跟你们一起 </span>
-					                            </div>
-					                        </li>            
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> 姆巴佩：红红火火恍恍惚惚 </span>
-					                            </div>
-					                        </li>  
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> 姆巴佩：红红火火恍恍惚惚 </span>
-					                            </div>
-					                        </li>  
-					                        <li>
-					                            <div class="task-checkbox">
-					                                <input type="hidden" value="1" name="test">
-					                                <input type="checkbox" class="liChild" value="2" name="test"> </div>
-					                            <div class="task-title">
-					                                <span class="task-title-sp"> 姆巴佩：红红火火恍恍惚惚 </span>
-					                            </div>
-					                        </li>  
-					                    </ul>
-					               	</div>
-									<div id="test2" style="margin-top: 10px; margin-left: 10%;"></div>
-					            </div>
-                            </div>
-                            <div id="test3" style="margin-top: 20px; margin-left: 37%;"></div>
-                        </div>
+                          </c:forEach>
+                                
+                        </div>       
+                           
                       </div>
+
+				         <div class="yahoo"> 				      
+					        <c:if test="${page.currentPage==1 }"><span class="disabled"><</span></c:if>
+						    <c:if test="${page.currentPage!=1 }"><a href="<%=request.getContextPath()%>/BackEnd/message/messagelist?currentPage=${page.currentPage-1 }" ><span><</span></a></c:if>
+						     <c:forEach begin="${page.startPage }" end="${page.endPage }" var="i"> 
+						     <c:if test="${page.currentPage==i }">
+						    <span class="current">${i }<span>
+						    </c:if>
+						    <c:if test="${page.currentPage!=i }">
+						    <a href="<%=request.getContextPath()%>/BackEnd/message/messagelist?currentPage=${i }" ><span >${i }</span></a>
+						    </c:if>
+						     </c:forEach>
+						    <c:if test="${page.currentPage==page.totalPage }"><span class="disabled">></span></c:if>
+						    <c:if test="${page.currentPage!=page.totalPage }"><a href="<%=request.getContextPath()%>/BackEnd/message/messagelist?currentPage=${page.currentPage +1}" ><span>></span></a></c:if>	  
+					    </div>                        
+					
 					</div>
 				</div>
 			</div>
 		</div>
-		<script src="../layui/layui.js"></script>
-		<script>
-		layui.use('laypage', function(){
-		  var laypage = layui.laypage;
-		  
-		  //执行一个laypage实例
-		  laypage.render({
-		    elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
-		    ,count: 50 //数据总数，从服务端得到
-
-		  });
-		});
-		</script>
-		<script>
-		layui.use('laypage', function(){
-		  var laypage = layui.laypage;
-		  
-		  //执行一个laypage实例
-		  laypage.render({
-		    elem: 'test2' //注意，这里的 test1 是 ID，不用加 # 号
-		    ,count: 50 //数据总数，从服务端得到
-
-		  });
-		});
-		</script>
-		<script>
+		<script src="${path}/BackEnd_final/layui/layui.js"></script>
+		<!-- <script>
 		layui.use('laypage', function(){
 		  var laypage = layui.laypage;
 		  
@@ -314,6 +206,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    ,count: 50 //数据总数，从服务端得到
 		  });
 		});
-		</script>
+		</script> -->
 	</body>
 </html>
+
+
+

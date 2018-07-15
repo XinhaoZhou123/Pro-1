@@ -1,10 +1,7 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 <html>
 
 	<head>
@@ -12,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<title>分部信息页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
+		<link rel="stylesheet" href="<%=request.getContextPath() %>/BackEnd_final/layui/css/layui.css">
 		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=7G4mrGoAKdfGRAGUNx8Wb1WhoVr0XkiV"></script>
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; text-align: center; border-radius: 10px;}
@@ -31,7 +28,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     //得到父页面的iframe框架的对象
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
-                obj.height = this.document.html.height;
+                    //obj.height='auto';
+                  
+                var height = getComputedStyle(window.parent.document.getElementsByClassName("layui-body")[0],null).height;
+                console.log(height); 
+                obj.height = height;
             } 
         </script>
 	</head>
@@ -40,7 +41,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		style="font-family: '宋体'; background-color: #F8F8FF;" onload="IFrameResize();">
 		<div class="layui-layout layui-layout-admin">
 			
-
+		
 				<!-- 内容主体区域 -->
 			  <div style="background-color: white; 
 			  	margin: 0px 50px 0px 0px; background-color: #F8F8FF;">
@@ -52,7 +53,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<div class="layui-card-header layui-colla-title">分部名称</div>
 								<div class="layui-card-body layui-colla-content layui-show" 
 									style="height: 50px; line-height: 50px;">
-									实训中心
+									${address.branch }
 								</div>
 							</div>
 						</div>
@@ -61,14 +62,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<div class="layui-card-header layui-colla-title">分部电话</div>
 								<div class="layui-card-body layui-colla-content layui-show" 
 									style="height: 50px; line-height: 50px;">
-									15940471396
+									${address.tel }
 								</div>
 							</div>
 						</div>
 				  	</div>
 				  	<div class="layui-form-item">
 						<button class="layui-btn" style="margin: 25% 0 0 36%;">
-							<a href="branchModify.jsp" style="color: white;">修改分部信息</a>
+							<a href="<%=request.getContextPath()%>/BackEnd/Handler_viewSingleAddressByQidId?aid=<%= request.getAttribute("id") %>&method=branchModify" style="color: white;">修改分部信息</a>
 						</button>
 					</div>	
 				  </div>
@@ -82,7 +83,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<div class="layui-card-body layui-colla-content layui-show" 
 									style="padding-left: 3%;">
 									<div class="layui-input-inline" style="padding-bottom: 10px;">
-									    东软实训中心
+									  ${address.address }
 									</div><br />
 						         	<!-- 地图-->
 						         	<div id="allmap";></div>
@@ -96,7 +97,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 		</div>
 		 
-		<script type="text/javascript" src="../layui/layui.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath() %>/BackEnd_final/layui/layui.js"></script>
 		<script>
 		//JavaScript代码区域
 		layui.use('layer ', function(){
@@ -111,7 +112,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript">
 			// 百度地图API功能
 			var map = new BMap.Map("allmap");    // 创建Map实例
-			var new_point = new BMap.Point(123.445967,41.711486);
+			var new_point = new BMap.Point(<%= request.getAttribute("longitude")%>,<%= request.getAttribute("latitude")%>);
 			map.centerAndZoom(new_point, 18);  // 初始化地图,设置中心点坐标和地图级别
 			//添加地图类型控件
 			map.addControl(new BMap.MapTypeControl({
@@ -119,7 +120,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            BMAP_NORMAL_MAP,
 		            BMAP_HYBRID_MAP
 		        ]}));	  
-			map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+			map.setCurrentCity("沈阳");          // 设置地图显示的城市 此项是必须设置的
 			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 			var marker = new BMap.Marker(new_point);  // 创建标注
 			map.addOverlay(marker);              // 将标注添加到地图中

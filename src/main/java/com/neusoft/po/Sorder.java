@@ -4,14 +4,16 @@ public class Sorder {
 	private int oid;				//订单id
 	private int lid;				//课程lesson id
 	private Lesson lesson;
-	private int total;				//花费价格
+	private double total;				//花费价格
 	private String status;			//状态{代付款、已付款、退款中、已退款}
 	private String orderTime;		//订单时间
-	
+	private String username;
 	private int qid;				//企业id
 	private Enterprise enterprise;
 	private String transactionId;	//购买者流水号
+	private double rating; //评分
 	private String tel;
+
 	private User user;
 	public int getOid() {
 		return oid;
@@ -25,10 +27,10 @@ public class Sorder {
 	public void setLid(int lid) {
 		this.lid = lid;
 	}
-	public int getTotal() {
+	public double getTotal() {
 		return total;
 	}
-	public void setTotal(int total) {
+	public void setTotal(double total) {
 		this.total = total;
 	}
 	public String getStatus() {
@@ -55,6 +57,14 @@ public class Sorder {
 	public void setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
 	}
+
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
 	public Lesson getLesson() {
 		return lesson;
 	}
@@ -73,12 +83,18 @@ public class Sorder {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public String getTel() {
-		return tel;
+	public String getUsername() {
+		return username;
 	}
-	public void setTel(String tel) {
-		this.tel = tel;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-	
+	public double getRating() {
+		return rating;
+	}
+	public void setRating(double rating) {
+		this.rating = rating;
+	}
+
 	
 }

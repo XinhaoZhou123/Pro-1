@@ -1,10 +1,10 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
+<%@ page language="java" pageEncoding="utf-8"%>  
+<%  
+String path = request.getContextPath();  
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
+request.setAttribute("path", basePath);  
+%> 
 <html>
 
 	<head>
@@ -12,7 +12,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<title>预约课程详情页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
+		<link rel="stylesheet" href="${path}BackEnd/layui/css/layui.css" media="all">
+		<script type="text/javascript" charset="utf-8" src="${path}BackEnd/utf8-jsp/ueditor.config.js"></script>
+		<script type="text/javascript" charset="utf-8" src="${path}BackEnd/utf8-jsp/ueditor.all.min.js"></script>
+		<script type="text/javascript" src="${path}BackEnd/layui/layui.js"></script>
+		<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+		<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+		<script type="text/javascript" charset="utf-8" src="${path}BackEnd/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
+		<script src="${path}BackEnd/layui/layui.js" charset="utf-8"></script>
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; text-align: center; border-radius: 10px;}
 			.layui-card-header {
@@ -30,7 +37,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
                 obj.height = this.document.body.scrollHeight;
+                    
+                    alert("开始设置地址");
+                document.getElementById("jump").setAttribute("href","../editfree?id="+request.getAttribute("id"));
             } 
+    
+            function editlesson(){
+            	window.location.href="<%=request.getContextPath()%>/BackEnd/editfree?id="+getUrlParam("id");//跳到购买界面
+            }
+            function getUrlParam(name) {
+    		    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
+    		    var r = window.location.search.substr(1).match(reg);  // 匹配目标参数
+    		    if (r != null) return unescape(r[2]); return null; // 返回参数值
+    		}
         </script>
 	</head>
 
@@ -42,11 +61,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  	margin: 0px 50px 0px 0px; background-color: #F8F8FF;">
 			<form class="layui-form">
 				<div class="layui-collapse">
+					<div class="layui-col-md12 layui-colla-item">
+						<div class="layui-card">
+							<div class="layui-card-header layui-colla-title">预约课程编号</div>
+							<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
+								<%=request.getAttribute("id") %>
+							</div>
+						</div>
+					</div>
 					<div class="layui-col-md8 layui-col-lg-offset2 layui-colla-item">
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">预约课程名称</div>
 							<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
-								大数据免费试听课
+								<%=request.getAttribute("title") %>
 							</div>
 						</div>
 					</div>
@@ -54,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">预约课程状态</div>
 							<div class="layui-card-body layui-colla-content layui-show">
-								进行中
+								<%=request.getAttribute("status") %>
 							</div>
 						</div>
 					</div>
@@ -62,7 +89,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">开设分部</div>
 							<div class="layui-card-body layui-colla-content layui-show">
-								实训中心
+								<%=request.getAttribute("branchName") %>
 							</div>
 						</div>
 					</div>
@@ -71,7 +98,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">课程图片</div>
 							<div class="layui-card-body layui-colla-content layui-show" style="padding-left: 3%;">
-								<img src="../images/bigdata.jpg" name="course_img" class="layui-upload-img" id="demo1" style="width: 100%;"><br /><br />
+								<img id="cover" src="/webapps/../upload/cover/<%=request.getAttribute("cover") %>"/>
 							</div>
 						</div>
 					</div>
@@ -79,21 +106,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">课程描述</div>
 							<div class="layui-card-body layui-colla-content layui-show">
-								<img src="../images/bigdata.jpg" />
+								<%out.println(request.getAttribute("fdesc")) ;%>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<button class="layui-btn" style="margin: 5% 0 0 43%;">
-						<a href="reservationModify.jsp" style="color: white;">修改课程信息</a>
-					</button>
-				</div>
+				<button class="layui-btn" onclick="editlesson()" style="margin: 5% 0 0 43%;">
+					修改课程信息
+				</button>
+			 </div>	
 			</form>
 		  </div>
 		</div>
 		
-		<script type="text/javascript" src="../layui/layui.js"></script>
+		
 		<script>
 			layui.use(['element', 'layer'], function(){
 			  var element = layui.element;

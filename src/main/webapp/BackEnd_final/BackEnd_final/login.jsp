@@ -12,6 +12,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta charset="utf-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	    <link rel="stylesheet" href="../layui/css/layui.css">
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+		<script type="text/javascript" src="../layui/layui.js"></script>
+		
     </head>
     <body class="layui-layout-body" style="background-color:#F1F4F5 ;">
 		<div class="layui-layout layui-layout-admin">
@@ -19,7 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 		    <!-- 内容主体区域 -->
 			<div class="layui-card" style="width : 30%; margin-left: 36.5%; margin-top:10%; border-radius: 10px;">
-			<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+			<div class="layui-tab layui-tab-brief" >
 				<ul class="layui-tab-title">
 					<li class="layui-this">管理员</li>
 					<li>超级管理员</li>
@@ -28,22 +31,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="layui-tab-item layui-show">
 
 						<div class="layui-card-body">
-							<form class="layui-form" action="index.jsp" style="margin-left: -10%;">
+							<form class="layui-form"  id="manager"  style="margin-left: -10%;">
 								<div class="layui-form-item" >
 									<label class="layui-form-label">用户名</label>
 									<div class="layui-input-block">
-										<input type="text" name="title" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+										<input type="text" name="name" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
 									</div>
 								</div>
-								<div class="layui-form-item">
+								<div class="layui-form-item" >
 									<label class="layui-form-label">密码</label>
 									<div class="layui-input-block">
-										<input type="password" name="title" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+										<input type="password" name="pwd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
 									</div>
 								</div>
-								<div class="layui-form-item">
+								<div class="layui-form-item" >
 									<div class="layui-input-block">
-										<button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" style="margin-top: 4% ; margin-left: 33%;">登陆</button>
+										<input type="button"  name="log" class="layui-btn"  style="margin-top: 4% ; margin-left: 33%;" value="登陆">
 									</div>
 								</div>
 							</form>
@@ -51,22 +54,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="layui-tab-item">
 						<div class="layui-card-body">
-							<form class="layui-form" action="enterprise.jsp" style="margin-left: -10%;">
+							<form class="layui-form" id="super_manager"  style="margin-left: -10%;">
 								<div class="layui-form-item">
 									<label class="layui-form-label">用户名</label>
 									<div class="layui-input-block">
-										<input type="text" name="title" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+										<input type="text" name="name" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">密码</label>
 									<div class="layui-input-block">
-										<input type="password" name="title" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+										<input type="password" name="pwd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block">
-										<button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" style="margin-top: 4% ; margin-left: 33%;">登陆</button>
+										<input type="button" name="log" value="登陆" class="layui-btn" lay-submit="" lay-filter="demo1" style="margin-top: 4% ; margin-left: 33%;">
 									</div>
 								</div>
 							</form>
@@ -77,7 +80,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</div>
 		</div>
-		<script type="text/javascript" src="../layui/layui.js"></script>
+		<script>
+			$("#manager").on("click","input[name=log]",function(){
+				var name=$("#manager input[name=name]").val();
+				var pwd = $("#manager input[name=pwd]").val();
+				$.ajax({
+					url:'<%=request.getContextPath()%>/BackEnd/Manager/log',
+					data:{name:name,pwd:pwd},
+					method:"post",
+					success:function(data){
+						if(data.msg){
+							window.location.href='index.jsp';
+						}else{
+							alert("用户名或密码错误");
+						}
+					}
+				});
+			})
+		</script>
 		<script>
 		//JavaScript代码区域
 		layui.use('element', function(){

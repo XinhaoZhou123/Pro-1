@@ -1,10 +1,6 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html>
 <html>
 
 	<head>
@@ -12,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<title>企业信息页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
+		<link rel="stylesheet" href="<%=request.getContextPath() %>/BackEnd_final/layui/css/layui.css">
 		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=7G4mrGoAKdfGRAGUNx8Wb1WhoVr0XkiV"></script>
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; text-align: center; border-radius: 10px;}
@@ -31,7 +27,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     //得到父页面的iframe框架的对象
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
-                obj.height = this.document.html.height;
+                var height = getComputedStyle(window.parent.document.getElementsByClassName("layui-body")[0],null).height;
+                console.log(height); 
+                obj.height = height;
             } 
         </script>
 	</head>
@@ -53,12 +51,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<div class="layui-card-body layui-colla-content layui-show" 
 									style="padding-left: 3%;">
 									<div class="layui-input-inline" style="padding-bottom: 10px;">
-									  <form>
-									      <input type="tel" name="phone" class="layui-input" 
-									      	placeholder="东软实训中心">
+									      <input type="tel" id="branch_address" class="layui-input" 
+									      	value="${address.address }">
+									      
 									</div><br />
 						         	<!-- 地图-->
-						         	<div id="allmap";></div>
+						         	<div id="allmap"></div>
 								</div>
 							</div>
 				      	</div>
@@ -73,7 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<div class="layui-card-header layui-colla-title">分部名称</div>
 								<div class="layui-card-body layui-colla-content layui-show" 
 									style="height: 50px; line-height: 50px;">
-									<input class="layui-input" type="text" placeholder="实训中心"/>
+									<input id="branch_branch" class="layui-input" type="text" value="${address.branch }"/>
 								</div>
 							</div>
 						</div>
@@ -82,23 +80,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<div class="layui-card-header layui-colla-title">分部电话</div>
 								<div class="layui-card-body layui-colla-content layui-show" 
 									style="text-align: left;">
-									<input class="layui-input" type="text" placeholder="15940471396"/>
+									<input class="layui-input" id="branch_tel" type="text" value="${address.tel }"/>
 								</div>
 							</div>
 						</div>
 				  	</div>
 				  	<div class="layui-form-item">
-						<button class="layui-btn" style="margin: 25% 0 0 36%;">
-							<a href="enterpriseModify.jsp" style="color: white;">保存分部信息</a>
+						<button class="layui-btn" style="margin: 25% 0 0 36%;" id="saveBranchInfo">
+							保存分部信息
 						</button>
-					  </form>
 					</div>	
 				  </div>
 				</div>
 			  </div>
 		</div>
 		 
-		<script type="text/javascript" src="../layui/layui.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath() %>/BackEnd_final/layui/layui.js"></script>
 		<script>
 		//JavaScript代码区域
 		layui.use('layer ', function(){
@@ -109,11 +106,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 		</script>
 	</body>
-</html>
-<script type="text/javascript">
+	<script type="text/javascript">
 			// 百度地图API功能
 			var map = new BMap.Map("allmap");    // 创建Map实例
-			var new_point = new BMap.Point(123.445967,41.711486);
+			var new_point = new BMap.Point(<%=request.getAttribute("longitude")%>,<%= request.getAttribute("latitude")%>);
 			map.centerAndZoom(new_point, 18);  // 初始化地图,设置中心点坐标和地图级别
 			//添加地图类型控件
 			map.addControl(new BMap.MapTypeControl({
@@ -126,4 +122,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var marker = new BMap.Marker(new_point);  // 创建标注
 			map.addOverlay(marker);              // 将标注添加到地图中
 			map.panTo(new_point); 
-		</script>
+			
+			var newlongitude = <%=request.getAttribute("longitude")%>;
+			var newlatitude = <%= request.getAttribute("latitude")%>;
+			map.addEventListener("click",function(e){
+				alert(e.point.lng+","+e.point.lat);
+				newlongitude = e.point.lng;
+				newlatitude = e.point.lat;
+			})
+	</script>
+	<script src="<%=request.getContextPath() %>/BackEnd_final/jquery-3.2.0.min.js"></script>
+	<script>
+		$("#saveBranchInfo").click(function(){
+			
+			var branch = $("#branch_branch").val();
+			var address = $("#branch_address").val();
+			var tel = $("#branch_tel").val();
+			//console.log(newlongitude);
+			
+			$.ajax({
+				url:"Handler_updateBranchInfoByQidId",
+				type:"post",
+				data:{
+					id: <%= request.getAttribute("id")%>,
+					branch:branch,
+					address:address,
+					tel:tel,
+					longitude:newlongitude,
+					latitude: newlatitude
+				},
+				dataType:"json",
+				success:function(data){
+					alert(data.result);
+				}
+				
+			});
+		})
+	</script>
+</html>

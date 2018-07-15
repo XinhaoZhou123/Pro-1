@@ -6,6 +6,7 @@ import java.util.Map;
 import com.neusoft.po.Refund;
 import com.neusoft.po.Sorder;
 import com.neusoft.tools.Page;
+import com.neusoft.vo.RatingItem;
 
 public interface OrderMapper {
 		public List<Sorder> getOrders(Map<String, Object> map) throws Exception;
@@ -13,12 +14,11 @@ public interface OrderMapper {
 		public int getOrdersCount(Map<String, Object> map) throws Exception;
 		public void changeRefundStatus(int oid) throws Exception;
 		public void changePaidStatus(int oid) throws Exception;	
-		
-		public List<Sorder> getUserOrders(Page page,String tel ) throws Exception;
-		public List<Sorder> getUserOrdersByStatus(Page page,Long tel,String status) throws Exception;
-		public List<Refund> getUserRefunds(Page page,Long tel) throws Exception;
-		public int getTotalNumOfUserOrders(Long tel) throws Exception;
-		public int getTotalNumOfUserOrdersByStatus(Long tel,String status) throws Exception;
-		public int getTotalNumOfUserRefunds(Long tel) throws Exception;
-		
+		public void changePaidToRefunding(int oid) throws Exception;
+		public void changeUnpaidToCanceled(int oid) throws Exception;
+		public void changeUnpaidToPaid(int oid) throws Exception;
+		public void addRating(Map<String, Object> map) throws Exception;
+		public float getRating(int oid) throws Exception;
+		public float getTotal(int oid) throws Exception;
+		public RatingItem getUidAndLidByOid(int oid) throws Exception;
 }

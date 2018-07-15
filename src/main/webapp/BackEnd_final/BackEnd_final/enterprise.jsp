@@ -1,10 +1,7 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+     <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 <html>
 
 	<head>
@@ -12,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<title>企业信息页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
+		<link rel="stylesheet" href="<%=request.getContextPath() %>/BackEnd_final/layui/css/layui.css">
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; text-align: center; border-radius: 10px;}
 			.layui-card-header {
@@ -20,6 +17,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				background-color: antiquewhite; 
 				border-top-left-radius: 10px;
 				border-top-right-radius: 10px;
+			}
+			#enterprie_jczs img{
+				width:500px;
+				height:346px;
 			}
 		</style>
 		<script type="text/javascript">
@@ -37,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		style="font-family: '宋体'; background-color: #F8F8FF;" onload="IFrameResize();">
 		<div class="layui-layout layui-layout-admin">
 			
-
+		
 				<!-- 内容主体区域 -->
 			  <div style="background-color: white; 
 			  	margin: 0px 50px 0px 0px; background-color: #F8F8FF;">
@@ -49,7 +50,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<div class="layui-card-header layui-colla-title">企业名称</div>
 								<div class="layui-card-body layui-colla-content layui-show" 
 									style="height: 50px; line-height: 50px;">
-									东软睿道
+									${list.name }
 								</div>
 							</div>
 						</div>
@@ -58,9 +59,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<div class="layui-card-header layui-colla-title">企业简介</div>
 								<div class="layui-card-body layui-colla-content layui-show" 
 									style="text-align: left;">
-									沈阳东软睿道教育服务有限公司（简称东软睿道）由东软创办，基于东软的产业发展
-									与人才培养实践， 提供更加符合IT行业发展需求的人才培养体系和方法学，精准提升
-									大学生和大学后的就业、创业技能， 为新经济时代的转型发展提供高质量规模化的人才供给。
+									${list.introduction }
 								</div>
 							</div>
 						</div>
@@ -68,10 +67,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				        	<div class="layui-card">
 								<div class="layui-card-header layui-colla-title">精彩展示</div>
 								<div class="layui-card-body layui-colla-content layui-show">
-									<img src="../images/yuantiao.jpg" style="width:500px;height:346px;"><br />
-									<img src="../images/yuantiao.jpg" style="width:500px;height:346px;">
-									<img src="../images/yuantiao.jpg" style="width:500px;height:346px;">
-									<img src="../images/yuantiao.jpg" style="width:500px;height:346px;">
+									<div id="enterprie_jczs">${list.jczs }</div>
 								</div>
 							</div>
 			      		</div>
@@ -88,9 +84,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									style="padding-left: 3%;">
 									<div class="layui-carousel carousel" id="img-carousel">
 									  <div carousel-item="">
-									    <div><img src="../images/yuantiao.jpg"></div>
-									    <div><img src="../images/6.jpg"></div>
-									    <div><img src="../images/muwu.jpg"></div>
+									 ·	 
+									  	<c:forEach items="${list.swiperList }" var="s">
+									   		<img src="/uploadImage/${s.imgurl }" style="width:500px;height:346px;">																						   		
+										</c:forEach>
+									 				 
 									  </div>
 									</div> 		
 								</div>
@@ -101,9 +99,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				        	<div class="layui-card">
 								<div class="layui-card-header layui-colla-title">企业视频</div>
 								<div class="layui-card-body layui-colla-content layui-show">
-									<video id="enterprise_video" src="" style="width:500px; height:250px;" 
+									<c:if test="${not empty list.videopath }">
+										<video id="enterprise_video" src="/uploadVideo/${list.videopath }" style="width:500px; height:250px;" 
 										controls="controls">
-									</video>
+										</video>
+									</c:if>
+									<c:if test="${empty list.videopath }">
+									</c:if>
 								</div>
 							</div>
 				      	</div>
@@ -113,14 +115,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 				<div class="layui-form-item">
 					<button class="layui-btn" style="margin: 5% 0 0 45%;">
-						<a href="enterpriseModify.jsp" style="color: white;">修改企业信息</a>
+						<a href="<%=request.getContextPath()%>/BackEnd/Handler_findEnterpriseByQid?method=enterprisemodify" style="color: white;">修改企业信息</a>
 					</button>
 				</div>				
 			  </div>
 
+		
 		</div>
 		
-		<script type="text/javascript" src="../layui/layui.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath() %>/BackEnd_final/layui/layui.js"></script>
+		<script src="<%=request.getContextPath() %>/BackEnd_final/jquery-3.2.0.min.js"></script>
+		
 		<script>
 		layui.use('carousel', function(){
 		  var carousel = layui.carousel;
@@ -158,19 +163,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				var layer = layui.layer;
 			});
 		</script>
-		<script>
-			layui.use('form',function(){
-				var $ = layui.jquery;
-				
-				//企业图片介绍
-			$("#demo1").attr("src","../images/6.jpg");
-			$("#demo2").attr("src","../images/yuantiao.jpg");
-		////企业风采中图片
-			$("#enterprise_info_img").attr("src","../images/teacher4.jpg");
-		////企业视频
-			$("#enterprise_video").attr("src","../videos/1.mp4");
-			})
-		</script>
+	
 </body>
 
 </html>

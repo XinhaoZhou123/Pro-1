@@ -2,9 +2,9 @@ package com.neusoft.po;
 //轮播图的图片
 public class Swiper {
 	private int id;
-	private int qid;			//企业id
-	String imgUrl;		//图片路径
-	char category;		//位置类别
+	private int qid;
+	private String imgurl;
+	private String category;
 	public int getId() {
 		return id;
 	}
@@ -17,19 +17,18 @@ public class Swiper {
 	public void setQid(int qid) {
 		this.qid = qid;
 	}
-	public String getImgUrl() {
-		return imgUrl;
+	public String getImgurl() {
+		return imgurl;
 	}
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
+	public void setImgurl(String imgurl) {
+		this.imgurl = imgurl;
 	}
-	public char getCategory() {
+	public String getCategory() {
 		return category;
 	}
-	public void setCategory(char category) {
+	public void setCategory(String category) {
 		this.category = category;
 	}
-
 	
 	
 }

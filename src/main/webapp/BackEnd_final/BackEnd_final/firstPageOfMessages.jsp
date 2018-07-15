@@ -1,18 +1,50 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>朋友圈首页照片</title>
+		<title>朋友圈发布页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+		<script type="text/javascript">
+		$(function(){
+			$("#btn_submit").click(function(){
+				var imgs = document.getElementById("file");
+				var list = imgs.files;
+				if(list.length==0){
+					alert("至少选择一张图片");
+					return;
+				}
+				var formData = new FormData(document.getElementById("myform"));		
+			 	$.ajax({
+					url:"<%=request.getContextPath()%>/message/publish",
+					type:"post",
+					data:formData,
+					processData:false,
+					contentType:false,
+					dataType:"json",
+					success:function(data){
+						if(data.result){
+							alert("发布成功");
+							jumpurl();
+							setTimeout(jumpurl,1000);
+						}
+						else{
+							alert("发布失败,请重新发布")
+						}
+					}						
+				});	
+			})
+		})
+		function jumpurl(){
+			window.location.href='<%=request.getContextPath()%>/message/messagelist';
+		}
 		
+</script>
+<link rel="stylesheet" href="../layui/css/layui.css">
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; text-align: center; border-radius: 10px;}
 			.layui-card-header {
@@ -33,6 +65,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 obj.height = this.document.html.height;
             } 
         </script>
+       	
 	</head>
 
 	<body class="layui-layout-body" onload="IFrameResize();">
@@ -49,9 +82,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											<img class="layui-upload-img" id="demo1">
 										</div>
 										<button type="button" class="layui-btn" id="test1">选择图片</button>
-										<div class="layui-inline layui-word-aux">
+										<!-- <div class="layui-inline layui-word-aux">
 											文件最大限制为1M
-										</div>
+										</div> -->
 										
 										<div class="layui-form-item" style="float: right; margin-right: 25%;">
 											<button class="layui-btn" type="submit">
@@ -79,39 +112,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 		</script>
 		<script>
-		layui.use('upload', function(){
-		    var $ = layui.jquery
-		    ,upload = layui.upload;
-	   
-			var uploadInst = upload.render({
-		     elem: '#test1'
-		    ,size:1024
-		    ,url: '/upload/'
-		    ,before: function(obj){
-		      //预读本地文件示例，不支持ie8
-		      obj.preview(function(index, file, result){
-		        $('#demo1').attr('src', result); //图片链接（base64）
-		       
-		      });
-		    }
-		    ,done: function(res){
-		      //如果上传失败
-		      if(res.code > 0){
-		        return layer.msg('上传失败');
-		      }
-	
-		      //上传成功
-		    }
-		    ,error: function(){
-		      //演示失败状态，并实现重传
-		      var demoText = $('#demoText');
-		      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
-		      demoText.find('.demo-reload').on('click', function(){
-		        uploadInst.upload();
-		      });
-		    }
-	 		});
- 		});
+			function uploadImg(){
+					var ie=navigator.appName=="Microsoft Internet Explorer" ? true : false; 
+					if(ie){ 
+					document.getElementById("file").click(); 
+					}else{
+					var a=document.createEvent("MouseEvents");//FF的处理 
+					a.initEvent("click", true, true);  
+					document.getElementById("file").dispatchEvent(a); 
+					} 
+		}
+		</script>
+		<script>  
+			    var imgs = document.getElementById("file");
+			    imgs.addEventListener("change", upload, false);  
+			    function upload(){  
+		        var list = this.files;  
+				if(list.length <= 4){
+					for(var i=0;i<4;i++){
+						var img = "img"+i;
+						document.getElementById(img).src="../images/white.PNG"
+					}
+					for(var i=0;i<list.length;i++){
+						
+						var file = list[i];
+						getImg(i,file);
+					}
+				}
+				else{
+					alert("上传图片不应多余4张");
+				}
+				
+		 		}
+			function getImg(i,f){				
+				var imgs = document.getElementById("file");
+				var oFReader = new FileReader();
+				oFReader.readAsDataURL(f);
+				oFReader.onload = function(oFRevent){
+							var src = oFRevent.target.result;
+							var img = "img"+i;
+							document.getElementById(img).src = src;
+						}
+			}
 		</script>
 	</body>
 </html>
