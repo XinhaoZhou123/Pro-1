@@ -24,7 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				padding: 20px 10px;
 			}
 
-			body {font-family: '宋体'; background-color: #F8F8FF; height: 1000px;}
+			body {font-family: '宋体'; background-color: #F8F8FF; height: 1050px;}
 		</style>
 		<script>
 			$(function(){

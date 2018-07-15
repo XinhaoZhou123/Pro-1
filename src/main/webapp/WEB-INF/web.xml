@@ -44,18 +44,34 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-		<!-- <filter>
+		<filter>
 	  		<filter-name>LoginFilter</filter-name>
 	  		<filter-class>com.neusoft.filter.LoginFilter</filter-class>
 	  		<init-param>
 	        <param-name>excludedPages</param-name>
-	        <param-value>/Education/login.html</param-value>
+	        <param-value>/Education/Education/login.html</param-value>
 	    	</init-param>
 	  </filter>
 	  <filter-mapping>
 	  		<filter-name>LoginFilter</filter-name>
-	  		<url-pattern>/Education/*</url-pattern>
-	  </filter-mapping> -->
+	  		<url-pattern>/Education/Education/*</url-pattern>
+	  </filter-mapping>
+	    <filter-mapping>
+	  		<filter-name>LoginFilter</filter-name>
+	  		<url-pattern>/FrontEnd/*</url-pattern>
+	  </filter-mapping>
+	  <filter>
+	  		<filter-name>BackEndLoginFilter</filter-name>
+	  		<filter-class>com.neusoft.filter.BackEndLoginFilter</filter-class>
+	  		<init-param>
+	        <param-name>excludedPages</param-name>
+	        <param-value>/BackEnd_final/BackEnd_final/login.jsp</param-value>
+	    	</init-param>
+	  </filter>
+	  <filter-mapping>
+	  		<filter-name>BackEndLoginFilter</filter-name>
+	  		<url-pattern>/BackEnd_final/BackEnd_final/*</url-pattern>
+	  </filter-mapping>
 	
 	
 	

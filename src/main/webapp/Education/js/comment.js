@@ -1,5 +1,16 @@
 var messageid =23; 
-
+function getRootPath(){
+	//获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+	var curWwwPath=window.document.location.href;
+	//获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+	var pathName=window.document.location.pathname;
+	var pos=curWwwPath.indexOf(pathName);
+	//获取主机地址，如： http://localhost:8083
+	var localhostPaht=curWwwPath.substring(0,pos);
+	//获取带"/"的项目名，如：/uimcardprj
+	var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+	return(localhostPaht+projectName);
+}
 function responseComment(mid){
 	// console.log($(this).index());
 
@@ -61,7 +72,7 @@ function responseSend(mid){
 		return;
 	}else{		
 		 $.ajax({
-				url:"../more/comment",
+				url: getRootPath()+"/FrontEnd/more/comment",
 				type:"post",
 				data:{content:commentTxt,mid:mid},
 				dataType:"json",
@@ -84,7 +95,7 @@ function responseSend(mid){
 }
 function getPullMessage(lastpubtime,type){
 	 $.ajax({
-			url:"../more/pullrefresh",
+			url: getRootPath()+"/FrontEnd/more/pullrefresh",
 			type:"post",
 			data:{pubtime:lastpubtime,type:type},
 			dataType:"json",
@@ -240,7 +251,7 @@ function getLikeuser(messagelikes,likenum,mid){
 function responseGood(mid,goodtype){
 	
 	 $.ajax({
-			url:"../more/good",
+			url: getRootPath()+"/FrontEnd/more/good",
 			type:"post",
 			data:{mid:mid,type:goodtype},
 			dataType:"json",
@@ -349,7 +360,7 @@ function responseGood(mid,goodtype){
 function getImgs(imgs,mid){
 	
 	if(imgs.length==1){
-	var img_url = '../../upload/messageimgs/'+imgs[0].imgUrl;	 
+	var img_url = '../../../upload/messageimgs/'+imgs[0].imgUrl;	 
 	
 	var img = new Image();	 
 	img.src = img_url;
@@ -433,7 +444,7 @@ function getImgs(imgs,mid){
 	else{
 		var result = '';
 		for(var i =0;i<imgs.length;i++){
-			var img_url = '../../upload/messageimgs/'+imgs[i].imgUrl;	 
+			var img_url = '../../../upload/messageimgs/'+imgs[i].imgUrl;	 
 			 result +=  '<li class="mui-table-view-cell mui-media mui-col-xs-5">'+
 						            '<a href="#"><img class="mui-media-object" src='+img_url+' data-preview-src="" data-preview-group="1" style="height: 142px;"></a>'+
 						      '</li>';
@@ -461,7 +472,7 @@ function getPubtime(pubtime){
 }*/
 function getPullComment(commentlastpubtime,type){
 	$.ajax({
-		url:"../more/morecomment",
+		url: getRootPath()+"/FrontEnd/more/morecomment",
 		type:"post",
 		data:{pubtime:commentlastpubtime,type:type,mid:messageid},
 		dataType:"json",

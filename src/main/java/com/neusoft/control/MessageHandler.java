@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,27 +27,7 @@ public class MessageHandler {
 	@Autowired
 	private MessageService messageService;
 	
-	
-	/*@RequestMapping(value="/message/publish")
-	@ResponseBody
-	public String publishMessage(String mtitle,@RequestParam MultipartFile[] upload,HttpServletRequest request) throws Exception{
-		System.out.println("........MessageHandle.......publish.....");
-		String path = request.getServletContext().getRealPath("/");
-		String ppath = new File(path).getParent();
-		path = ppath+"/upload/messageimgs";
-		int qid = 1;
-		Message message = new Message();
-		message.setMtitle(Tools.Stringfilter(mtitle));
-		message.setQid(qid);
-		boolean isOK = messageService.saveMessage(message, upload, path);
-		if(isOK){
-			return "{\"result\":true}";
-		}
-		else{
-			return "{\"result\":false}";
-		}
-	}
-}*/
+
 @RequestMapping(value="/BackEnd/message/publish")
 @ResponseBody
 public String publishMessage(String mtitle,@RequestParam MultipartFile[] upload,HttpServletRequest request) throws Exception{
@@ -55,7 +36,8 @@ public String publishMessage(String mtitle,@RequestParam MultipartFile[] upload,
 	String path = request.getServletContext().getRealPath("/");
 	String ppath = new File(path).getParent();
 	path = ppath+"/upload/messageimgs";
-	int qid = 1;
+	HttpSession session = request.getSession();
+	int  qid = (int) session.getAttribute("qid");
 	Message message = new Message();
 	message.setMtitle(Tools.Stringfilter(mtitle));
 	message.setQid(qid);
@@ -72,7 +54,8 @@ public String publishMessage(String mtitle,@RequestParam MultipartFile[] upload,
 @RequestMapping(value="/BackEnd/message/messagelist")
 public String messagelist_Handler(HttpServletRequest request) throws Exception{
 	System.out.println(".........MessageHandler..........messagelist_Handler()........");
-	int qid = 1;
+	HttpSession session = request.getSession();
+	int  qid = (int) session.getAttribute("qid");
 	int currentPage = 1;
 	if(request.getParameter("currentPage")==null){
 		currentPage = 1;
@@ -83,7 +66,6 @@ public String messagelist_Handler(HttpServletRequest request) throws Exception{
 	Page page = new MessagePage(currentPage,num);
 	
 	List<Message> messages = messageService.selectMessages(page, qid);
-	//System.out.println("messagessize:"+messages.size());
 	request.setAttribute("page", page);
 	request.setAttribute("messages", messages);
 	return "forward:/BackEnd_final/BackEnd_final/messageView.jsp";
@@ -92,7 +74,6 @@ public String messagelist_Handler(HttpServletRequest request) throws Exception{
 @RequestMapping(value="/BackEnd/message/messagedelete")
 public String messagedelete_Handler(HttpServletRequest request,int mid,int currentPage) throws Exception{
 		System.out.println(".........MessageHandler..........messagedelete_Handler()........");
-		System.out.println("mid:"+mid+"\t"+"currentPage:"+currentPage);
 		String path = request.getServletContext().getRealPath("/");
 		String ppath = new File(path).getParent();
 		path = ppath+"/upload/messageimgs";
@@ -103,7 +84,6 @@ public String messagedelete_Handler(HttpServletRequest request,int mid,int curre
 @RequestMapping(value="/BackEnd/message/messagereview")
 public String messagereview_Handler(HttpServletRequest request,int messagePage,int mid) throws Exception{
 	System.out.println(".........MessageHandler..........messagereview_Handler()........");
-	System.out.println("mid:"+mid);
 	int currentPage = 1;
 	if(request.getParameter("currentPage")==null){
 		currentPage = 1;

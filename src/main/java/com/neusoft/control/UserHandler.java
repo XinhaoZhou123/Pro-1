@@ -3,6 +3,7 @@ package com.neusoft.control;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,8 @@ public class UserHandler {
 	
 	@RequestMapping(value="/user/log")
 	@ResponseBody
-	public Map<String, Object> login(String tel , String pwd, Integer qid , HttpSession session) throws Exception{
+	public Map<String, Object> login(String tel , String pwd, Integer qid ,HttpServletRequest request) throws Exception{
+		HttpSession session = request.getSession();
 		Map<String, Object> map = new HashMap<String, Object>();
 		User user = u_serv.findUserByTel(tel, qid);
 		Boolean msg = false;
@@ -30,7 +32,12 @@ public class UserHandler {
 			session.setAttribute("tel",tel);
 			session.setAttribute("nickName",user.getNickName());
 			session.setAttribute("uid", user.getUid());
-			map.put("user", user);
+			map.put("user", user);		
+		}
+		if(msg){
+			session.setAttribute("isLoginOk", "true");
+		}else{
+			session.setAttribute("isLoginOk", "false");
 		}
 		map.put("msg", msg);
 		return map;

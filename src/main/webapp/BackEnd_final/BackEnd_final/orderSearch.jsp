@@ -6,6 +6,10 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/"+path+"/";  
 request.setAttribute("path", basePath);  
 %> 
+<!--String path = request.getServletContext().getRealPath("/");
+		String ppath = new File(path).getParent();
+		//1.3 临时-》目的
+		File dest = new File(ppath+"/upload",filename);	  -->
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -47,7 +51,7 @@ request.setAttribute("path", basePath);
 				var status = $("#status").val();
 				var startDate = $("#startDate").val();
 				var endDate = $("#endDate").val();
-				var url = '<%=request.getContextPath() %>/order/getOrdersPageAjax?oid=' + oid 
+				var url = '<%=request.getContextPath() %>/BackEnd/order/getOrdersPageAjax?oid=' + oid 
 							+ '&status=' + status + '&startDate=' + startDate + '&endDate=' + endDate;
 				return url;
 			}

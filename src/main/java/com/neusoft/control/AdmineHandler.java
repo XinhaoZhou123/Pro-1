@@ -29,6 +29,11 @@ public class AdmineHandler {
 			session.setAttribute("qid", qid);
 			msg=true;
 		}
+		if(msg){
+			session.setAttribute("isLoginOk", "true");
+		}else{
+			session.setAttribute("isLoginOk", "false");
+		}
 		map.put("msg", msg);
 		return map;
 	}

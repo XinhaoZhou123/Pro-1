@@ -70,7 +70,7 @@
 					<a href="javascript:;">课程管理</a>
 					<dl class="layui-nav-child">
 					  <dd>
-						<a href="courseView.jsp" target="myFrame">&nbsp;课程信息管理</a>
+						<a href="<%=request.getContextPath() %>/BackEnd/selectCourseByQid"  target="myFrame">&nbsp;课程信息管理</a>
 					  </dd>
 					  <dd>
 						<a href="firstPageOfCourses.jsp" target="myFrame">&nbsp;课程首页图片</a>
@@ -81,7 +81,7 @@
 					<a href="javascript:;">预约管理</a>
 					<dl class="layui-nav-child">
 					  <dd>
-						<a href="#">&nbsp;预约课程查询</a>
+						<a href="<%=request.getContextPath() %>/BackEnd/selectFreeListenByQid" target="myFrame">&nbsp;预约课程查询</a>
 					  </dd>
 					  <dd>					  
 					  <a href="reservationDeal3.jsp" target="myFrame">&nbsp;预约课程处理</a>
@@ -111,9 +111,9 @@
 					  <dd>
 						<a href="<%=request.getContextPath()%>/BackEnd/message/messagelist"  target="myFrame">&nbsp;消息列表</a>
 					  </dd>
-					  <dd>
+					 <!--  <dd>
 						<a href="firstPageOfMessages.jsp" target="myFrame">&nbsp;朋友圈首页图片</a>
-					  </dd>
+					  </dd> -->
 					</dl>
 				  </li>
 				</ul>

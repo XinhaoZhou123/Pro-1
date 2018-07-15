@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,25 +20,25 @@ public class MorePageHandler {
 		@Autowired
 		private MessageService messageService;
 		
-		@RequestMapping(value="/more/pullrefresh")
+		@RequestMapping(value="/FrontEnd/more/pullrefresh")
 		@ResponseBody
 		public List<Message> pullrefresh_handler(HttpServletRequest request,String pubtime,int type) throws Exception{
 			System.out.println("........MorePageHandler.......pullrefresh_handler()........");
-			//String pubtime = "2019-00-00 00:00:00";
-		//	int type = 0;
 			System.out.println("pubtime:"+pubtime);
 			System.out.println("type:"+type);
-			int qid = 1;
+			HttpSession session = request.getSession();
+			int  qid = (int) session.getAttribute("qid");
 			List<Message> messages = messageService.selectFrontEndMessages(qid,pubtime,type);
 			return messages;
 		}
 		
-		@RequestMapping(value="/more/good")
+		@RequestMapping(value="/FrontEnd/more/good")
 		@ResponseBody
-		public String responsegood_handler(int mid,int type) throws Exception{
+		public String responsegood_handler(int mid,int type,HttpServletRequest request) throws Exception{
 			System.out.println("........MorePageHandler.......responsegood_handler()........");
-			String nickname = "千阳";
-			boolean isOK = messageService.updateMessageLike(type, mid, nickname);
+			HttpSession session = request.getSession();
+			String nickName =(String) session.getAttribute("nickName");
+			boolean isOK = messageService.updateMessageLike(type, mid, nickName);
 			if(isOK){
 				return "{\"result\":true}";
 			}
@@ -46,14 +47,16 @@ public class MorePageHandler {
 			}
 		}
 		
-		@RequestMapping(value="/more/comment")
+		@RequestMapping(value="/FrontEnd/more/comment")
 		@ResponseBody
-		public String responsecomment_handler(String content,int mid) throws Exception{
+		public String responsecomment_handler(String content,int mid,HttpServletRequest request) throws Exception{
 			System.out.println("........MorePageHandler.......responsecomment_handler()........");
+			HttpSession session = request.getSession();
+			String nickName =(String) session.getAttribute("nickName");
 			MessageReply messageReply = new MessageReply();
 			messageReply.setMid(mid);
 			messageReply.setContent(content);
-			messageReply.setNickName("千阳");
+			messageReply.setNickName(nickName);
 			boolean isOK = messageService.saveMessageReply(messageReply);
 			if(isOK){
 				return "{\"result\":true}";
@@ -63,7 +66,7 @@ public class MorePageHandler {
 			}
 		}
 		
-		@RequestMapping(value="/more/morecomment")
+		@RequestMapping(value="/FrontEnd/more/morecomment")
 		@ResponseBody
 		public List<MessageReply> responsemorecomment_handler(String pubtime,int type,int mid) throws Exception{
 			System.out.println("........MorePageHandler.......responsemorecomment_handler()........");

@@ -1,10 +1,11 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+<!DOCTYPE html>
+<%@ page language="java" pageEncoding="utf-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%  
+String path = request.getContextPath();  
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
+request.setAttribute("path", basePath);  
 %>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 
 	<head>
@@ -12,9 +13,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<title>添加预约课程页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="../layui/css/layui.css">
-		<script type="text/javascript" charset="utf-8" src="../js/ueditor.config.js"></script>
-		<script type="text/javascript" charset="utf-8" src="../js/ueditor.all.min.js"></script>
+		<link rel="stylesheet" href="${path}BackEnd_final/layui/css/layui.css">
+	    <script type="text/javascript" charset="utf-8" src="${path}BackEnd_final/utf8-jsp/ueditor.config.js"></script>
+		<script type="text/javascript" charset="utf-8" src="${path}BackEnd_final/utf8-jsp/ueditor.all.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+		<script type="text/javascript" charset="utf-8" src="${path}BackEnd_final/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
+		<script src="${path}BackEnd_final/layui/layui.js" charset="utf-8"></script>
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; text-align: center; border-radius: 10px;}
 			.layui-card-header {
@@ -32,23 +36,66 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
                 obj.height = this.document.body.scrollHeight;
-            } 
+            	
+                    
+                    //看看这是修改还是上传
+                var fdesc = '<%=request.getAttribute("fdesc")%>';
+        		
+    			if(fdesc!="null"){
+    				UE.getEditor('editor').setContent(fdesc);
+    			}
+    			
+    			var ue = UE.getEditor('editor');
+             
+                ue.addListener("contentChange",function(){
+                	refreshHeight();
+                });
+                ue.addListener("blur",function(){
+                	refreshHeight();
+                });
+                ue.addListener("change",function(){
+                	refreshHeight();
+                });
+              
+                window.addEventListener('DOMMouseScroll',refreshHeight(),false);
+                window.addEventListener('onMouseWheel',refreshHeight(),false);
+             
+            }
+        
+            function refreshHeight(){
+            	var obj = parent.document.getElementById("myFrame");
+                //把当前页面内容的高度动态赋给iframe框架的高
+            	obj.height = this.document.body.scrollHeight;
+            }
         </script>
 	</head>
 
-	<body class="layui-layout-body" 
-		style="font-family: '宋体'; background-color: #F8F8FF;" onload="IFrameResize();">
+	<body class="layui-layout-body" style="font-family: '宋体'; background-color: #F8F8FF;" onload="IFrameResize();">
 		<div class="layui-layout layui-layout-admin">
 				<!-- 内容主体区域 -->
-		  <div style="background-color: white; 
-			  	margin: 0px 50px 0px 0px; background-color: #F8F8FF;">
-			<form class="layui-form">
+		  <div style="background-color: white; margin: 0px 50px 0px 0px; background-color: #F8F8FF;">
+			<form class="layui-form" action="<%=request.getContextPath() %>/upload/freelisten" method="post" id="upload_freelisten" >
 				<div class="layui-collapse">
+					<c:if test="${id!=null}">
+						<div class="layui-col-md8 layui-col-lg-offset2 layui-colla-item">
+							<div class="layui-card">
+								<div class="layui-card-header layui-colla-title">预约课程编号</div>
+								<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
+									<input class="layui-input" readonly="true" type="text"  value="${id}"/>
+								</div>
+							</div>
+						</div>
+					</c:if>
 					<div class="layui-col-md8 layui-col-lg-offset2 layui-colla-item">
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">预约课程名称</div>
 							<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
-								<input class="layui-input" type="text" />
+								<c:if test="${title!=null}">
+									<input type="text" id="f_title" name="f_title" class="layui-input" placeholder="请输入课程的名称" value=${title} width="200px" />
+								</c:if>
+								<c:if test="${title==null}">
+									<input type="text" id="f_title" name="f_title" class="layui-input" placeholder="请输入课程的名称" width="200px" />
+								</c:if>
 							</div>
 						</div>
 					</div>
@@ -57,9 +104,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<div class="layui-card-header layui-colla-title">预约课程状态</div>
 							<div class="layui-card-body layui-colla-content layui-show" style="text-align: left;">
 								<div class="layui-form-item">
-									<select id="classification">
-										<option value="handled">请选择</option>
-										<option>进行中</option>
+									<select id="classification" name="f_status">
+										<c:if test="${status==null}">
+											<option id="on" value="进行中">进行中</option>
+											<option id="not_started" value="未开始">未开始</option>
+											<option id="finished" value="已结束">已结束</option>
+										</c:if>
+											<c:if test="${status=='进行中'}">
+											<option id="on" value="进行中" selected=true>进行中</option>
+											<option id="not_started" value="未开始">未开始</option>
+											<option id="finished" value="已结束">已结束</option>
+										</c:if>
+											<c:if test="${status=='未开始'}">
+											<option id="on" value="进行中">进行中</option>
+											<option id="not_started" value="未开始" selected=true>未开始</option>
+											<option id="finished" value="已结束" >已结束</option>
+										</c:if>
+											<c:if test="${status=='已结束'}">
+											<option id="on" value="进行中">进行中</option>
+											<option id="not_started" value="未开始">未开始</option>
+											<option id="finished" value="已结束" selected=true>已结束</option>
+										</c:if>
 									</select>
 								</div>
 							</div>
@@ -70,9 +135,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<div class="layui-card-header layui-colla-title">开设分部</div>
 							<div class="layui-card-body layui-colla-content layui-show">
 								<div class="layui-form-item">
-									<input type="radio" name="sub" value="train_center" title="实训中心" id="train_center" />
-									<input type="radio" name="sub" value="art_center" id="art_center" title="艺术中心" />
-									<input type="radio" name="sub" value="hengda" id="hengda" title="恒大名都" />
+									<c:if test="${branches==null}">
+										<c:redirect url="/BackEnd/initBranchFree" />
+									</c:if>
+									<c:forEach items="${requestScope.branches }" var="b">
+										<c:if test="${branch!=null}">
+											<c:if test="${branch!=b.radioID}">
+												<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" />
+											</c:if>
+											<c:if test="${branch==b.radioID}">
+												<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" checked=true/>
+											</c:if>
+										</c:if>
+										<c:if test="${branch==null}">
+											<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" />
+										</c:if>
+									</c:forEach>
 								</div>
 							</div>
 						</div>
@@ -83,10 +161,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<div class="layui-card-header layui-colla-title">课程图片</div>
 							<div class="layui-card-body layui-colla-content layui-show" style="padding-left: 3%;">
 								<div class="layui-upload-list">
-									<img class="layui-upload-img" id="demo1" 
-										style="width:100%;height:400px;">
+									<c:if test="${cover!=null}">
+										<img class="layui-upload-img" id="cover" name="cover1" src="/webapps/../upload/cover/${cover}"}>
+										<p id="demoText"></p>
+										<input type="hidden" name="imgurl" id="coverurl" value="${cover}" />
+									</c:if>
+									<c:if test="${cover==null}">
+										<img class="layui-upload-img" id="cover" name="cover1">
+										<p id="demoText"></p>
+										<input type="hidden" name="imgurl" id="coverurl" />
+									</c:if>
 								</div>
-								<button type="button" class="layui-btn" id="btn_upload">选择图片</button>
+								<button type="button" class="layui-btn" id="choose">选择图片</button>
 								<div class="layui-inline layui-word-aux">
 									文件最大限制为1M
 								</div><br /><br />
@@ -95,23 +181,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="layui-col-md8 layui-col-lg-offset2 layui-colla-item">
 						<div class="layui-card">
-							<div class="layui-card-header layui-colla-title">课程描述</div>
-							<div class="layui-card-body layui-colla-content layui-show">
-								<script id="editor" type="text/plain"></script>
-							</div>
+							<div class="layui-card-header layui-colla-title" >课程描述</div>
+								<div class="layui-card-body layui-colla-content layui-show"  >
+									<script id="editor" name="editor" type="text/plain"  ></script>
+								</div>
 						</div>
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<button class="layui-btn" style="margin: 5% 0 0 43%;">
-						<a href="#" style="color: white;">保存课程信息</a>
+					<button  class="layui-btn"  type="submit" style="margin: 5% 0 0 43%;">
+						保存课程信息
 					</button>
 				</div>
 			</form>
 		  </div>
 		</div>
 		
-		<script type="text/javascript" src="../layui/layui.js"></script>
+
 		<script>
 			layui.use(['element', 'layer'], function(){
 			  var element = layui.element;
@@ -125,38 +211,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</script>
 
 		<script>
-			layui.use(['form', 'upload'], function() {
-				var form = layui.form,
-					layer = layui.layer,
-					$ = layui.jquery,
+			layui.use('upload', function() {
+				var $ = layui.jquery,
 					upload = layui.upload;
-
-				//监听提交
-				form.on('submit(demo1)', function(data) {
-					layer.alert(JSON.stringify(data.field), {
-						title: '最终的提交信息'
-					})
-					return false;
-				});
-
-				upload.render({
-					elem: '#btn_upload',
-					url: '/upload/',
-					size: 1024,
+	
+				//普通图片上传
+				var uploadInst = upload.render({
+					elem: '#choose',
+					url: '<%=request.getContextPath()%>/upload/cover.do',
+					//auto:false,
+					//bindAction: '#submitBtn',
+					accept: 'file',
+		
 					before: function(obj) {
 						//预读本地文件示例，不支持ie8
 						obj.preview(function(index, file, result) {
-							$('#demo1').attr('src', result); //图片链接（base64）
-
+							$('#cover').attr('src', result); //图片链接（base64）
 						});
 					},
 					done: function(res) {
 						//如果上传失败
 						if(res.code > 0) {
+							refreshHeight();
 							return layer.msg('上传失败');
+							
 						}
-
 						//上传成功
+						else{
+				
+							alert(res.url);
+							
+							document.getElementById("coverurl").value=res.url;
+							refreshHeight();
+						}
 					},
 					error: function() {
 						//演示失败状态，并实现重传
@@ -166,6 +253,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							uploadInst.upload();
 						});
 					}
+				});
+	
+				layui.use(['form', 'layedit', 'laydate'], function() {
+					var form = layui.form,
+						layer = layui.layer,
+						layedit = layui.layedit,
+						laydate = layui.laydate;
 				});
 			});
 		</script>
