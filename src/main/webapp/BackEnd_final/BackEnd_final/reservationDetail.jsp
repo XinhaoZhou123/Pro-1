@@ -12,10 +12,11 @@ request.setAttribute("path", basePath);
 		<title>预约课程详情页</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="${path}BackEnd/layui/css/layui.css" media="all">
-		<script type="text/javascript" charset="utf-8" src="${path}BackEnd/utf8-jsp/ueditor.config.js"></script>
-		<script type="text/javascript" charset="utf-8" src="${path}BackEnd/utf8-jsp/ueditor.all.min.js"></script>
-		<script type="text/javascript" src="${path}BackEnd/layui/layui.js"></script>
+		<link rel="stylesheet" href="${path}BackEnd_final/layui/css/layui.css">
+	    <script type="text/javascript" charset="utf-8" src="${path}BackEnd_final/utf8-jsp/ueditor.config.js"></script>
+		<script type="text/javascript" charset="utf-8" src="${path}BackEnd_final/utf8-jsp/ueditor.all.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+		<script type="text/javascript" charset="utf-8" src="${path}BackEnd_final/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
 		<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
 		<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
 		<script type="text/javascript" charset="utf-8" src="${path}BackEnd/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
@@ -38,12 +39,13 @@ request.setAttribute("path", basePath);
                     //把当前页面内容的高度动态赋给iframe框架的高
                 obj.height = this.document.body.scrollHeight;
                     
-                    alert("开始设置地址");
+                    //alert("开始设置地址");
                 document.getElementById("jump").setAttribute("href","../editfree?id="+request.getAttribute("id"));
             } 
     
             function editlesson(){
-            	window.location.href="<%=request.getContextPath()%>/BackEnd/editfree?id="+getUrlParam("id");//跳到购买界面
+          	//alert(getUrlParam("id"));
+            	window.location.href="<%=request.getContextPath()%>/BackEnd/editfree?id="+getUrlParam("id");
             }
             function getUrlParam(name) {
     		    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
@@ -59,12 +61,12 @@ request.setAttribute("path", basePath);
 				<!-- 内容主体区域 -->
 		  <div style="background-color: white; 
 			  	margin: 0px 50px 0px 0px; background-color: #F8F8FF;">
-			<form class="layui-form">
+			
 				<div class="layui-collapse">
-					<div class="layui-col-md12 layui-colla-item">
+					<div class="layui-col-md8 layui-col-lg-offset2 layui-colla-item">
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">预约课程编号</div>
-							<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
+							<div class="layui-card-body layui-colla-content layui-show" >
 								<%=request.getAttribute("id") %>
 							</div>
 						</div>
@@ -72,7 +74,7 @@ request.setAttribute("path", basePath);
 					<div class="layui-col-md8 layui-col-lg-offset2 layui-colla-item">
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">预约课程名称</div>
-							<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
+							<div class="layui-card-body layui-colla-content layui-show" 	>
 								<%=request.getAttribute("title") %>
 							</div>
 						</div>
@@ -98,7 +100,7 @@ request.setAttribute("path", basePath);
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">课程图片</div>
 							<div class="layui-card-body layui-colla-content layui-show" style="padding-left: 3%;">
-								<img id="cover" src="/webapps/../upload/cover/<%=request.getAttribute("cover") %>"/>
+								<img id="cover"  style="width:200px;height:auto" src="/webapps/../upload/cover/<%=request.getAttribute("cover") %>"/>
 							</div>
 						</div>
 					</div>
@@ -116,7 +118,7 @@ request.setAttribute("path", basePath);
 					修改课程信息
 				</button>
 			 </div>	
-			</form>
+		
 		  </div>
 		</div>
 		

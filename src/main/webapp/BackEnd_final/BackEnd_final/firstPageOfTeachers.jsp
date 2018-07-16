@@ -49,7 +49,7 @@
 												<img class="layui-upload-img" id="demo1" src="/uploadImage/${img.img }">
 											</c:if>
 											<c:if test="${empty img.id }">
-												<img class="layui-upload-img" id="demo">
+												<img class="layui-upload-img" id="demo1">
 											</c:if>
 										</div>
 										<button type="button" class="layui-btn" id="test1">选择图片</button>
@@ -101,7 +101,7 @@
 		    ,choose: function(obj){
 		      //预读本地文件示例，不支持ie8
 		      obj.preview(function(index, file, result){
-		        $('#demo').attr('src', result); //图片链接（base64）
+		        $('#demo1').attr('src', result); //图片链接（base64）
 		       
 		      });
 		    }
@@ -139,7 +139,7 @@
 					dataType:"json",
 					success:function(data){
 						alert(data.result);
-						$("#demo1").hide();
+						//$("#demo1").hide();
 					}
 				});
 			}

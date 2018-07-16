@@ -6,6 +6,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
 request.setAttribute("path", basePath);  
 %> 
+
 <!DOCTYPE html>
 <html>
 
@@ -14,7 +15,7 @@ request.setAttribute("path", basePath);
 		<title>课程信息</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+		 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
 		<link rel="stylesheet" href="${path}BackEnd_final/layui/css/layui.css">
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; border-radius: 10px; text-align: center;}
@@ -42,7 +43,7 @@ request.setAttribute("path", basePath);
                     //得到父页面的iframe框架的对象
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
-                obj.height = this.document.html.height;
+                obj.height = "2000px";
             } 
         
         </script>
@@ -57,13 +58,18 @@ request.setAttribute("path", basePath);
 					<div id="selectStyle">
 						<select id="branch" name="branch"  >    
 						   	<c:forEach items="${requestScope.branches }" var="b">
-										<option value="${b.aid }">${b.branch }</option>
+						   				<c:if test="${current_branch==b.aid}" >
+						   					<option value="${b.aid }" selected="selected">${b.branch }</option>
+						   				</c:if>
+										<c:if test="${current_branch!=b.aid}">
+						   					<option value="${b.aid }">${b.branch }</option>
+						   				</c:if>
 							</c:forEach>
 
 					    </select>
 				    </div>
 					<span style="float: right;">
-						<a href="<%=request.getContextPath() %>/BackEnd_final/BackEnd_final/courseAdd.jsp" id="a_courseAdd">
+						<a href="<%=request.getContextPath()%>/BackEnd_final/BackEnd_final/courseAdd.jsp" id="a_courseAdd">
 							<i class="layui-icon layui-icon-add-1"></i>添加课程
 						</a>
 					</span>
@@ -86,7 +92,7 @@ request.setAttribute("path", basePath);
 							      <td>${c.lid }</td>
 							      <td>${c.lname }</td>
 							      <td >    	 
-							        <img src="webapps/../upload/cover/${c.imgUrl}" id="img" />
+							        <img src="/webapps/../upload/cover/${c.imgUrl}" id="img" />
 							      </td>
 							      <td>${c.lprice }</td>
 								    <td>${c.category }</td>
@@ -109,15 +115,17 @@ request.setAttribute("path", basePath);
 	<script>
 	layui.use('laypage', function(){
 		  var laypage = layui.laypage;
-		  var branchid = parseInt($("branch").val());
-		  $("#branch option:first").prop("selected", 'selected');
+		  var branchid = parseInt($("#branch option:selected").val());
+		  //alert(branchid+"：branchid");
+		 
 		  $("#branch").change(function(){
 		        console.log($(this).val());//可以在这里做判断选中值
 		     
 		        branchid=$(this).val();
-		        $.ajax({
+		        window.location.href="<%=request.getContextPath()%>/BackEnd/selectCourseByQid?aid="+branchid;
+		       <%--  $.ajax({
 		        	url:"<%=request.getContextPath()%>/BackEnd/selectCourseByPage",
-		        	type:"get",
+		        	type:"post",
 		        	data:{
 		        		branchid:branchid,
 	    				curr:1,
@@ -132,58 +140,60 @@ request.setAttribute("path", basePath);
 	    				 trStr += '<tr>';//拼接处规范的表格形式
 	    				 trStr += '<td>' + data[i].lid + '</td>';//数据表的主键值
 	    				 trStr += '<td>'+data[i].lname+'</td>';
-	    				 trStr += '<td><img src="/webapps/upload/cover/' + data[i].imgUrl + ' "/></td>';//对应数组表的字段值
+	    				 trStr += '<td><img src="webapps/../upload/cover/' + data[i].imgUrl + ' "/></td>';//对应数组表的字段值
 	    				 trStr += '<td>' + data[i].lprice + '</td>';
-	    				 trStr +='<td><button onClick="viewCourseDetail('+data[i].lid+')"><i class="layui-icon layui-icon-right"></i>&nbsp;</button></td>';
+	    				 trStr += '<td>' + data[i].category + '</td>';
+	    				 trStr +='<td><button onClick="viewCourseDetail('+data[i].lid+')"><i class="layui-icon layui-icon-right"></i>&nbsp;</button>';
 	    				 trStr +='<button onClick="modifyCourseDetail('+data[i].lid+')"><i class="layui-icon layui-icon-edit" ></i>&nbsp;</button>';
 	    				 trStr += '<button onclick="deleteRow(this)"><i class="layui-icon layui-icon-delete"></i></button>';
 	    				 trStr += '</td></tr>'
 	    				 } 
 	    				$("#courseinfo").html(trStr);
 	    			}
-		        });
+		        }); --%>
 		    });
 		  
 		  //执行一个laypage实例
-		  laypage.render({
-		    elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
-		    ,count: <%= request.getAttribute("count")%> //数据总数，从服务端得到
-		    ,limit:5
-		    ,jump:function(obj,first){
-		    	if(!first){
-		    		//alert("not first");
-		    		$.ajax({
-		    			url:"<%=request.getContextPath()%>/BackEnd/selectCourseByPage",
-		    			type:"post",
-		    			data:{
-		    				branchid:branchid,
-		    				curr:obj.curr,
-		    				limit:5
-		    			},
-		    			dataType:"json",
-		    			success:function(data){
-		    				console.log(data);
-		    				$("#courseinfo").empty();
-		    				var trStr = '';//动态拼接table
-		    				 for (var i = 0; i < data.length; i++) {//循环遍历出json对象中的每一个数据并显示在对应的td中
-		    				 trStr += '<tr>';//拼接处规范的表格形式
-		    				 trStr += '<td>' + data[i].lid + '</td>';//数据表的主键值
-		    				 trStr += '<td>'+data[i].lname+'</td>';
-		    				 trStr += '<td><img src="/webapps/../upload/cover/' + data[i].imgUrl + ' "/></td>';//对应数组表的字段值
-		    				 trStr += '<td>' + data[i].lprice + '</td>';
-		    				 alert(data[i].lid);
-		    				 trStr +='<td><button onClick="viewCourseDetail('+data[i].lid+')"><i class="layui-icon layui-icon-right"></i>&nbsp;</button></td>';
-		    				 trStr +='<button onClick="modifyCourseDetail('+data[i].lid+')"><i class="layui-icon layui-icon-edit" ></i>&nbsp;</button>';
-		    				 trStr += '<button onclick="deleteRow(this)"><i class="layui-icon layui-icon-delete"></i></button>';
-		    				 trStr += '</td></tr>'
-		    				 } 
-		    				$("#courseinfo").html(trStr);
-		    			}
-		    		});
-		    	}
-					
-		    }
-		  });
+						  laypage.render({
+						    elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+						    ,count: <%= request.getAttribute("count")%> //数据总数，从服务端得到
+						    ,limit:5
+						    ,jump:function(obj,first){
+						    	if(!first){
+						    		//alert("not first");
+						    		$.ajax({
+						    			url:"<%=request.getContextPath()%>/BackEnd/selectCourseByPage",
+						    			type:"post",
+						    			data:{
+						    				branchid:parseInt($("#branch option:selected").val()),
+						    				curr:obj.curr,
+						    				limit:5
+						    			},
+						    			dataType:"json",
+						    			success:function(data){
+						    				console.log(data);
+						    				$("#courseinfo").empty();
+						    				var trStr = '';//动态拼接table
+						    				 for (var i = 0; i < data.length; i++) {//循环遍历出json对象中的每一个数据并显示在对应的td中
+						    				 trStr += '<tr>';//拼接处规范的表格形式
+						    				 trStr += '<td>' + data[i].lid + '</td>';//数据表的主键值
+						    				 trStr += '<td>'+data[i].lname+'</td>';
+						    				 trStr += '<td><img src="/webapps/../upload/cover/' + data[i].imgUrl + ' "/></td>';//对应数组表的字段值
+						    				 trStr += '<td>' + data[i].lprice + '</td>';
+						    				 trStr += '<td>' + data[i].category + '</td>';
+						    				
+						    				 trStr +='<td><button onClick="viewCourseDetail('+data[i].lid+')"><i class="layui-icon layui-icon-right"></i>&nbsp;</button>';
+						    				 trStr +='<button onClick="modifyCourseDetail('+data[i].lid+')"><i class="layui-icon layui-icon-edit" ></i>&nbsp;</button>';
+						    				 trStr += '<button onclick="deleteRow(this)"><i class="layui-icon layui-icon-delete"></i></button>';
+						    				 trStr += '</td></tr>'
+						    				 } 
+						    				$("#courseinfo").html(trStr);
+						    			}
+						    		});
+						    	}
+									
+						    }
+						  });
 		});
 	</script>
 
@@ -209,7 +219,7 @@ request.setAttribute("path", basePath);
 	}	
 	
 	function viewCourseDetail(obj){
-		alert(obj);
+		//alert(obj);
 	
 		window.location.href="<%= request.getContextPath()%>/BackEnd/detail/lesson?lid="+obj;
 	}

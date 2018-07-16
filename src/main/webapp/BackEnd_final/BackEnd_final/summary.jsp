@@ -50,6 +50,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
                 obj.height = this.document.body.scrollHeight;
+                    
             } 
         </script>
 	</head>

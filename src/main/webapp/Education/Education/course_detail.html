@@ -47,11 +47,14 @@
 					dataType:"json",
 					success:function(result){
 						//alert("NO!");
-						
+						var latitude=result.latitude;
 						var longitude=result.longitude;
 						var latitude=result.latitude;
 						var  desc=result.detail;
+						
 						baidumap(longitude,latitude);
+						$("#detail").html(desc);
+						
 						//alert(longitude,latitude);
 					}
 				});
@@ -107,13 +110,13 @@
 		<div style="padding: 0px,0px;">
 			<p align="center">门店地址</p>
 			<div style="background-color:beige">
-			
+				<br>
 				<p id="address" align="center"></p>
 				<p id="phone" align="center"></p>
 				
 			</div>
 		</div>
-		<div id="allmap" style="padding: 0px,0px;"></div>
+		<div id="allmap" style="padding: 0px,0px;height:250px" ></div>
 	</div>
 	<div id="detail" align="center"  style="margin: 10px auto;">
 		<h4 align="bottom" style="margin:10% 10% 1% 10% ;" align="center" >课程详情</h4>

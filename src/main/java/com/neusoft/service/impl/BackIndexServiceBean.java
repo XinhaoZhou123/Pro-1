@@ -55,4 +55,8 @@ public class BackIndexServiceBean implements BackIndexService {
 		map.put("monthMessage", monthMessage);
 		return map;
 	}
+	@Override
+	public int seleceMaxLessonId(int qid) throws Exception {
+		return backmapper.getMaxLessonId(qid);
+	}
 }

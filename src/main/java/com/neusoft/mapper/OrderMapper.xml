@@ -70,6 +70,7 @@
 		<if test="status != null and status == '取消和退款'">
 			and (status = '已取消' or status = '退款中' or status = '已退款')
 		</if>
+		order by oid desc
 		limit #{page.start},#{page.end}
 	</select>
 	
@@ -79,6 +80,9 @@
 		where 1=1
 		<if test="qid != null">
 			and qid = #{qid}
+		</if>
+		<if test="tel != null">
+			and tel = #{tel}
 		</if>
 		<if test="oid != null">
 			and oid = #{oid}

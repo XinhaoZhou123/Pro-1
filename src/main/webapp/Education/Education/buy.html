@@ -13,6 +13,8 @@
 		<script type="text/javascript" src="../js/mui.min.js" ></script>
 	<script>
 		$(function(){
+			var tel = sessionStorage.getItem("tel");
+			$('#inputphone').val(tel);
 			//注册提交按钮的点击事件
 			$("#buy").click(function(){
 				
@@ -30,15 +32,15 @@
 							dataType:"json",
 							success:function(data){
 								if(data.result==0){
-									alert("购买成功");
+									alert("下单成功");
 									window.location.href="course_list.html";
 								}
 								else if(data.result==1){
-									alert("购买失败");
+									alert("下单失败");
 								}
 							}
 						});
-						alert("OK");
+						//alert("OK");
 					}
 						else{
 							alert("输入值不合法");
@@ -50,7 +52,7 @@
 		
 		function init(){
 			var lessonid=getUrlParam("lid");
-			alert(lessonid);
+			//alert(lessonid);
 			$.ajax({
 				url:"../../FrontEnd/getLesson111",
 				type:"get",
@@ -60,7 +62,7 @@
 					async:false,
 				dataType:"json",
 				success:function(data){
-					document.getElementById("buy").innerHTML="￥"+data[0]+"       立即购买";
+					document.getElementById("buy").innerHTML="￥"+data[0]+"       立即下单";
 					document.getElementById("course_name").innerText=data[1];
 				}
 			});
@@ -92,15 +94,15 @@
 			<p>需要您填写一些信息：</p>
 			<div>
 				<form id="buyform" method="post" action class="mui-input-group" id="user_info">
-					<div class="mui-input-row">
-						<label>姓名：</label>
-						<input type="text" name=username id="inputname" class="mui-input-clear">
-					</div>
+				
 					<div class="mui-input-row">
 						<label>电话：</label>
 						<input type="text" name=phonenumber id="inputphone" class="mui-input-clear">
 					</div>
-				
+					<div class="mui-input-row">
+						<label>姓名：</label>
+						<input type="text" name=username id="inputname" class="mui-input-clear">
+					</div>
 				</form>
 				<div align="center" style="padding: 10% ;">
 						<button class="mui-btn mui-btn-success" id="buy" style="width: 50%;"></button>

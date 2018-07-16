@@ -17,5 +17,10 @@
 		select count(*) from user
 		where tel=#{tel} and qid=#{qid}
 	</select>
+	
+	<update id="updateIcon" parameterType="map">
+		update user set iconurl=#{url}
+		where qid=#{qid} and tel=#{tel}
+	</update>
 </mapper>
 

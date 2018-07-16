@@ -43,5 +43,9 @@
 		where qid=#{qid}
 		and DATE_FORMAT(mtime,'%Y-%c') = DATE_FORMAT(SYSDATE(),'%Y-%c')
 	</select>
+	
+	<select id="getMaxLessonId" parameterType="int" resultType="int">
+		select max(lid) from lesson where lesson.qid =#{qid}
+	</select>
 </mapper>
 

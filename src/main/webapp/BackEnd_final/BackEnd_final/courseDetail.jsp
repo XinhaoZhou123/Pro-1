@@ -34,7 +34,9 @@ request.setAttribute("path", basePath);
                     //得到父页面的iframe框架的对象
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
-                obj.height = this.document.body.scrollHeight;
+                //obj.height = this.document.body.scrollHeight;
+                    obj.height = '1500px';
+                    
             } 
             function editlesson(){
             	window.location.href="<%=request.getContextPath()%>/BackEnd/edit?lid="+getUrlParam("lid");//跳到购买界面
@@ -61,18 +63,11 @@ request.setAttribute("path", basePath);
 							<div class="layui-card">
 								<div class="layui-card-header layui-colla-title">课程图片</div>
 								<div class="layui-card-body layui-colla-content layui-show" style="padding-left: 3%;">
-									<img id="cover" src="/webapps/../upload/cover/<%=request.getAttribute("cover") %>"/>
+									<img id="cover"  style="width:500px;height:520px" src="/webapps/../upload/cover/<%=request.getAttribute("cover") %>"/>
 								</div>
 							</div>
 						</div>
-						<div class="layui-col-md12 layui-colla-item">
-							<div class="layui-card">
-								<div class="layui-card-header layui-colla-title">课程描述</div>
-								<div class="layui-card-body layui-colla-content layui-show">
-									<%out.println(request.getAttribute("ldesc")) ;%>
-								</div>
-							</div>
-						</div>
+						
 			  		</div>
 			  	</div>
 			  </div>
@@ -83,7 +78,7 @@ request.setAttribute("path", basePath);
 			  		<div class="layui-col-md12 layui-colla-item">
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">课程编号</div>
-							<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
+							<div class="layui-card-body layui-colla-content layui-show" >
 								<%=request.getAttribute("lid") %>
 							</div>
 						</div>
@@ -91,7 +86,7 @@ request.setAttribute("path", basePath);
 					<div class="layui-col-md12 layui-colla-item">
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">课程名称</div>
-							<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
+							<div class="layui-card-body layui-colla-content layui-show">
 								<%=request.getAttribute("lname") %>
 							</div>
 						</div>
@@ -123,12 +118,22 @@ request.setAttribute("path", basePath);
 				  </div>
 			  	</div>
 			  </div>
-
-			  <div class="layui-form-item">
-				<button class="layui-btn" onclick="editlesson()" style="margin: 5% 0 0 43%;">
-					修改课程信息
-				</button>
-			 </div>	
+			  <div class="layui-col-md12">
+			  		 <div class="layui-col-md12 layui-colla-item">
+							<div class="layui-card">
+								<div class="layui-card-header layui-colla-title">课程描述</div>
+								<div class="layui-card-body layui-colla-content layui-show" style="text-align: left  ">
+									<%out.println(request.getAttribute("ldesc")) ;%>
+								</div>
+							</div>
+					</div>
+					<div class="layui-form-item">
+						<button class="layui-btn" onclick="editlesson()" style="margin: 5% 0 0 43%;">
+							修改课程信息
+						</button>
+					 </div>
+				</div>
+			  	
 		  </div>
 		</div>
 </body>

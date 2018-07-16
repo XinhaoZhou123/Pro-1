@@ -78,7 +78,7 @@ public String messagedelete_Handler(HttpServletRequest request,int mid,int curre
 		String ppath = new File(path).getParent();
 		path = ppath+"/upload/messageimgs";
 		boolean isOK = messageService.deleteMessage(mid, path);
-		return "forward:/message/messagelist";
+		return "forward:/BackEnd/message/messagelist";
 }
 
 @RequestMapping(value="/BackEnd/message/messagereview")

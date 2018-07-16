@@ -7,8 +7,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
 		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../layui/css/modules/layer/default/layer.css">
+		<script src="../layui/layui.js"></script>
+		<script src="../layui/lay/modules/layer.js"></script>
+		
 		<style>
 			html,
 			body {
@@ -173,9 +177,10 @@
 			/*问题反馈在setting页面单独的css==end*/
 			
 		</style>
-		<link rel="stylesheet" type="text/css" href="css/feedback.css" />
+		<link rel="stylesheet" type="text/css" href="../css/feedback.css" />
+		
 	</head>
-
+	
 	<body class="mui-fullscreen">
 		<!--页面主结构开始-->
 		<div id="app" class="mui-views">
@@ -235,7 +240,7 @@
 						</ul>
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell" style="text-align: center;">
-								<a>退出登录</a>
+								<a id="logout">退出登录</a>
 							</li>
 						</ul>
 					</div>
@@ -256,7 +261,7 @@
 					<div class="mui-scroll">
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
-								<a id="head" class="mui-navigate-right" onclick="openBrowse()">头像
+								<a id="head" class="mui-navigate-right">头像
 								<span class="mui-pull-right head">
 									<img class="head-img mui-action-preview" id="head-img1" src=""/>
 								</span>
@@ -587,6 +592,7 @@
 		});
 		
 		setTimeout(function () {
+			$(".mui-table-view-cell span[name='nickName']").append(sessionStorage.getItem("nickName"));
 			defaultImg();
 			setTimeout(function() {
 				initImgPreview();
@@ -731,117 +737,23 @@
 		})(mui);
 		//更换头像
 		mui(".mui-table-view-cell").on("tap", "#head", function(e) {
-			if(mui.os.plus){
-				var a = [{
-					title: "拍照"
-				}, {
-					title: "从手机相册选择"
-				}];
-				plus.nativeUI.actionSheet({
-					title: "修改头像",
-					cancel: "取消",
-					buttons: a
-				}, function(b) {
-					switch (b.index) {
-						case 0:
-							break;
-						case 1:
-							getImage();
-							break;
-						case 2:
-							galleryImg();
-							break;
-						default:
-							break
-					}
-				})	
-			}
+			document.getElementById("file").click(); 
 			
 		});
 
-		function getImage() {
-			var c = plus.camera.getCamera();
-			c.captureImage(function(e) {
-				plus.io.resolveLocalFileSystemURL(e, function(entry) {
-					var s = entry.toLocalURL() + "?version=" + new Date().getTime();
-					console.log(s);
-					document.getElementById("head-img").src = s;
-					document.getElementById("head-img1").src = s;
-					//变更大图预览的src
-					//目前仅有一张图片，暂时如此处理，后续需要通过标准组件实现
-					document.querySelector("#__mui-imageview__group .mui-slider-item img").src = s + "?version=" + new Date().getTime();;;
-				}, function(e) {
-					console.log("读取拍照文件错误：" + e.message);
-				});
-			}, function(s) {
-				console.log("error" + s);
-			}, {
-				filename: "_doc/head.jpg"
-			})
-		}
-
-		function galleryImg() {
-			plus.gallery.pick(function(a) {
-				plus.io.resolveLocalFileSystemURL(a, function(entry) {
-					plus.io.resolveLocalFileSystemURL("_doc/", function(root) {
-						root.getFile("head.jpg", {}, function(file) {
-							//文件已存在
-							file.remove(function() {
-								console.log("file remove success");
-								entry.copyTo(root, 'head.jpg', function(e) {
-										var e = e.fullPath + "?version=" + new Date().getTime();
-										document.getElementById("head-img").src = e;
-										document.getElementById("head-img1").src = e;
-										//变更大图预览的src
-										//目前仅有一张图片，暂时如此处理，后续需要通过标准组件实现
-										document.querySelector("#__mui-imageview__group .mui-slider-item img").src = e + "?version=" + new Date().getTime();;
-									},
-									function(e) {
-										console.log('copy image fail:' + e.message);
-									});
-							}, function() {
-								console.log("delete image fail:" + e.message);
-							});
-						}, function() {
-							//文件不存在
-							entry.copyTo(root, 'head.jpg', function(e) {
-									var path = e.fullPath + "?version=" + new Date().getTime();
-									document.getElementById("head-img").src = path;
-									document.getElementById("head-img1").src = path;
-									//变更大图预览的src
-									//目前仅有一张图片，暂时如此处理，后续需要通过标准组件实现
-									document.querySelector("#__mui-imageview__group .mui-slider-item img").src = path;
-								},
-								function(e) {
-									console.log('copy image fail:' + e.message);
-								});
-						});
-					}, function(e) {
-						console.log("get _www folder fail");
-					})
-				}, function(e) {
-					console.log("读取拍照文件错误：" + e.message);
-				});
-			}, function(a) {}, {
-				filter: "image"
-			})
-		};
-
+		
 		function defaultImg() {
-			if(mui.os.plus){
-				plus.io.resolveLocalFileSystemURL("_doc/head.jpg", function(entry) {
-					var s = entry.fullPath + "?version=" + new Date().getTime();;
-					document.getElementById("head-img").src = s;
-					document.getElementById("head-img1").src = s;
-				}, function(e) {
-					document.getElementById("head-img").src = 'img/logo.png';
-					document.getElementById("head-img1").src = 'img/logo.png';
-				})
+			var icon = sessionStorage.getItem("iconUrl");
+			var url;
+			var li;
+			if(icon!=undefined && icon!="null"){
+				url ="/img/"+icon;
 			}else{
-				document.getElementById("head-img").src = 'img/logo.png';
-				document.getElementById("head-img1").src = 'img/logo.png';
+				url="/img/logo.png";
 			}
-			
+			document.getElementById("head-img").src = url;
+			document.getElementById("head-img1").src = url;
+			console.log(sessionStorage.getItem("iconUrl"));
 		}
 		document.getElementById("head-img1").addEventListener('tap', function(e) {
 			e.stopPropagation();
@@ -860,6 +772,31 @@
 				}
 			});
 		});
+		$(document).on("tap","#logout",function(){
+			layer.open({
+				type:0,
+				title:['退出登录','font-size:20px;'],
+				area: '250px',
+				content:'确定登出?',
+				btn:['确定','取消'],
+				yes:function(index,layero){
+					sessionStorage.clear();
+					$(function(){
+						$.ajax({
+						url:getRootPath()+"/user/logout",
+						success:function(){
+							mui.toast("登出成功");
+							window.location.href="login.html?qid=1"						
+						}
+						})
+					})
+					layer.close(index); //如果设定了yes回调，需进行手工关闭
+				},
+				btn2:function(index,layero){
+				}
+				
+			});
+		})
 
 		function initImgPreview() {
 			var imgs = document.querySelectorAll("img.mui-action-preview");
@@ -879,7 +816,7 @@
 				var slider_group = document.createElement("div");
 				slider_group.setAttribute("id", "__mui-imageview__group");
 				slider_group.classList.add("mui-slider-group");
-				/*imgs.forEach(function(value, index, array) {
+				imgs.forEach(function(value, index, array) {
 					//给图片添加点击事件，触发预览显示；
 					value.addEventListener('tap', function() {
 						slider.style.display = "block";
@@ -894,7 +831,7 @@
 					a.appendChild(img)
 					item.appendChild(a);
 					slider_group.appendChild(item);
-				});*/
+				});
 				slider.appendChild(slider_group);
 				document.body.appendChild(slider);
 				var _slider = mui(slider).slider();
@@ -907,8 +844,10 @@
 		}
 		
 	</script>
-<input accept="image/*" id="file" type="file" hidden="hidden" value="上传图片" />
-<script type="text/javascript"> 
+	<form id="myform">
+		<input accept="image/*" id="file" type="file" name="img" hidden="hidden" />	
+	</form>
+<!-- <script type="text/javascript"> 
 function openBrowse(){
 　　var ie=navigator.appName=="Microsoft Internet Explorer" ? true : false; 
 　　if(ie){ 
@@ -917,7 +856,57 @@ function openBrowse(){
 　　　　var a=document.createEvent("MouseEvents");//FF的处理 
 　　　　a.initEvent("click", true, true);  
 　　　　document.getElementById("file").dispatchEvent(a); 
+
 　　} 
 } 
-</script> 
+</script>  -->
+<script>
+	function getRootPath(){
+		//获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+		var curWwwPath=window.document.location.href;
+		//获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+		var pathName=window.document.location.pathname;
+		var pos=curWwwPath.indexOf(pathName);
+		//获取主机地址，如： http://localhost:8083
+		var localhostPaht=curWwwPath.substring(0,pos);
+		//获取带"/"的项目名，如：/uimcardprj
+		var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+		return(localhostPaht+projectName);
+	}
+	function isChinese(str){
+            　var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+        if(reg.test(str)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+	$(document).on("change","#file",function(){
+		var filename = $("#file").val();
+		if(filename!=""){
+			var dataForm = new FormData(document.getElementById("myform"));
+			if (isChinese(filename)) 
+			{
+			alert("文件名中有汉字");		
+			}else{
+				$.ajax({
+					url:getRootPath()+'/user/uploadIcon',
+					type:"post",
+					data:dataForm,
+					dataType:"json",
+					processData: false, // 告诉jQuery不要去处理发送的数据
+					contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+					success:function(data){
+						console.log(data);
+						if(data.msg){
+							sessionStorage.setItem("iconUrl",data.iconUrl);
+							defaultImg();
+							document.querySelector("#__mui-imageview__group .mui-slider-item img").src = "/img/"+sessionStorage.getItem("iconUrl");;;
+						}
+					}
+				})
+			}
+		}
+})	
+</script>
 </html>

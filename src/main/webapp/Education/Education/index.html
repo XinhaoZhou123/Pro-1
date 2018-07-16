@@ -29,36 +29,36 @@
 		<div id="slider" class="mui-slider" style="height: 80%;">
 			<div class="mui-slider-group mui-slider-loop" id="enterprise_img">
 				<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-				<div class="mui-slider-item mui-slider-item-duplicate">
+			<div class="mui-slider-item mui-slider-item-duplicate">
 					<a href="#">
 						<img src="img/yuantiao.jpg">
 					</a>
 				</div>
-				<!-- 第一张 -->
+				第一张
 				<div class="mui-slider-item">
 					<a href="#">
 						<img src="img/shuijiao.jpg">
 					</a>
 				</div>
-				<!-- 第二张 -->
+				第二张
 				<div class="mui-slider-item">
 					<a href="#">
 						<img src="img/muwu.jpg">
 					</a>
 				</div>
-				<!-- 第三张 -->
+				第三张
 				<div class="mui-slider-item">
 					<a href="#">
 						<img src="img/cbd.jpg">
 					</a>
 				</div>
-				<!-- 第四张 -->
+				第四张
 				<div class="mui-slider-item">
 					<a href="#">
 						<img src="img/yuantiao.jpg">
 					</a>
 				</div>
-				<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+				额外增加的一个节点(循环轮播：最后一个节点是第一张轮播)
 				<div class="mui-slider-item mui-slider-item-duplicate">
 					<a href="#">
 						<img src="img/shuijiao.jpg">
@@ -72,16 +72,10 @@
 				<div class="mui-indicator"></div>
 			</div>
 		</div>
-		<script type="text/javascript" charset="utf-8">
-			mui.init({
-				 swipeBack:true //启用右滑关闭功能
-			});
-			var slider = mui("#slider");
-			slider.slider({
-				interval:2000
-			})
+	<!-- 	<script type="text/javascript" charset="utf-8">
+			
 		</script>
-
+ -->
 
 		<hr />
 		<div class="mui-content" >
@@ -108,10 +102,10 @@
 		
 		<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
         <div class="mui-scroll">
-         <!--    <a class="mui-control-item mui-active" href="#recommend" id="recommend">
+         <a class="mui-control-item mui-active" href="#recommend" >
                 推荐
-            </a> -->
-            <a class="mui-control-item" href="#lesson" id="lesson_click">
+            </a>
+            <a class="mui-control-item" href="#lesson" >
               	精品课课程
             </a>
             <a class="mui-control-item" href="#freelisten">
@@ -133,12 +127,12 @@
     </div>
 
 	<div class="mui-content" >
-		<!-- <div id="recommend" class="mui-slider-item mui-control-content mui-active">
-		    <ul class="mui-table-view mui-grid-view" >
+		<div id="recommend" class="mui-slider-item mui-control-content mui-active">
+		    <ul class="mui-table-view mui-grid-view"  id="rec">
 		      
 		    </ul>
 		    <a href="more_course.html"><span style="padding-left: 82%;">>>更多</span></a>
-		</div> -->
+		</div>
 		
 		<div id="lesson" class="mui-slider-item mui-control-content ">
 		    <ul class="mui-table-view mui-grid-view" id="0">
@@ -235,6 +229,7 @@
 		var paraString = location.search;
 		//alert(paraString.substring(5,6));
 	
+		
 		$.ajax({
 			url:"../../test/Handler_frontEndFindEnterpriseByQid",
 			type:"post",
@@ -245,21 +240,40 @@
 				var img = document.getElementById("enterprise_img");
 				cont.innerHTML = "";
 				img.innerHTML = "";
-				img.innerHTML += '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="http://localhost:8080/uploadImage/'+data.swiperList[data.swiperList.length-1].imgurl+'"/></a></div>';
+				img.innerHTML += '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="/uploadImage/'+data.swiperList[data.swiperList.length-1].imgurl+'"/></a></div>';
 				for(var i = 0; i< data.swiperList.length; i++){
-					img.innerHTML+= '<div class="mui-slider-item"><a href="#"><img src="http://localhost:8080/uploadImage/'+data.swiperList[i].imgurl+'"/></a></div>';
+					img.innerHTML+= '<div class="mui-slider-item"><a href="#"><img src="/uploadImage/'+data.swiperList[i].imgurl+'"/></a></div>';
 					if(i==0){
+						//img.innerHTML+='<div class="mui-slider-item"><a href="#"><img src="/uploadImage/'+data.swiperList[i].imgurl+'"/></a></div>'
 						cont.innerHTML += '<div class="mui-indicator mui-active"></div>';
 					}
 					else{
+						//img.innerHTML+='<div class="mui-slider-item"><a href="#"><img src="/uploadImage/'+data.swiperList[i].imgurl+'"/></a></div>'
 						cont.innerHTML  += '<div class="mui-indicator"></div>';
 					}
 				}
-				img.innerHTML+= '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="http://localhost:8080/uploadImage/'+data.swiperList[0].imgurl+'"/></a></div>';
-
+				img.innerHTML+= '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="/uploadImage/'+data.swiperList[0].imgurl+'"/></a></div>';
 			}
 		});
-		
+		mui.init({
+			 swipeBack:true //启用右滑关闭功能
+		});
+		var slider = mui("#slider");
+		slider.slider({
+			interval:2000
+		})
+		$.ajax({
+			url:"../../FrontEnd/getrecommend",
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				console.log(data);
+				var ul = document.getElementById("rec");			
+				for(var k=0;k<data.length;k++){
+					ul.appendChild(createFragment(data[k].lname,data[k].imgUrl,data[k].lid,2));	
+				}
+			}			
+		})
 		for(var j=0;j<=5;j++){
 		
 			if(j==1){
@@ -309,22 +323,22 @@
 						var li;
 					
 							li = document.createElement('li');
-							li.className = 'mui-table-view-cell';
+							li.className = 'mui-table-view-cell mui-media mui-col-xs-6';
 							
 							if(kind==1){
-								li.innerHTML='<a href="course_detail.html?id='+id+'"><img class="mui-media-object" src="/webapps/../upload/cover/'+imgurl+'"><div class="mui-media-body">'+name+'</div></a>'
+								li.innerHTML='<a href="course_detail.html?id='+id+'"><img style="width:174px;height:116px" class="mui-media-object" src="/webapps/../upload/cover/'+imgurl+'"><div class="mui-media-body">'+name+'</div></a>'
 								
 								}
 							else{
 							
-								li.innerHTML='<a href="course_detail.html?lid='+id+'"><img class="mui-media-object" src="/webapps/../upload/cover/'+imgurl+'"><div class="mui-media-body">'+name+'</div></a>'
+								li.innerHTML='<a href="course_detail.html?lid='+id+'"><img  style="width:174px;height:116px" class="mui-media-object" src="/webapps/../upload/cover/'+imgurl+'"><div class="mui-media-body">'+name+'</div></a>'
 							}
 							fragment.appendChild(li);
 						
 						return fragment;
 				};
 		}
-		 var rec_click = document.getElementById("lesson_click");
+		/*  var rec_click = document.getElementById("lesson_click");
 	 	 rec_click.addEventListener('tap',function(){
         		alert(this.href);
         			mui.openWindow({
@@ -332,7 +346,7 @@
         			});
         		//rec_click.click();
         }); 
-		 mui.trigger(rec_click, "tap");
+		 mui.trigger(rec_click, "tap"); */
 	});
 	</script>
 	

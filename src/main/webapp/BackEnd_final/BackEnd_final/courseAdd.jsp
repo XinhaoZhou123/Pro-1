@@ -33,23 +33,28 @@ request.setAttribute("path", basePath);
 		<script type="text/javascript">
             function IFrameResize()
             {
-                    //得到父页面的iframe框架的对象
+                //得到父页面的iframe框架的对象
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
-                obj.height = this.document.body.scrollHeight;
+                //obj.height = this.document.body.scrollHeight*1.5;
+                    obj.height = '2000px';
             
                 //看看这个是修改页面还是上传页面    
-                var ldesc = '<%=request.getAttribute("ldesc")%>';
-    			
-    			if(ldesc!="null"){
-    				UE.getEditor('editor').setContent(ldesc);
-    			}
+                    var ue = UE.getEditor("editor");
+                    var jczs = '<%=request.getAttribute("ldesc")%>';
+        			//alert(jczs);
+                	ue.ready(function(){
+        				if(jczs!='null'){
+        					ue.setContent(jczs);
+        				}
+        			});
+        		
             } 
         </script>
 	</head>
 
 	<body class="layui-layout-body" 
-		style="font-family: '宋体'; background-color: #F8F8FF;" onload="IFrameResize();">
+		style="font-family: '宋体'; background-color: #F8F8FF;"  onload="IFrameResize()">
 		<div class="layui-layout layui-layout-admin">
 				<!-- 内容主体区域 -->
 		  <div style="background-color: white; 
@@ -82,14 +87,7 @@ request.setAttribute("path", basePath);
 								</div>
 							</div>
 						</div>
-						<div class="layui-col-md12 layui-colla-item">
-							<div class="layui-card">
-								<div class="layui-card-header layui-colla-title"  style="width:1024px;">课程描述</div>
-								<div class="layui-card-body layui-colla-content layui-show"  style="width:1024px;height:300px;">
-									<script id="editor" name="editor" type="text/plain"  style="width:1024px;height:300px;"></script>
-								</div>
-							</div>
-						</div>
+						
 			  		</div>
 			  	</div>
 			  </div>
@@ -102,7 +100,7 @@ request.setAttribute("path", basePath);
 							<div class="layui-card">
 								<div class="layui-card-header layui-colla-title">课程编号</div>
 								<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
-									<input class="layui-input" readonly="true" type="text" value="${lid}"/>
+									<input class="layui-input" readonly="true" type="text" name="l_id" value="${lid}"/>
 								</div>
 							</div>
 						</div>
@@ -203,17 +201,29 @@ request.setAttribute("path", basePath);
 				  </div>
 			  	</div>
 			  </div>
-
-			  <div class="layui-form-item">
-				<button class="layui-btn" style="margin: 20% 0 0 0;" type="submit" id="submitBtn">
-					保存课程信息
-				</button>
-			  </div>
+			  <div class="layui-col-md12">
+			    <div class="layui-collapse">
+					<div class="layui-col-md12 layui-colla-item">
+								<div class="layui-card">
+									<div class="layui-card-header layui-colla-title" >课程描述</div>
+									<div class="layui-card-body layui-colla-content layui-show"  style="margin-left: 25px; text-align: left ">
+										<script id="editor" name="editor" type="text/plain"  style="width:1024px;height:300px;"></script>
+									
+									</div>
+								</div>
+								<div class="layui-form-item">
+				<button class="layui-btn" style="margin: 5% 0 0 43%;" type="submit"
+							id="submitBtn">保存课程信息</button>
+				  </div>
+					</div>
+			    </div>
+			 </div>
+			  
 			</form>
 		  </div>
 		</div>
 		
-		<script type="text/javascript" src="layui/layui.js"></script>
+		
 		<script>
 			layui.use('carousel', function(){
 			  var carousel = layui.carousel;
@@ -268,7 +278,7 @@ request.setAttribute("path", basePath);
 						//上传成功
 						else{
 			
-							alert(res.url);
+							//alert(res.url);
 							document.getElementById("coverurl").value=res.url;
 						}
 					},

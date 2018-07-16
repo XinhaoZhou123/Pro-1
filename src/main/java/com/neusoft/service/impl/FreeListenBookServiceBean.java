@@ -70,7 +70,17 @@ public class FreeListenBookServiceBean implements FreeListenBookService {
 		map.put("qid", qid);
 		return freeMapper.getFreeListenBookBeyondTime(map);
 	}
-	
+	@Override
+	public int insertFreeListenBook(int fid, String tel, String username,  String comment)
+			throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("fid",fid);
+		map.put("username", username);
+		map.put("tel", tel);
+		map.put("comment", comment);
+		
+		return freeMapper.insertFreeListenBook(map);
+	}
 	
 	
 	/*

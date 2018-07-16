@@ -19,4 +19,5 @@ public interface BackIndexService {
 			//查找以上六个数据
 			public Map<String,Object> selectSix(int qid) throws Exception;
 			
+			public int seleceMaxLessonId(int qid) throws Exception;
 }

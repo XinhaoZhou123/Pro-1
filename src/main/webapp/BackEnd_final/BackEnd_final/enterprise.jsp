@@ -29,7 +29,8 @@
                     //得到父页面的iframe框架的对象
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
-                obj.height = this.document.body.scrollHeight;
+                //obj.height = this.document.body.scrollHeight;
+                obj.height = '2000px';     
             } 
         </script>
 	</head>

@@ -87,7 +87,8 @@ function responseSend(mid){
 		var id_cancel ='cancel'+mid;
 		document.getElementById(id_cancel).click();
 		var li = document.createElement('li');
-		li.innerHTML = '<li><a>'+'千阳'+'</a>：'+commentTxt+'</li>';
+		var username = sessionStorage.getItem("nickName");
+		li.innerHTML = '<li><a>'+username+'</a>：'+commentTxt+'</li>';
 		var id_comment = 'comment'+mid;
 		var comment = document.getElementById(id_comment);
 		comment.insertBefore(li, comment.firstChild);
@@ -142,9 +143,9 @@ function setMessage(data,type){
 			'<div style="margin-left: 8px;">'+
 				'<div>'+
 				'<a href="javascript:;">'+
-					'<img class="mui-media-object mui-pull-left" src="img/shuijiao.jpg">'+
+					'<img class="mui-media-object mui-pull-left" src="../img/dongruan.jpg">'+
 					'<div class="mui-media-body">'+
-						'<span style="font-size: small;">东软官方</span>'+
+						'<span style="font-size: small;">东软睿道</span>'+
 					'</div>'+
 				'</a>'+
 				'</div>'+
@@ -263,7 +264,7 @@ function responseGood(mid,goodtype){
 						good.className = '';
 						var style = 'font-size:15px;border:none;padding-top: 1px;background-color: #EFEFF4;padding-bottom: 4px;z-index:1;';
 						good.style=style;
-						var imghtml = '<img src="img/good.svg" style="z-index: -1;"/>赞';
+						var imghtml = '<img src="../img/good.svg" style="z-index: -1;"/>赞';
 						good.innerHTML=imghtml;
 						/*<button  style="font-size:14px;border:none;padding-top: 1px;background-color: #EFEFF4;padding-bottom: 4px;" ><img src="img/点赞.svg" />赞</button>*/
 					/*	style="font-size:15px;border:none;padding-top: 4px;background-color: #EFEFF4;"*/
@@ -282,17 +283,18 @@ function responseGood(mid,goodtype){
 							var likelist = document.getElementById(id_likelist);
 							var likelistText = likelist.innerText;
 							//alert(likelistText);
+							var username = sessionStorage.getItem("nickName");
 							if(likelistText!=''){		
 								likelistText = likelistText.replace('等'+num+'人觉得很赞','');
 								likelistText = likelistText.replace('等'+num+'人觉得很赞','');
-								likelistText = '千阳、'+likelistText;
+								likelistText = username+'、'+likelistText;
 								var id_value = 'likenum'+mid;
 								likelist.innerHTML =likelistText+'等<span id='+id_value+'>'+num+'</span>人觉得很赞';	
 								//likelist.innerHTML =likelistText;						
 							}else{
 								//var id_value = 'likenum'+mid;
 								likelist.className = 'mui-icon-extra mui-icon-extra-heart-filled';
-								likelist.innerHTML = '千阳';
+								likelist.innerHTML = username;
 							}				
 						}
 					}else{
@@ -323,9 +325,10 @@ function responseGood(mid,goodtype){
 							}					
 							var likelistText = likelist.innerText;
 							//alert(likelistText);
-							if(likelistText!='千阳'){
-								likelistText = likelistText.replace('千阳、','');
-								likelistText = likelistText.replace('、千阳','');
+							var username = sessionStorage.getItem("nickName");
+							if(likelistText!=username){
+								likelistText = likelistText.replace(username+'、','');
+								likelistText = likelistText.replace('、'+username,'');
 								likelistText = likelistText.replace('等'+num+'人觉得很赞','');
 								likelistText = likelistText.replace('等'+num+'人觉得很赞','');
 								if(num==1){

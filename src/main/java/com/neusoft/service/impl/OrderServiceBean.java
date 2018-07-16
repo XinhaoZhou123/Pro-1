@@ -101,12 +101,14 @@ public class OrderServiceBean implements OrderService {
 	
 	@Override
 	public List<Integer> getTotalPage(int qid, String tel) throws Exception {
+		System.out.println("getTotalPage()-----");
 		List<Integer> pages = new ArrayList<Integer>();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("qid", qid);
 		map.put("tel", tel);
 		// 全部订单
 		Page page_all = new MorePage(1,selectOrdersCount(map));
+		System.out.println("all_count: "+selectOrdersCount(map));
 		pages.add(page_all.getTotalPage());
 		// 待付款订单
 		map.put("status", "待付款");

@@ -89,7 +89,10 @@
 			</if>
 			
 	</select>
-	
+	<insert id="insertFreeListenBook" parameterType="com.neusoft.po.FreeListenBook" >
+		INSERT INTO freelistenbook(fid,tel,username,booktime,status,comment)
+		values(#{fid},#{tel},#{username},SYSDATE(),'待处理',#{comment})
+	</insert>
 	<select id="getTotalNumOfFreeListenBooksByStatus" parameterType="map" resultType="int">
 		select count(*) FROM 
 			(

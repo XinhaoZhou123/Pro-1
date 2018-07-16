@@ -42,7 +42,7 @@
 	</select>
 	
 	<select id="getSwiperByCategory" parameterType="com.neusoft.po.Swiper" resultType="com.neusoft.po.Swiper" >
-				SELECT * FROM swiper where qid=#{qid} and category=#{category};
+				SELECT * FROM swiper where qid=#{qid} and category=#{category} order by id desc limit 0,4;
 		</select>
 	
 	
