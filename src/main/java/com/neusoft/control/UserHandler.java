@@ -1,5 +1,7 @@
 package com.neusoft.control;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.neusoft.po.User;
 import com.neusoft.service.UserService;
@@ -55,5 +58,39 @@ public class UserHandler {
 		}
 		map.put("msg", result);
 		return map;
+	}
+	@RequestMapping(value="/user/uploadIcon")
+	@ResponseBody
+	public Map<String, Object> upload(HttpServletRequest request,MultipartFile img){
+		Map<String, Object> map = new HashMap<String, Object>();
+		boolean result=false;
+		HttpSession session = request.getSession();
+		int qid = (Integer)session.getAttribute("qid");
+		String tel = (String)session.getAttribute("tel");
+		
+		String filename = System.currentTimeMillis()+img.getOriginalFilename();
+		String path = request.getServletContext().getRealPath("/");
+		File f = new File(path);
+		String ppath = f.getParent();
+		File dest = new File(ppath+"/img",filename);
+		try {
+			img.transferTo(dest);
+			result = u_serv.updateIcon(tel, qid, filename);
+			map.put("iconUrl", filename);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		map.put("msg", result);
+		return map;
+	}
+	@RequestMapping(value = "/user/logout")
+	@ResponseBody
+	public void logout(HttpSession session) throws Exception{
+		session.invalidate();
+		
 	}
 }

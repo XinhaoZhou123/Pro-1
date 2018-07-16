@@ -13,4 +13,6 @@ public interface BackIndexMapper {
 		public Double findMonthProfit(int qid) throws Exception;
 		//查询本月朋友圈发布数量
 		public Integer findMonthMessageNum(int qid) throws Exception;
+		
+		public int getMaxLessonId(int qid) throws Exception;
 }

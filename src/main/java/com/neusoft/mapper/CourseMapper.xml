@@ -50,7 +50,7 @@
 	</select>
 	<insert  id="addLesson" parameterType="com.neusoft.po.Lesson" >
 		insert into lesson(lname,imgurl,lprice,ldesc,category,qid,pubtime ) 
-		values ( #{lname},#{imgurl},#{lprice},#{ldesc},#{category},#{qid},#{pubTime} )
+		values ( #{lname},#{imgUrl},#{lprice},#{ldesc},#{category},#{qid},#{pubTime} )
 		 	<selectKey keyProperty="lid" order="AFTER" resultType="int">
            		 select LAST_INSERT_ID()
      		</selectKey>
@@ -62,7 +62,7 @@
 		<update  id="updateLesson" parameterType="com.neusoft.po.Lesson" >
 		update lesson set
 					lname=#{lname},
-					imgurl=#{imgurl},
+					imgurl=#{imgUrl},
 					lprice=#{lprice},
 					ldesc=#{ldesc},
 					category=#{category},
@@ -118,11 +118,16 @@
 		 where qid=#{qid} and address.aid=FREELISTEN.branchid
 	</select>
 	
-	
+	<select id="getTotalNumOdBranchFreeListen" parameterType="int" resultType="int" >
+			SELECT count(*)  FROM freelisten
+			where branchid=#{aid}
+	</select>
 	
 	
 
-	
+	<insert id="addCourseImg" parameterType="Map">
+		insert into swiper(qid,imgurl,category) values(#{qid},#{imgurl},'B');
+	</insert>
 	
 	
 	

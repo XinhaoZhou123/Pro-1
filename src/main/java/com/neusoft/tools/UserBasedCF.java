@@ -13,13 +13,15 @@ import java.util.List;
 public class UserBasedCF {
 
 	// k个最相似邻居
-	public static int KNN = 2;
+	public static int KNN = 3;
 	// 默认的推荐物品数量
 	public static int DEFAULT = 4;
 	// 评分矩阵
 	private float[][] ratingMatrix;
 	// 用户相似度矩阵
 	private float[][] userSimilarityMatrix;
+	
+	
 	
 	public UserBasedCF(String filename, int userCount, int itemCount) {
 		try {

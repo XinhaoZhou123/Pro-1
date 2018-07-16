@@ -22,7 +22,7 @@ public interface FreeListenBookService {
 		public int selectTotalNumOfFreeListenBookByStatus(String tel,String status,int qid) throws Exception; 
 		//根据时间找到某一状态下的预约
 		public List<FreeListenBook> selectFreeListenBookBeyondTime(String tel,String status,String bookTime,int qid) throws Exception;
-		
+		public int insertFreeListenBook(int fid,String tel,String username,String comment) throws Exception;
 		/*
 		 * 后台
 		 */

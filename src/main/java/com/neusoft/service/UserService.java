@@ -8,4 +8,5 @@ public interface UserService {
 	
 	public User findUserByTel(String tel , int qid) throws Exception;
 	
+	public boolean updateIcon(String tel, int qid, String url) throws Exception;
 }

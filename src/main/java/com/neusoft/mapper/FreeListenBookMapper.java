@@ -23,7 +23,7 @@ public interface FreeListenBookMapper {
 		public int getTotalNumOfFreeListenBooksByStatus(Map<String, Object> map) throws Exception;
 		//tel ,qid ,status ,bookTime
 		public List<FreeListenBook> getFreeListenBookBeyondTime(Map<String,Object> map) throws Exception;
-		
+		public int insertFreeListenBook(Map<String,Object> map) throws Exception;
 		/*
 		 * 后台
 		 */

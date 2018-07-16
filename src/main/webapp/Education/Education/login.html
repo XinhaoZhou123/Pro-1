@@ -158,10 +158,12 @@
 							mui.toast("登录成功");
 							setTimeout(function(){
 								sessionStorage.setItem("nickName", data.user.nickName);
-								sessionStorage.setItem("imgUrl", data.user.imgUrl);
+								sessionStorage.setItem("iconUrl", data.user.iconUrl);
 								sessionStorage.setItem("tel", data.user.tel);
+								sessionStorage.setItem("uid", data.user.uid);
+								sessionStorage.setItem("tomcatPath",data.tomcatPath);
 								window.location.href="index.html";
-							},800)			
+							},1000)			
 						}else{
 							mui.toast("登录失败,用户名或密码错误");
 						}

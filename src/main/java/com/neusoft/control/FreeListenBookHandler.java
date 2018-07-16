@@ -26,7 +26,7 @@ import com.neusoft.vo.ReservationCondition;
 public class FreeListenBookHandler {
 	@Autowired
 	private FreeListenBookService free_serv;
-	int qid=1;
+	//int qid=1;
 
 	/*
 	 * 
@@ -35,14 +35,18 @@ public class FreeListenBookHandler {
 	//找到所有的企业预约
 	@RequestMapping(value="/freeListenBook/findAll")
 	@ResponseBody
-	public List<FreeListenBook> findAllFreeListenBook() throws Exception{
-		
+	public List<FreeListenBook> findAllFreeListenBook(HttpServletRequest request) throws Exception{
+		HttpSession session = request.getSession();
+		int qid = (int) session.getAttribute("qid");
 		return free_serv.findAllFreeListenBooks(qid);
 	}
 	//找到个人的全部预约
 	@RequestMapping(value="/freeListenBook/findPersonAll")
 	@ResponseBody
-	public List<FreeListenBook> findPersonFreeListenBook(String tel,Integer currentPage) throws Exception{
+	public List<FreeListenBook> findPersonFreeListenBook(Integer currentPage,HttpServletRequest request) throws Exception{
+		HttpSession session = request.getSession();
+		int qid = (int) session.getAttribute("qid");
+		String tel = (String) session.getAttribute("tel");
 		currentPage= currentPage== null?1:currentPage;
 		int count = free_serv.selectTotalNumOfFreeListenBook(tel, qid);
 		Page page = new FreeListenPage(currentPage, count);
@@ -51,7 +55,10 @@ public class FreeListenBookHandler {
 	//通过状态找到个人的预约
 	@RequestMapping(value="/freeListenBook/findPersonByStatus")
 	@ResponseBody
-	public List<FreeListenBook> findPersonByStatus(String tel,Integer currentPage,String status) throws Exception{
+	public List<FreeListenBook> findPersonByStatus(Integer currentPage,String status,HttpServletRequest request) throws Exception{
+		HttpSession session = request.getSession();
+		int qid = (int) session.getAttribute("qid");
+		String tel = (String) session.getAttribute("tel");
 		currentPage= currentPage== null?1:currentPage;
 		int count = free_serv.selectTotalNumOfFreeListenBookByStatus(tel, status, qid);
 		Page page = new FreeListenPage(currentPage, count);
@@ -60,7 +67,10 @@ public class FreeListenBookHandler {
 	//找到 个人预约的页数数量{全部、待处理、已处理}
 	@RequestMapping(value="/freeListenBook/findCountPageThree")
 	@ResponseBody
-	public List<Integer> findCountPageThree(String tel) throws Exception{
+	public List<Integer> findCountPageThree(HttpServletRequest request) throws Exception{
+		HttpSession session = request.getSession();
+		int qid = (int) session.getAttribute("qid");
+		String tel = (String) session.getAttribute("tel");
 		int count1 = free_serv.selectTotalNumOfFreeListenBook(tel, qid);
 		int count2= free_serv.selectTotalNumOfFreeListenBookByStatus(tel, "待处理", qid);
 		int count3= free_serv.selectTotalNumOfFreeListenBookByStatus(tel, "已处理", qid);
@@ -77,8 +87,11 @@ public class FreeListenBookHandler {
 	//根据时间找到某一状态下的预约
 	@RequestMapping(value="/freeListenBook/pullUpRefresh")
 	@ResponseBody
-	public List<FreeListenBook> findFreeListenBookBeyondTime(String tel,String status,String bookTime) throws Exception{
+	public List<FreeListenBook> findFreeListenBookBeyondTime(String status,String bookTime,HttpServletRequest request) throws Exception{
 		//System.out.println(bookTime);
+		HttpSession session = request.getSession();
+		int qid = (int) session.getAttribute("qid");
+		String tel = (String) session.getAttribute("tel");
 		return free_serv.selectFreeListenBookBeyondTime(tel, status, bookTime, qid);
 	}
 	
@@ -99,7 +112,8 @@ public class FreeListenBookHandler {
 	@ResponseBody
 	public Map<String,Object> findPageByCondition(ReservationCondition condition,
 			Integer page,Integer limit,HttpServletRequest request) throws Exception{
-		
+		HttpSession session = request.getSession();
+		int qid = (int) session.getAttribute("qid");
 		System.out.println(".....FreeListenBookHandler.....findPageByCondition.");
 		
 		//HttpSession session = request.getSession();
@@ -146,6 +160,20 @@ public class FreeListenBookHandler {
 		map.put("state", state);
 		return map;
 	}
+	@RequestMapping(value="/freeListenBook/addFreeListenBook")
+	@ResponseBody
+	public Map<String, Object> addReserve(String comment,String tel,String name,int fid) throws Exception{
+		Map<String, Object> map = new HashMap<String, Object>();
+		boolean msg=false;
+		int result = free_serv.insertFreeListenBook(fid, tel, name, comment);
+		if(result>0){
+			msg=true;
+		}
+		map.put("msg", msg);			
+		
+		return map;
+	}
+	
 	/*
 	 * session中已有条件，查找某一页预约
 	 */

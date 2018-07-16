@@ -35,4 +35,17 @@ public class UserServiceBean implements UserService {
 		map.put("qid", qid);
 		return u_mapper.findUserByTelQid(map);
 	}
+	@Override
+	public boolean updateIcon(String tel, int qid, String url) throws Exception {
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("qid", qid);
+		map.put("tel", tel);
+		map.put("url", url);
+		int changeNum = u_mapper.updateIcon(map);
+		if(changeNum>0)
+			return true;
+		else
+			return false;
+		
+	}
 }

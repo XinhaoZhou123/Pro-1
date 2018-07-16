@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.neusoft.po.Message;
 import com.neusoft.po.MessageReply;
 import com.neusoft.service.MessageService;
+import com.neusoft.tools.Tools;
 
 @Controller
 public class MorePageHandler {
@@ -55,7 +56,7 @@ public class MorePageHandler {
 			String nickName =(String) session.getAttribute("nickName");
 			MessageReply messageReply = new MessageReply();
 			messageReply.setMid(mid);
-			messageReply.setContent(content);
+			messageReply.setContent(Tools.Stringfilter(content));
 			messageReply.setNickName(nickName);
 			boolean isOK = messageService.saveMessageReply(messageReply);
 			if(isOK){

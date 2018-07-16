@@ -2,6 +2,8 @@ package com.neusoft.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.neusoft.po.FreeListen;
 import com.neusoft.po.Lesson;
 import com.neusoft.vo.CourseCategoryVo;
@@ -22,9 +24,9 @@ public interface CourseService {
 		public int selectTotalNumOfBranchLessons(int aid) throws Exception;
 		
 		
-	
+		public List<Lesson> selectReccommendLesson(List<Object[]>lids) throws Exception;
 		
-		
+		public int selectTotalNumOfBranchFreeListen(int aid) throws Exception;
 		
 		
 		public void saveLesson(Lesson l) throws Exception;
@@ -47,4 +49,6 @@ public interface CourseService {
 		public void deleteCourse(int lid) throws Exception;
 		
 		public void deleteFreeListen(int id) throws Exception;
+		
+		public boolean saveCoursePagesImgs(String path,MultipartFile[] upload,int qid) throws Exception;
 }

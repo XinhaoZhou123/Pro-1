@@ -15,7 +15,7 @@
 		<script src="../js/mui.pullToRefresh.material.js"></script>
 		<script src="../layui/layui.js"></script>
 		<script src="../layui/lay/modules/layer.js"></script>
-	    <script src="../https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>	
+	    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>	
 		<script>
 			//半星效果
 			var mark=2.5;
@@ -210,7 +210,6 @@
 			var totalPage_paid;
 			var totalPage_used;
 			var totalPage_refund;
-			var tel = '15940471397';
 			
 			// 修改支付提示框里订单价格
 			function editPayMsgDiv(price){
@@ -219,7 +218,7 @@
 			
 			// 查看课程是否已评分
 			function hasRating(id){
-				var rating = null;
+				var rating;
 				mui.ajax(getRootPath()+'/FrontEnd/order/getRating',{
 					async : false,
 					data:{oid : id},
@@ -236,11 +235,22 @@
 				return has;
 			}
 			
+			// 初始化页面参数
+			function initPageIdx(){
+				page_all = 1;
+				page_unpaid = 1;
+				page_paid = 1;
+				page_used = 1;
+				page_refund = 1;
+				
+				getTotalPage();
+			}
+			
 			// 初始化订单
 			function initItem(id){
 				var ul_id = id + '_ul';
 				document.getElementById(ul_id).innerHTML = '';
-				loadNextPage(id)
+				loadNextPage(id,'init');
 			}
 			
 			// 根据状态获得相应按钮html
@@ -282,7 +292,6 @@
 			function getTotalPage(){
 				mui.ajax(getRootPath()+'/FrontEnd/order/getTotalPage',{
 					data:{
-						tel : tel,
 						qid : 1,
 					},
 					dataType:'json',//服务器返回json格式数据
@@ -298,11 +307,14 @@
 			}
 
 			// 加载下一页
-			function loadNextPage(status){
+			function loadNextPage(status,flag){
 				var fragment = document.createDocumentFragment();
 				var ul;
 				var nextPage;
 				var btn = getButtonHTML(status);
+				if(flag=='init'){
+					initPageIdx();
+				}
 				switch(status){
 				case 'all':
 					ul = document.getElementById('allOrders').querySelector('.mui-table-view');
@@ -319,6 +331,7 @@
 				case 'used':
 					ul = document.getElementById('used').querySelector('.mui-table-view');
 					nextPage = page_used;
+					//alert(nextPage);
 					break;
 				case 'refund':
 					ul = document.getElementById('refund').querySelector('.mui-table-view');
@@ -326,13 +339,14 @@
 					break;
 				}
 				mui.ajax(getRootPath()+'/FrontEnd/order/getOrders',{
-					data:{tel:tel, qid:1, page:nextPage, status:status} ,
+					data:{qid:1, page:nextPage, status:status} ,
 					async:false,
 					success:function(data){
 						console.log(data);
 						var li = '';
 						for(var i=0;i<data.length;i++){
 							btn = getButtonHTML(status);
+							//alert(btn);
 							if(status == 'used' && hasRating(data[i].oid))
 								btn =  '<button type="button" class="order-btn-left mui-btn mui-btn-primary mui-btn-outlined mark" style="display:none">打分</button>' +
 								'<button type="button" class="all-order-btn-right mui-btn mui-btn-primary mui-btn-outlined">查看</button>' ;
@@ -344,7 +358,7 @@
 										'</div>' +
 										'<div class="div-item">' +
 											'<div class="div-item-img">' +
-												'<img class="order-img" src="img/'+data[i].lesson.imgUrl+'"/>' +
+												'<img class="order-img" src="/upload/cover/'+data[i].lesson.imgUrl+'"/>' +
 											'</div>' +
 											'<div class="div-item-desc">' +
 												'<span class="span-product-name">'+data[i].lesson.lname+'</span>' +
@@ -373,7 +387,6 @@
 					page_refund++;
 			}
 			
-			mui.init();
 			(function($) {
 				//阻尼系数
 				var deceleration = mui.os.ios?0.003:0.0009;
@@ -382,7 +395,7 @@
 					indicators: true, //是否显示滚动条
 					deceleration:deceleration
 				});
-				$.ready(function() {
+				$.ready(function refresh() {
 					//循环初始化所有下拉刷新，上拉加载。
 					$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
 						$(pullRefreshEl).pullToRefresh({
@@ -400,58 +413,73 @@
 							}
 						});
 					});
-					var createFragment = function(ul, index, count, up) {
+					var createFragment = function(ul, index, count) {
 						var length = ul.querySelectorAll('li').length;
 						var fragment = document.createDocumentFragment();
 						var li;
 						var url = getRootPath()+'/FrontEnd/order/getOrders';
 						var status;
 						var page;
+						var button;
 						var doit=false;
 
 						if(index==0){
+							status = 'all';
 							page=page_all;
-							if(page<=totalPage_all)
+							if(page<=totalPage_all){
+								//alert(totalPage_all);
 								doit=true;
+							}
 							page_all++;
 						}else if(index==1){
 							page=page_unpaid;
 							status="unpaid";
-							if(page<=totalPage_unpaid)
-							doit=true;
+							if(page<=totalPage_unpaid){
+								//alert(totalPage_unpaid);
+								doit=true;
+							}
 							page_unpaid++;
 						}else if(index==2){
 							page=page_paid;
 							status="paid";
-							if(page<=totalPage_paid)
-							doit=true;
+							if(page<=totalPage_paid){
+								//alert(totalPage_paid);
+								doit=true;
+							}
 							page_paid++;
 						}else if(index==3){
 							page=page_used;
 							status="used";
-							if(page<=totalPage_used)
-							doit=true;
+							if(page<=totalPage_used){
+								//alert(totalPage_used);
+								doit=true;
+							}
 							page_used++;
 						}else if(index==4){
 							page=page_refund;
 							status="refund";
-							if(page<=totalPage_refund)
-							doit=true;
+							if(page<=totalPage_refund){
+								//alert(totalPage_refund);
+								doit=true;
+							}
 							page_refund++;
 						}
 						if(doit){
-							var update_len=0;
 							mui.ajax(url,{
-								data:{tel:tel,qid:1,page:page,status:status} ,
+								data:{qid:1,page:page,status:status} ,
 								type:"post",
 								async:false,
 								success:function(data){
 									console.log(data);
 									
 									var li = '';
-									var button = getButtonHTML(status);
 									
+
 									for(var i=0; i<data.length; i++){
+										button = getButtonHTML(status);
+										if(status == 'used' && hasRating(data[i].oid))
+											button =  '<button type="button" class="order-btn-left mui-btn mui-btn-primary mui-btn-outlined mark" style="display:none">打分</button>' +
+											'<button type="button" class="all-order-btn-right mui-btn mui-btn-primary mui-btn-outlined">查看</button>' ;
 										var html = '<li class="mui-table-view-cell">' +
 														'<div class="div-order-num-status">' +
 														'<span class="span-order-num">订单编号:'+data[i].oid+'</span>' +
@@ -459,7 +487,7 @@
 													'</div>' +
 													'<div class="div-item">' +
 														'<div class="div-item-img">' +
-															'<img class="order-img" src="img/'+data[i].lesson.imgUrl+'"/>' +
+															'<img class="order-img" src="/upload/cover/'+data[i].lesson.imgUrl+'"/>' +
 														'</div>' +
 														'<div class="div-item-desc">' +
 															'<span class="span-product-name">'+data[i].lesson.lname+'</span>' +
@@ -473,14 +501,9 @@
 										li.innerHTML = html;
 										fragment.appendChild(li);
 									}
-									if(up){
-										update_len = data.length;
-										mui.toast("更新了"+update_len+"个订单" );
-									}else{
-										mui.toast("更新成功")
-									}
+									mui.toast("更新成功");
 								}
-							})
+							});
 						}else{
 							mui.toast("没有更多了");
 						}
@@ -567,12 +590,12 @@
 			});
 
 			getTotalPage();
-			loadNextPage('all');
-			loadNextPage('unpaid');
-			loadNextPage('paid');
-			loadNextPage('used');
-			loadNextPage('refund');
-			getTotalPage();
+			loadNextPage('all','');
+			loadNextPage('unpaid','');
+			loadNextPage('paid','');
+			loadNextPage('used','');
+			loadNextPage('refund','');
+
 		})(mui);
 	</script>
 	
@@ -741,7 +764,7 @@
 				content:$("#mark"),
 				btn:['提交','取消'],
 				yes:function(index,layero){
-					alert(mark);
+					//alert(mark);
 					$(function(){
 						$.ajax({
 							url:getRootPath()+'/FrontEnd/order/addRating',

@@ -37,14 +37,17 @@
                     //得到父页面的iframe框架的对象
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
-                obj.height = this.document.body.scrollHeight;
-            
+                //obj.height = this.document.body.scrollHeight;
+                obj.height = '2000px';
                 //看看这个是修改页面还是上传页面    
+                var ue = UE.getEditor("editor");
                 var jczs = '<%=request.getAttribute("jczs")%>';
-    			
-    			if(ldesc!=null){
-    				UE.getEditor('editor').setContent(ldesc);
-    			}
+    			//alert(jczs);
+    			ue.ready(function(){
+    				if(jczs!="null"){
+    					ue.setContent(jczs);
+    				}
+    			});
             } 
         </script>
 	</head>

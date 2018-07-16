@@ -19,17 +19,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.neusoft.po.Lesson;
 import com.neusoft.po.LessonBranch;
+import com.neusoft.po.Message;
 import com.neusoft.po.Sorder;
 import com.neusoft.po.Swiper;
 import com.neusoft.po.Address;
 import com.neusoft.po.FreeListen;
+import com.neusoft.service.BackIndexService;
 import com.neusoft.service.CourseService;
+import com.neusoft.service.EnterpriseService;
 import com.neusoft.service.EnterpriseServiceForCourse;
 import com.neusoft.service.OrderServiceForCourse;
+import com.neusoft.tools.Tools;
+import com.neusoft.tools.UserBasedCF;
 import com.neusoft.vo.AddressVo;
 import com.neusoft.vo.CourseCategoryVo;
 import com.neusoft.vo.CoursePageVo;
 import com.neusoft.vo.FreeListenPageVo;
+import com.neusoft.vo.SingleAddress;
 import com.neusoft.vo.TotalCoursePageVo;
 import com.neusoft.vo.TotalFreeListenPageVo;
 
@@ -44,11 +50,17 @@ public class CourseHandler {
 	private EnterpriseServiceForCourse branchService;
 	
 	@Autowired
+	private EnterpriseService enterpriseService;
+	
+	@Autowired
 	private OrderServiceForCourse orderService;
 	
-	@RequestMapping(value="/upload/cover")
+	@Autowired
+	private BackIndexService backIndexService;
+	@RequestMapping(value="/BackEnd/upload/cover")
 	@ResponseBody		
 	public String upload(@RequestParam("file") MultipartFile upload,HttpServletRequest request){
+		System.out.println(".....CourseHandle.........upload()...........");
 		String original_name=upload.getOriginalFilename();
 		String filename = System.currentTimeMillis()+request.getSession().getId()+original_name;
 
@@ -168,7 +180,7 @@ public class CourseHandler {
 		request.setAttribute("lid", l.getLid());
 		request.setAttribute("lname", l.getLname());
 		request.setAttribute("cover", l.getImgUrl());
-		System.out.println(l.getImgUrl()+"*************");
+	
 		request.setAttribute("lprice", l.getLprice());
 		request.setAttribute("ldesc", l.getLdesc());
 		request.setAttribute("category", l.getCategory());
@@ -185,6 +197,7 @@ public class CourseHandler {
 	public String freelistdetail(HttpServletRequest request) throws Exception
 	{
 		String ID=request.getParameter("id");
+
 		int id=Integer.parseInt(ID);
 		FreeListen l=courseService.getFreeListen(id);
 		
@@ -240,8 +253,10 @@ public class CourseHandler {
 		@RequestMapping(value="/BackEnd/editfree")
 		public String editFreeListen(HttpServletRequest request) throws Exception
 		{
+			System.out.println("开始修改预约课*------------");
 			String ID=request.getParameter("id");
 			int id=Integer.parseInt(ID);
+			System.out.println(request.getParameter("id")+"***********");
 			FreeListen l=courseService.getFreeListen(id);
 			
 			request.setAttribute("id", l.getId());
@@ -352,6 +367,37 @@ public class CourseHandler {
 			return result;
 		}
 		
+		@RequestMapping(value="FrontEnd/getFreeListenPosition")
+		@ResponseBody		
+		public String loadFreeListenDetail(HttpServletRequest request){
+			int id=Integer.parseInt(request.getParameter("id"));
+			int qid=Integer.parseInt(request.getSession().getAttribute("qid").toString());
+			FreeListen l=null;
+			
+			Address adr = null;
+			try {
+				 l=courseService.getFreeListen(id);
+				 SingleAddress sa=new SingleAddress();
+				 sa.setAid(l.getBranchid());
+				 sa.setQid(qid);
+				 adr=enterpriseService.viewSingleAddressByQidId(sa);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(l.getFdesc().replace("\"", "\\\""));
+			String result="{\"code\":\"0\","
+					+ "\"detail\":\""+l.getFdesc().replace("\"", "\\\"")+"\","
+					+ "\"longitude\":\""+adr.getLongitude()+"\","
+					+ "\"address\":\""+adr.getAddress()+"\","
+					+ "\"phone\":\""+adr.getTel()+"\","
+					+ "\"latitude\":\""+adr.getLatitude()+"\"}";
+			
+			System.out.println(result);
+			System.out.println(result);
+			return result;
+		}
+		
 		@RequestMapping(value="FrontEnd/getLesson111")
 		@ResponseBody		
 		public List<String> getPrice(HttpServletRequest request){
@@ -399,7 +445,7 @@ public class CourseHandler {
 			//		 qid=request.getSession().getAttribute("qid");
 	
 			Swiper s=new Swiper();
-			s.setCategory("A");
+			s.setCategory("B");
 			s.setQid(qid);
 					
 			List<Swiper> swipers=branchService.getSwipers(s);
@@ -422,7 +468,7 @@ public class CourseHandler {
 			int aid=Integer.parseInt(request.getParameter("aid"));
 			int from=Integer.parseInt(request.getParameter("from"));
 			int to=Integer.parseInt(request.getParameter("to"));
-			System.out.println(aid+"*********************");
+			
 			CoursePageVo cpv = null;
 			TotalCoursePageVo tpv = null;
 			if(aid!=0) {
@@ -649,26 +695,36 @@ public class CourseHandler {
 			 * 记得删除！！！
 			 */
 			System.out.println("第一次进入课程列表");
-			//int qid=1;
 			HttpSession session = request.getSession();
-			int qid = (int)session.getAttribute("qid");
+			int qid = (int) session.getAttribute("qid");
 	//		qid=Integer.parseInt(request.getSession().getAttribute("qid").toString());
 		
-			List<Address> branches=branchService.selectAllAddress(qid);
+			List<Address> branches = branchService.selectAllAddress(qid);
 			
-			
+			int aid=Integer.parseInt(request.getParameter("aid"));
+			if(aid==0) {
+				
+				 aid=branches.get(0).getAid();
+			}
+
 			request.setAttribute("branches", branches);
 			request.setAttribute("current_branch", branches.get(0));
-			
+			if(aid==0) {
+				
+				request.setAttribute("current_branch", branches.get(0).getAid());
+			}
+			else{
+				request.setAttribute("current_branch", aid);
+			}
 			CoursePageVo cpv = new CoursePageVo();
-			int aid=branches.get(0).getAid();
+			
 			cpv.setAid(aid);
 			cpv.setFrom((1-1)*5);
 			cpv.setLimit(5);
 			
 			List<Lesson> lessons = courseService.selectBranchLessons(cpv);
 			request.setAttribute("lessons", lessons);
-			int count = courseService.selectTotalNumOfLessons(qid);
+			int count = courseService.selectTotalNumOfBranchLessons(aid);
 			request.setAttribute("count", count);
 			for(Lesson l:lessons) {
 				System.out.println("sssss"+l.getLname());
@@ -687,24 +743,35 @@ public class CourseHandler {
 			 */
 			System.out.println("第一次进入预约课程列表");
 			HttpSession session = request.getSession();
-			int qid = (int)session.getAttribute("qid");
+			int qid = (int) session.getAttribute("qid");
 			//		qid=Integer.parseInt(request.getSession().getAttribute("qid").toString());
 				
-					List<Address> branches=branchService.selectAllAddress(qid);
-					
-					
-					request.setAttribute("branches", branches);
-					request.setAttribute("current_branch", branches.get(0));
+			List<Address> branches =  branches=branchService.selectAllAddress(qid);
+			
+			int aid=Integer.parseInt(request.getParameter("aid"));
+			if(aid==0) {
+				
+				 aid=branches.get(0).getAid();
+			}
+
+			request.setAttribute("branches", branches);
+			if(aid==0) {
+				
+				request.setAttribute("current_branch", branches.get(0).getAid());
+			}
+			else{
+				request.setAttribute("current_branch", aid);
+			}
 					
 					FreeListenPageVo fpv = new FreeListenPageVo();
-					int aid=branches.get(0).getAid();
+				
 					fpv.setAid(aid);
 					fpv.setFrom((1-1)*5);
 					fpv.setLimit(5);
 					
 					List<FreeListen> freelisten = courseService.selectBranchFreeListens(fpv);
 					request.setAttribute("freelisten", freelisten);
-					int count = courseService.selectToalNumOfFreeListens(qid);
+					int count = courseService.selectTotalNumOfBranchFreeListen(aid);
 					request.setAttribute("count", count);
 					for(FreeListen f:freelisten) {
 						System.out.println("sssss"+f.getTitle());
@@ -719,7 +786,7 @@ public class CourseHandler {
 		public List<Lesson> selectCourseByPage(int curr, int limit, int branchid,HttpServletRequest request) throws Exception{
 			System.out.println(".........EnterpriseHandler..........selectCourseByPage.........");
 			HttpSession session = request.getSession();
-			int qid = (int)session.getAttribute("qid");
+			int qid = (int) session.getAttribute("qid");
 			//测试的时候没有session  整合的时候有  所以到时候去掉注释符号就行
 			//		qid=Integer.parseInt(request.getSession().getAttribute("qid").toString());
 			CoursePageVo cpv = new CoursePageVo();
@@ -730,7 +797,7 @@ public class CourseHandler {
 			System.out.println("从第"+curr+"页开始");
 			List<Lesson> lessons = courseService.selectBranchLessons(cpv);
 			request.setAttribute("lessons", lessons);
-			int count = courseService.selectTotalNumOfLessons(qid);
+			int count = courseService.selectTotalNumOfBranchLessons(branchid);
 			request.setAttribute("count", count);
 
 			return lessons;
@@ -740,8 +807,9 @@ public class CourseHandler {
 		@ResponseBody
 		public List<FreeListen> selectFreeListenByPage(int curr, int limit, int branchid,HttpServletRequest request) throws Exception{
 			System.out.println(".........EnterpriseHandler..........selectFreeListenByPage.........");
+			//int qid=1;
 			HttpSession session = request.getSession();
-			int qid = (int)session.getAttribute("qid");
+			int qid = (int) session.getAttribute("qid");
 			//测试的时候没有session  整合的时候有  所以到时候去掉注释符号就行
 			//		qid=Integer.parseInt(request.getSession().getAttribute("qid").toString());
 			FreeListenPageVo flpv = new FreeListenPageVo();
@@ -752,9 +820,56 @@ public class CourseHandler {
 			System.out.println("从第"+curr+"页开始");
 			List<FreeListen> freelistens = courseService.selectBranchFreeListens(flpv);
 			request.setAttribute("freelistens", freelistens);
-			int count = courseService.selectToalNumOfFreeListens(qid);
+			int count = courseService.selectTotalNumOfBranchFreeListen(branchid);
 			request.setAttribute("count", count);
 
 			return freelistens;
 		}
+
+		@RequestMapping(value="/FrontEnd/getrecommend")
+		@ResponseBody
+		public List<Lesson> response_getRecommendHandler(HttpServletRequest request) throws Exception{
+			System.out.println(".........CourseHandler.......response_getrecommendHandler()......");
+			List<Lesson> lessons =new ArrayList<Lesson>();
+			HttpSession session = request.getSession();
+			int qid = (int) session.getAttribute("qid");
+			String path = request.getServletContext().getRealPath("/");			
+			File f = new File(path);
+			String ppath = f.getParent();
+			String filename = ppath +"//upload//rating.txt";
+			int itemCount = backIndexService.seleceMaxLessonId(qid);
+			Integer userCount = backIndexService.selectUserNum(qid);
+			System.out.println("itemcount:"+itemCount);
+			System.out.println("userCount:"+userCount);
+			UserBasedCF userBacesCF = new UserBasedCF(filename,userCount,itemCount);
+			int userIdx = (int) session.getAttribute("uid") - 1;
+			System.out.println(userIdx);
+			List<Object[]> recommendedItems = userBacesCF.getRecommendedItems(userIdx);
+		
+			
+			if(recommendedItems!=null){
+			lessons = courseService.selectReccommendLesson(recommendedItems);
+			}
+			System.out.println("lessons.length:"+lessons.size());
+			return lessons;
+		}
+		
+			@RequestMapping(value="/BackEnd/course/publish")
+			@ResponseBody
+			public String response_coursepublishHandler(@RequestParam MultipartFile[] upload,HttpServletRequest request) throws Exception{
+				System.out.println("........MessageHandle.......response_coursepublishHandler.....");
+				System.out.println(request.getRequestURI());
+				String path = request.getServletContext().getRealPath("/");
+				String ppath = new File(path).getParent();
+				path = ppath+"/upload/courseimgs";
+				HttpSession session = request.getSession();
+				int  qid = (int) session.getAttribute("qid");
+				boolean isOK = courseService.saveCoursePagesImgs(path, upload, qid);
+				if(isOK){
+					return "{\"result\":true}";
+				}
+				else{
+					return "{\"result\":false}";
+				}
+			}		
 }

@@ -1,14 +1,20 @@
 package com.neusoft.service.impl;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.neusoft.mapper.CourseMapper;
 import com.neusoft.po.FreeListen;
 import com.neusoft.po.Lesson;
 import com.neusoft.po.LessonBranch;
+import com.neusoft.po.MessageImg;
 import com.neusoft.service.CourseService;
 import com.neusoft.tools.Page;
 import com.neusoft.vo.CourseCategoryVo;
@@ -195,6 +201,38 @@ public class CourseServiceBean implements CourseService {
 	public List<FreeListen> selectBranchFreeListens(FreeListenPageVo fpv) throws Exception {
 		// TODO Auto-generated method stub
 		return cm.getFreeListensByBranch(fpv);
+	}
+
+	@Override
+	public List<Lesson> selectReccommendLesson(List<Object[]> lids) throws Exception {
+		List<Lesson> lessons = new ArrayList<Lesson>();
+		if(lids!=null){
+			for(int i=0;i<lids.size();i++){
+				int lid =(int) lids.get(i)[0]+1;
+				System.out.println("lid:"+lid);
+				lessons.add(cm.getLesson(lid));
+			}
+			}
+		return lessons;
+	}
+	@Override
+	public int selectTotalNumOfBranchFreeListen(int aid) throws Exception {
+		return cm.getTotalNumOdBranchFreeListen(aid);
+	}
+
+	@Override
+	public boolean saveCoursePagesImgs(String path,MultipartFile[] upload, int qid) throws Exception {
+		System.out.println("....CourseServiceBean........saveCoursePagesImgs().........");	
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("qid", qid);
+		for(int i=0;i<upload.length;i++){
+			String filename  =System.currentTimeMillis()+upload[i].getOriginalFilename();
+			map.put("imgurl", filename);
+			File dest = new File(path,filename);	
+			upload[i].transferTo(dest);
+			cm.addCourseImg(map);
+		}	
+		return true;		
 	}
 
 

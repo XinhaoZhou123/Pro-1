@@ -32,7 +32,7 @@ request.setAttribute("path", basePath);
 		<script type="text/javascript">
             function IFrameResize()
             {
-                    //得到父页面的iframe框架的对象
+                  <%--   //得到父页面的iframe框架的对象
                 var obj = parent.document.getElementById("myFrame");
                     //把当前页面内容的高度动态赋给iframe框架的高
                 obj.height = this.document.body.scrollHeight;
@@ -59,7 +59,22 @@ request.setAttribute("path", basePath);
               
                 window.addEventListener('DOMMouseScroll',refreshHeight(),false);
                 window.addEventListener('onMouseWheel',refreshHeight(),false);
-             
+              --%>
+            //得到父页面的iframe框架的对象
+              var obj = parent.document.getElementById("myFrame");
+                  //把当前页面内容的高度动态赋给iframe框架的高
+              obj.height = this.document.body.scrollHeight*1.5;
+          	
+                  
+                  //看看这是修改还是上传
+              var fdesc = '<%=request.getAttribute("fdesc")%>';
+      		
+  			if(fdesc!="null"){
+  				UE.getEditor('editor').setContent(fdesc);
+  			}
+  			
+  	
+           
             }
         
             function refreshHeight(){
@@ -74,14 +89,14 @@ request.setAttribute("path", basePath);
 		<div class="layui-layout layui-layout-admin">
 				<!-- 内容主体区域 -->
 		  <div style="background-color: white; margin: 0px 50px 0px 0px; background-color: #F8F8FF;">
-			<form class="layui-form" action="<%=request.getContextPath() %>/upload/freelisten" method="post" id="upload_freelisten" >
+			<form class="layui-form" action="<%=request.getContextPath() %>/BackEnd/upload/freelisten" method="post" id="upload_freelisten" >
 				<div class="layui-collapse">
 					<c:if test="${id!=null}">
 						<div class="layui-col-md8 layui-col-lg-offset2 layui-colla-item">
 							<div class="layui-card">
 								<div class="layui-card-header layui-colla-title">预约课程编号</div>
 								<div class="layui-card-body layui-colla-content layui-show" style="height: 50px; line-height: 50px;">
-									<input class="layui-input" readonly="true" type="text"  value="${id}"/>
+									<input class="layui-input" readonly="true" type="text"  name="f_id"  value="${id}"/>
 								</div>
 							</div>
 						</div>
@@ -218,7 +233,7 @@ request.setAttribute("path", basePath);
 				//普通图片上传
 				var uploadInst = upload.render({
 					elem: '#choose',
-					url: '<%=request.getContextPath()%>/upload/cover.do',
+					url: '<%=request.getContextPath()%>/BackEnd/upload/cover.do',
 					//auto:false,
 					//bindAction: '#submitBtn',
 					accept: 'file',
@@ -239,7 +254,7 @@ request.setAttribute("path", basePath);
 						//上传成功
 						else{
 				
-							alert(res.url);
+							//alert(res.url);
 							
 							document.getElementById("coverurl").value=res.url;
 							refreshHeight();

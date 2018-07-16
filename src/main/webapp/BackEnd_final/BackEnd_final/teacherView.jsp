@@ -108,7 +108,7 @@
 	    ,limit:3
 	    ,jump:function(obj,first){
 	    	if(!first){
-	    		alert("not first");
+	    		//alert("not first");
 	    		$.ajax({
 	    			url:"<%=request.getContextPath()%>/BackEnd/Handler_selectTeachersByPage",
 	    			type:"post",
