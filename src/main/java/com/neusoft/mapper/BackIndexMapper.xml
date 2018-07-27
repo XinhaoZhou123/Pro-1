@@ -47,5 +47,36 @@
 	<select id="getMaxLessonId" parameterType="int" resultType="int">
 		select max(lid) from lesson where lesson.qid =#{qid}
 	</select>
+	
+	<select id="findProfitByMonth" parameterType="map" resultType="Double">
+		select sum(total)
+		FROM sorder
+		where `status`='已使用' and qid=#{qid}
+		and DATE_FORMAT(ordertime,'%Y-%c') = DATE_FORMAT('${year}-${month}-1','%Y-%c')
+	</select>
+	<select id="findOrderNumByMonth" parameterType="map" resultType="Integer">
+		select count(*)
+		from sorder
+		where qid=#{qid} and DATE_FORMAT(ordertime,'%Y-%c') = DATE_FORMAT('${year}-${month}-1','%Y-%c')
+	</select>
+	<select id="findFLBNByMonth" parameterType="map" resultType="Integer">
+		select count(*) FROM 
+		(
+		SELECT freelistenbook.id,freelistenbook.booktime,
+		freelisten.branchid
+		FROM `freelistenbook`
+		left JOIN freelisten 
+		on freelisten.id = freelistenbook.fid
+		) form1
+		 LEFT JOIN address
+		ON form1.branchid = address.aid
+		where qid=#{qid} and DATE_FORMAT(booktime,'%Y-%c') = DATE_FORMAT('${year}-${month}-1','%Y-%c')
+	</select> 
+	<select id="findOSNByMonth" parameterType="map" resultType="Integer">
+		select count(*)
+		from sorder
+		where qid=#{qid} and DATE_FORMAT(ordertime,'%Y') = DATE_FORMAT('${year}-1-1','%Y')
+		and status = #{status}
+	</select>
 </mapper>
 

@@ -7,22 +7,49 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.neusoft.mapper.FreeListenBookMapper;
 import com.neusoft.po.FreeListenBook;
 import com.neusoft.service.FreeListenBookService;
 import com.neusoft.tools.Page;
 import com.neusoft.vo.ReservationCondition;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 @Service
 public class FreeListenBookServiceBean implements FreeListenBookService {
 	@Autowired
 	FreeListenBookMapper freeMapper;
+	
+	@Autowired
+	JedisPool jedisPool;
+	
 	@Override
 	public List<FreeListenBook> selectFreeListenBooks(Page page, String tel, int qid) throws Exception {
+		
+		Gson gson = new Gson();
+		
+		Jedis jedis = jedisPool.getResource();
+		String clist =jedis.hget("freelisten","freelisten"+tel+"-"+page.getCurrentPage());
+		if(clist ==null){
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("page", page);
+			map.put("tel", tel);
+			map.put("qid", qid);
+			List<FreeListenBook> lists = freeMapper.getFreeListenBook(map);
+			String json_str = gson.toJson(lists);
+			jedis.hset("freelisten","freelisten"+tel+"-"+page.getCurrentPage(), json_str);
+			return lists; 
+		}else{
+			List<FreeListenBook> lists = gson.fromJson(clist, new TypeToken<List<FreeListenBook>>(){}.getType());
+			return lists;
+		}/*
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("page", page);
 		map.put("tel", tel);
 		map.put("qid", qid);
-		return freeMapper.getFreeListenBook(map);
+		return freeMapper.getFreeListenBook(map);*/
 	}
 	@Override
 	public List<FreeListenBook> selectFreeListenBooksByStatus(Page page, String tel, String status, int qid)
