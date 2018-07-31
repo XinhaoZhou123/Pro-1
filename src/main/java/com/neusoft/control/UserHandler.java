@@ -27,6 +27,15 @@ public class UserHandler {
 	@Autowired
 	private UserService	u_serv;
 	
+	@RequestMapping(value="/user/modifyNick")
+	@ResponseBody
+	public Map<String,Object> modifyNickName(String uid,String nickName) throws Exception{
+		Map<String, Object> map = new HashMap<String, Object>();
+		boolean result =u_serv.updateNickName(uid, nickName);
+		map.put("result", result);
+		return map;
+	}
+	
 	@RequestMapping(value = "/user/sendCode")
 	@ResponseBody
 	public VerifyInfo sendCode(String tel) throws Exception{

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>课程</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script type="application/javascript" src="../js/jquery-3.2.0.min.js"></script>
+		<script type="application/javascript" src="../js/mui.min.js"></script>
+		<style type="text/css">
+			.mui-content>.mui-table-view:first-child {
+				margin-top: -1px;
+			}
+		</style>
+		<script type="text/javascript">
+		
+		function getRootPath(){
+			//获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+			var curWwwPath=window.document.location.href;
+			//获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+			var pathName=window.document.location.pathname;
+			var pos=curWwwPath.indexOf(pathName);
+			//获取主机地址，如： http://localhost:8083
+			var localhostPaht=curWwwPath.substring(0,pos);
+			//获取带"/"的项目名，如：/uimcardprj
+			var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+			return(localhostPaht+projectName);
+		}
+		mui(document).on('tap','a',function(){
+			  //业务逻辑
+			 	top.window.location.href=this.href;
+			})
+		
+	
+		
+		mui.init({
+			pullRefresh: {
+				container: '#pullrefresh',
+				
+				up: {
+					auto:true,
+					contentrefresh: '正在加载...',
+					callback: pullupRefresh
+				}
+			}
+		});
+		
+		var over=0;
+		function pullupRefresh() {
+			setTimeout(function() {
+				//参数为true代表没有更多数据了
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh((over> 0)); //参数为true代表没有更多数据了。
+				//上拉  一次加载这么多
+				var table = document.body.querySelector('.mui-table-view');
+				var cells = document.body.querySelectorAll('.countcoupon');
+				
+				var newListStart=cells.length;
+				var count=5;//一次加载五个优惠券
+			
+				//alert("开始"+newListStart);
+				if(over==0){
+						$.ajax({
+							url:getRootPath()+'/coupon/getCouponList',
+							type:"get",
+							async: false,
+							data:{
+								code:0,
+								from:newListStart,
+								count:count
+							},
+							dataType:"json",
+							success:function(data){
+							
+								
+								mui('#pullrefresh').pullRefresh().endPullupToRefresh(false); //参数为true代表没有更多数据了。不能上拉了
+								for(var i=0;i<data.length;i++){
+									var name = data[i].name;
+									var use_condition= data[i].use_condition;
+									var decrease=data[i].decrease;
+									var fromdate=data[i].startdate;
+									var enddate=data[i].enddate;
+									var c_category=data[i].c_category;
+								
+									var	li = document.createElement('li');
+									li.className='countcoupon';
+									var carddiv=document.createElement("div");
+									carddiv.className='mui-card';
+									
+									var contentdiv=document.createElement("div");;
+									contentdiv.className='mui-card-content-inner'
+
+									li.appendChild(carddiv);
+									var div1=document.createElement("div");
+									var div2=document.createElement("div");
+									var div3=document.createElement("div");
+									div1.style="float: left; width: 35%;";
+									div2.style='float: left; width: 45%;';
+									div3.style='float: right; width: 18%; margin-top: 40px;';
+									
+									var amountdiv=document.createElement("div");
+										amountdiv.style="height: 80px; width: 100%;";
+										amountdiv.innerHTML='<div style="float: left; width:40%; margin-top: 40px;"><h5 align="right" style="color: #FF0000;">￥</h5></div>'
+										amountdiv.innerHTML+='<div style="float: right;width:60%; margin-top: 25px;"><h1 align="left" style="color: #FF0000;">'+decrease+'</h4></div>'
+									var limitdiv=document.createElement("div");
+										limitdiv.style="height: 20px;width: 100%; margin-bottom: 5px;";
+										limitdiv.innerHTML='<h6 align="center" style="color: #000000;">满'+use_condition+'元起用</h6>';
+										
+									div1.appendChild(amountdiv);
+									div1.appendChild(limitdiv);
+									
+										var p=document.createElement("p");
+											p.style='margin-top:5%;color: #000000; ';
+											p.innerHTML=name;
+										div2.appendChild(p);
+									
+									
+										var time=document.createElement("h6");
+											time.style='float: left; color: #000000;';
+											time.innerHTML=fromdate+" 至 "+enddate;
+										div2.appendChild(time);
+										var catediv=document.createElement("h6");
+											catediv.style="float: left;"
+											catediv.innerHTML=c_category+"类使用";
+										div2.appendChild(catediv);
+											
+									
+										
+										div3.innerHTML='<a href="course_list.html"><button style="float: right;" class="mui-btn mui-btn-blue  mui-btn-outlined">去使用</button></a>';
+									
+									
+									
+									contentdiv.appendChild(div1);
+									contentdiv.appendChild(div2);
+									contentdiv.appendChild(div3);
+									
+								
+									carddiv.appendChild(contentdiv);
+							
+									table.appendChild(li);	
+									
+								}
+							
+								if(document.body.querySelectorAll('.showcourse').length==data.total){
+									
+									over++;
+								
+								}
+							
+							}
+						});
+	
+				}		
+			}, 500);
+		};
+		
+		</script>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">我的优惠券</h1>
+		</header>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll" >
+				<!--数据列表-->	
+				<ul class="mui-table-view mui-table-view-chevron" style="background-color:#F0F1F1">
+				
+				
+
+				</ul>
+			</div>
+		</div>
+	
+				
+	</body>
+
+</html>

@@ -114,31 +114,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					  }
 				});
 				table.on('tool(check_filter)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-				        	var data = obj.data; //获得当前行数据
-				        	var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-	
-				        	if(layEvent === 'edit'){ //查看
-				        		$.ajax({
-				        		url: '<%=request.getContextPath() %>/BackEnd/reserve/dealReservation',
-				        			type: 'post',
-				        			data: {id: data.id},
-				        			dataType: 'json',
-				        			success: function(data){
-				        				if(data.state == 1){
-				        					obj.update({
-				        						status : "已处理"
-				        					})
-				        					layer.msg('处理成功');
-				        				}
-				        			 	else{
-				        					layer.msg('处理失败');
-				        				}
-				        			}
-				        	   });
-				           } 
-				       });
-				})	
-			}
+		        	var data = obj.data; //获得当前行数据
+		        	var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+
+		        	if(layEvent === 'edit'){ //查看
+		        		$.ajax({
+		        		url: '<%=request.getContextPath() %>/BackEnd/reserve/dealReservation',
+		        			type: 'post',
+		        			data: {id: data.id},
+		        			dataType: 'json',
+		        			success: function(data){
+		        				if(data.state == 1){
+		        					obj.update({
+		        						status : "已处理"
+		        					})
+		        					layer.msg('处理成功');
+		        				}
+		        			 	else{
+		        					layer.msg('处理失败');
+		        				}
+		        			}
+		        	   });
+			      	} 
+		       	});
+			})	
+		}
 			window.onload  = select();
 	</script>
 	</head>

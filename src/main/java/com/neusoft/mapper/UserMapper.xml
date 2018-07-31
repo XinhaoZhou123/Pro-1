@@ -22,5 +22,10 @@
 		update user set iconurl=#{url}
 		where qid=#{qid} and tel=#{tel}
 	</update>
+	
+	<update id="updateNickName" parameterType="map">
+		update user set nickName=#{nickName}
+		where uid = #{uid}
+	</update>
 </mapper>
 

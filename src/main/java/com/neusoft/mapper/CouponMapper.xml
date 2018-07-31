@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.mapper.CouponMapper">
+	<select id="findCouponByPage" parameterType="map" resultType="com.neusoft.po.Coupon">
+		select user_coupon.u_id,coupon.* from 
+		user_coupon left join coupon on 
+		user_coupon.c_id = coupon.c_id
+		where
+		qid = #{qid}
+		<if test="c_category!=null and c_category!=''">
+			and c_category = #{c_category}
+		</if>
+		<if test = "status!=null and status!=''">
+			and status = #{status}
+		</if>
+		<if test="uid!=null and uid!=''">
+			and user_coupon.u_id = #{uid}
+		</if>
+		limit #{start},#{length}
+	</select>
+	
+	<select id="findCouponList" parameterType="map" resultType="com.neusoft.po.Coupon">
+		select * from coupon where
+		qid = #{qid}
+		<if test="c_category!=null and c_category!=''">
+			and c_category = #{c_category}
+		</if>
+		<if test = "c_status!=null and c_status!=''">
+			and c_status = #{c_status}
+		</if>
+		limit #{start},#{length}
+		
+	</select>
+	
+	<insert id="addUserCoupon" parameterType="com.neusoft.po.User_coupon">
+		insert into user_coupon(u_id,c_id,addtime,status)
+		values(#{u_id},#{c_id},DATE_FORMAT(SYSDATE(),"%Y-%c-%d"),#{status})
+	</insert>
+	
+	<update id="updateUserInte"	 parameterType="int" >
+		update user set integral = integral-#{denum}
+		where uid = #{uid}
+	</update>
+		
+	<insert id="insertCoupon">
+		insert into coupon(qid,startdate,c_category,name,c_status,decrease,pubtime,use_condition,chan_integral,enddate,remain,totalnum)
+		values(#{qid},#{startdate},#{c_category},#{name},'可兑换',#{decrease},DATE_FORMAT(SYSDATE(),"%Y-%c-%d")
+		,#{use_condition},#{chan_integral},#{enddate},#{totalnum},#{totalnum})
+	</insert>
+	
+	<select id="getCouponById" parameterType="int" resultType="com.neusoft.po.Coupon">
+		select * from coupon where
+		c_id=#{c_id}
+	</select>
+	
+	<select id="findCouponByCondition"	parameterType="com.neusoft.vo.CouponCondition" resultType="com.neusoft.po.Coupon">
+		select * from coupon where
+		qid = #{qid}
+		<if test="condition.name!=null and condition.name!=''">
+		and name like '%${condition.name}%'
+		</if> 
+		<if test="condition.c_category!=null and condition.c_category!=''">
+		and c_category = #{condition.c_category}
+		</if>
+		<if test="condition.c_status!=null and condition.c_status!=''">
+		and c_status = #{condition.c_status}
+		</if>
+		<if test="condition.startdate!=null and condition.startdate!=''">
+		and DATE_FORMAT(startdate, '%Y-%c-%d' )&gt;= STR_TO_DATE(#{condition.startdate},'%Y-%c-%d')
+		</if>
+		<if test="condition.enddate!=null and condition.enddate!=''">
+		and DATE_FORMAT(enddate, '%Y-%c-%d' )&lt;= STR_TO_DATE(#{condition.enddate},'%Y-%c-%d')			
+		</if>
+		limit #{start},#{length}
+	</select>
+	
+	<select id="countCouponByCondition" parameterType="map" resultType="Integer">
+		select count(*) from coupon where
+		qid = #{qid}
+		<if test="condition.name!=null and condition.name!=''">
+		and name like '%${condition.name}%'
+		</if> 
+		<if test="condition.c_category!=null and condition.c_category!=''">
+		and c_category = #{condition.c_category}
+		</if>
+		<if test="condition.c_status!=null and condition.c_status!=''">
+		and c_status = #{condition.c_status}
+		</if>
+		<if test="condition.startdate!=null and condition.startdate!=''">
+		and DATE_FORMAT(startdate, '%Y-%c-%d' )&gt;= STR_TO_DATE(#{condition.startdate},'%Y-%c-%d')
+		</if>
+		<if test="condition.enddate!=null and condition.enddate!=''">
+		and DATE_FORMAT(enddate, '%Y-%c-%d' )&lt;= STR_TO_DATE(#{condition.enddate},'%Y-%c-%d')			
+		</if>
+	</select>
+	
+	<update id="downCoupon" parameterType="int">
+		update coupon set c_status='不可兑'
+		where c_id = #{c_id}	
+	</update>
+	
+	<update id="updateCoupon" parameterType="map" >
+		update coupon set 
+		remain = remain+(#{totalnum}-totalnum),
+		totalnum = #{totalnum},chan_integral = #{chan_integral}
+		where c_id=#{c_id}
+	</update>
+	
+</mapper>
+

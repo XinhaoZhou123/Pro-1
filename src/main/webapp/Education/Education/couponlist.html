@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+		<link rel="stylesheet" href="../css/mui.min.css">
+
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.mui-bar~.mui-content .mui-fullscreen {
+				top: 44px;
+				height: auto;
+			}
+			
+			.mui-pull-bottom-tips {
+				text-align: center;
+				background-color: #efeff4;
+				font-size: 15px;
+				line-height: 40px;
+				color: #777;
+			}
+			
+			.mui-slider-indicator.mui-segmented-control {
+				background-color: #efeff4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">更多课程</h1>
+		</header>
+		<div class="mui-content">
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<div class="mui-scroll" id="listhead">
+						<a class="mui-control-item mui-active" href="#all">
+							全品类
+						</a>
+						<a class="mui-control-item" href="#java">
+							Java
+						</a>
+						<a class="mui-control-item" href="#html5">
+							HTML5
+						</a>
+						<a class="mui-control-item" href="#python">
+							python
+						</a>
+						<a class="mui-control-item" href="#cpp">
+							C++
+						</a>
+					</div>
+				</div>
+				<div class="mui-slider-group">
+					<div id="all" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="alllist" style="background-color:#F0F1F1">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="java" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="javalist" style="background-color:#F0F1F1">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="html5" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="html5list"  style="background-color:#F0F1F1">
+			
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="python" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="pythonlist"  style="background-color:#F0F1F1">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="cpp" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="cpplist"  style="background-color:#F0F1F1">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.pullToRefresh.js"></script>
+		<script src="../js/mui.pullToRefresh.material.js"></script>
+		<script>
+			
+		function getRootPath(){
+			//获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+			var curWwwPath=window.document.location.href;
+			//获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+			var pathName=window.document.location.pathname;
+			var pos=curWwwPath.indexOf(pathName);
+			//获取主机地址，如： http://localhost:8083
+			var localhostPaht=curWwwPath.substring(0,pos);
+			//获取带"/"的项目名，如：/uimcardprj
+			var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+			return(localhostPaht+projectName);
+		}
+		
+			mui.init();
+			(function($) {
+				//阻尼系数
+				var deceleration = mui.os.ios ? 0.003 : 0.0009;
+				$('.mui-scroll-wrapper').scroll({
+					bounce: false,
+					indicators: true, //是否显示滚动条
+					deceleration: deceleration
+				});
+				$.ready(function() {
+					//循环初始化所有下拉刷新，上拉加载。
+					$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+						$(pullRefreshEl).pullToRefresh({
+							down: {
+
+							},
+							up: {
+								auto:true,
+								callback: function() {
+									var self = this;
+									setTimeout(function() {
+										var ul = self.element.querySelector('.mui-table-view');
+									
+										ul.appendChild(createFragment(ul, index, 5));
+										self.endPullUpToRefresh();
+										
+										var buttons=document.getElementsByClassName('mui-btn mui-btn-blue  mui-btn-outlined');
+										
+										
+										
+										/* for(var i=0;i<buttons.length;i++){
+										
+											buttons[i].addEventListener('tap', function(element) {
+												var btnArray = ['否', '是'];
+												var cid=this.id.substr(3);
+												alert(cid);
+												mui.confirm('确认兑换吗？', '兑换优惠券', btnArray, function(e) {
+													if(e.index == 1) {
+													
+														//发送兑换的ajax请求
+														//alert("ajax请求发出  兑换");
+														$.ajax({
+														url: getRootPath()+"/coupon/exchangeCoupon",
+														type: "get",
+														async: false,
+														data: {
+															c_id: cid,
+														},
+														dataType: "json",
+														success: function(data) {
+																mui.alert("提示消息", data, function() {
+																});
+														},
+														error:function(){
+																mui.alert("提示消息", "兑换失败,网络异常", function() {
+																});
+														}
+													});
+														
+													} else {
+														//nothing
+													}
+												})
+											})
+										}
+										
+										 */
+										
+										
+										
+										
+									}, 1000);
+								}
+			
+							}
+						});
+					});
+					
+					
+					
+					var createFragment = function(ul, index, count, reverse) {
+						var length = ul.querySelectorAll('li').length;
+						
+						var data = new Array();
+						
+						if(ul.id == "alllist") {
+							listcode = 0
+						} else if(ul.id == "javalist") {
+							listcode = 1
+						} else if(ul.id == "html5list") {
+							listcode = 2
+						} else if(ul.id == "cpplist") {
+							listcode = 3
+						} else if(ul.id == "pythonlist") {
+							listcode = 4
+						} else {
+							listcode = -1;
+						}
+					
+						$.ajax({
+							url: getRootPath()+"/coupon/getCouponStore",
+							type: "get",
+							async: false,
+							data: {
+								code: listcode,
+								from: length,
+								count: count
+							},
+							dataType: "json",
+							success: function(result) {
+							console.log(result);
+								data=result;
+							}
+						});
+					
+						var fragment = document.createDocumentFragment();
+						var li;
+						for(var i = 0; i < data.length; i++) {
+								var	li = document.createElement('li');
+							li.className="couponclass";
+							
+							var carddiv=document.createElement("div");
+							carddiv.className='mui-card';
+							
+							var contentdiv=document.createElement("div");;
+							contentdiv.className='mui-card-content-inner'
+							
+							
+							li.appendChild(carddiv);
+							var div1=document.createElement("div");
+							var div2=document.createElement("div");
+							var div3=document.createElement("div");
+							div1.style="float: left; width: 40%;";
+							div2.style='float: left; width: 40%;';
+							div3.style='float: right; width: 18%; margin-top: 40px;';
+							
+							var amountdiv=document.createElement("div");
+								amountdiv.style="height: 80px; width: 100%;";
+								amountdiv.innerHTML='<div style="float: left; width:40%; margin-top: 40px;"><h5 align="right" style="color: #FF0000;">￥</h5></div>'
+								amountdiv.innerHTML+='<div style="float: right;width:60%; margin-top: 25px;"><h1 align="left" style="color: #FF0000;">'+data[i].decrease+'</h4></div>'
+							var limitdiv=document.createElement("div");
+								limitdiv.style="height: 20px;width: 100%; margin-bottom: 5px;";
+								limitdiv.innerHTML='<h6 align="center" style="color: #000000;">满'+data[i].use_condition+'元起用</h6>';
+								
+							div1.appendChild(amountdiv);
+							div1.appendChild(limitdiv);
+							
+	
+								var p=document.createElement("p");
+									p.style='margin-top:5%;color: #000000; ';
+									p.innerHTML=data[i].name;
+								div2.appendChild(p);
+								var costmark=document.createElement("h6");
+									costmark.innerHTML=data[i].chan_integral+"积分";
+									costmark.style="color: #000000;";
+									costmark.align="left";
+								div2.appendChild(costmark);
+								var sondiv=document.createElement("div");
+									sondiv.innerHTML='<h5 style="float: left; color: #FF0000; width: 40%;">仅剩：</h5><h4 style="float: left;width: auto;color:#FF0000 ; ">'+data[i].remain+'</h4>'
+								div2.appendChild(sondiv);
+								var time=document.createElement("h6");
+									time.style='float: left; color: #000000;';
+									time.innerHTML=data[i].enddate+"之前使用";
+								div2.appendChild(time);
+								var catediv=document.createElement("h6");
+									catediv.style="float: left;"
+									catediv.innerHTML=data[i].c_category+"类使用";
+								div2.appendChild(catediv);	
+							
+								var button1=document.createElement("button");
+								button1.id="btn"+data[i].c_id;
+								button1.style="float:right;"
+								button1.className="mui-btn mui-btn-blue  mui-btn-outlined exchange";
+							
+								button1.innerHTML="兑换";
+								div3.appendChild(button1);
+							
+							
+							
+							contentdiv.appendChild(div1);
+							contentdiv.appendChild(div2);
+							contentdiv.appendChild(div3);
+						
+						
+							carddiv.appendChild(contentdiv);
+							
+							fragment.appendChild(li);
+
+					
+						}
+						return fragment;
+					};
+					
+		
+				});
+			})(mui);
+
+		
+		/*	
+			document.getElementById("btn").addEventListener('tap', function() {
+				var btnArray = ['否', '是'];
+				mui.confirm('确认兑换吗？', 'Hello MUI', btnArray, function(e) {
+					if(e.index == 1) {
+					
+						//发送兑换的ajax请求
+						
+						
+						
+						alert("ajax请求发出  兑换");
+						
+						
+					} else {
+						//nothing
+					}
+				})
+			});*/
+		</script>
+		<script>
+		
+		
+		$(document).on('tap',".exchange",function(){
+			var ind= $(".exchange").index($(this));
+			var cid= $(".exchange").eq(ind).attr('id').substr(3);
+			var btnArray = ['否', '是'];
+			mui.confirm('确认兑换吗？', '兑换优惠券', btnArray, function(e) {
+				if(e.index == 1) {
+				
+					//发送兑换的ajax请求
+					//alert("ajax请求发出  兑换");
+					$.ajax({
+					url: getRootPath()+"/coupon/exchangeCoupon",
+					type: "get",
+					async: false,
+					data: {
+						c_id: cid,
+					},
+					dataType: "json",
+					success: function(data) {
+							if(data){
+								mui.alert("提示消息", "兑换成功", function() {
+								});
+							}else{
+								mui.alert("提示消息", "兑换失败,服务器异常", function() {
+								});
+							}
+					},
+					error:function(){
+							mui.alert("提示消息", "兑换失败,网络异常", function() {
+							});
+					}
+				});
+					
+				} else {
+					//nothing
+				}
+			})
+		})
+		</script>
+	</body>
+
+</html>

@@ -70,7 +70,7 @@ request.setAttribute("path", basePath);
 								<div class="layui-card-body layui-colla-content layui-show" style="padding-left: 3%;">
 									<div class="layui-upload-list">
 										<c:if test="${cover!=null}">
-											<img class="layui-upload-img" style="width:100%;height:400px;" id="cover" name="cover1" src="/webapps/../upload/cover/${cover}" }>
+											<img class="layui-upload-img" style="width:100%;height:400px;" id="cover" name="cover1" src="/webapps/../upload/cover/${cover}" >
 											<p id="demoText"></p>
 											<input type="hidden" name="imgurl" id="coverurl" value="${cover}"/>
 										</c:if>
