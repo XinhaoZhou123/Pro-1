@@ -12,12 +12,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<title>优惠券处理</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="<%=request.getContextPath() %>/BackEnd_final/layui/css/layui.css">
+		<link rel="stylesheet" href="<%=request.getContextPath() %>/BackEnd_final/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="<%=request.getContextPath() %>/BackEnd_final/layui/css/modules/layer/default/layer.css">
 		<script type="text/javascript" src="<%=request.getContextPath() %>/BackEnd_final/layui/layui.js"></script>
 		<script src="<%=request.getContextPath() %>/BackEnd_final/layui/lay/modules/layer.js"></script>
 		<script src="<%=request.getContextPath() %>/BackEnd_final/js/mui.min.js"></script>
 		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+		<script src="<%=request.getContextPath() %>/BackEnd_final/layui/lay/modules/laydate.js"></script>
+		
 		
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; border-radius: 10px; text-align: center;}
@@ -62,10 +64,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	});
 	$(function(){
-			$("#btnSelect").click(function(){
-				select();
-			});
-		})
+		$("#btnSelect").click(function(){
+			select();
+		});
+	})
 	function select(){
 		layui.use('table', function(){
 		var table = layui.table;
@@ -74,7 +76,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var name = $("#conditionSelect input[name='name']").val();
 		var c_category = $("#conditionSelect select[name='c_category']").val();
 		var c_status = $("#conditionSelect select[name = 'c_status']").val();
-		var startdate = $("#conditionSelect startdate[name = 'startdate']").val();
+		var startdate = $("#conditionSelect input[name = 'startdate']").val();
 		var enddate = $("#conditionSelect input[name='enddate']").val();
 	  	table.render({
 		    elem: '#coupon_deal'
@@ -203,6 +205,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									  <option value="Python">Python</option>
 									  <option value="C++">C++</option>
 									  <option value="HTML5">HTML5</option>
+				 					  <option value="ALL">ALL</option>
 								</select>
 							
 							状态:<select name="c_status" lay-verify="" style="margin-right: 2%;">
@@ -210,7 +213,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									  <option value="可兑换">可兑换</option>
 									  <option value="不可兑">不可兑</option>
 								</select>
-							预约时间:自<input type="date" name="startdate" style="width: 120px;"/>
+							有效时间(在此段日期内有效):自<input type="date" name="startdate" style="width: 120px;"/>
 							-至<input type="date" name="enddate" style="width: 120px"/>
 									<button type="button" id="btnSelect" class="layui-btn  layui-btn-sm ">查询</button>
 						</form>
@@ -254,18 +257,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">使用日期(始)</label>
 		    <div class="layui-input-inline" style="width:27%">
-		      <input type="date" name="startdate" required lay-verify="required" autocomplete="off" class="layui-input"> 
+		      <input type="text" name="startdate" required lay-verify="required" autocomplete="off" class="layui-input startdate"> 
 		    </div>
 		    <label class="layui-form-label">使用日期(终)</label>
 		    <div class="layui-input-inline" style="width:27%">
-		      <input type="date" name="enddate" required lay-verify="required" autocomplete="off" class="layui-input"> 
+		      <input type="text" name="enddate" required lay-verify="required" autocomplete="off" class="layui-input enddate"> 
 		    </div>
 		  </div>
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">使用类别</label>
 		    <div class="layui-input-block" style="width:30%">
 		      <select name="c_category" lay-verify="unrequired">
-		          <option value="">全部</option>
+		          <option value="ALL">全部类型</option>
 				  <option value="JAVA">JAVA</option>
 				  <option value="Python">Python</option>
 				  <option value="C++">C++</option>
@@ -308,9 +311,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  //监听提交
 	  form.on('submit(formDemo)', function(data){
 	  	
-	  	if(data.field.enddate<data.field.startdate){
+	  	if(data.field.enddate < data.field.startdate){
 	  		layer.msg("使用日期不合法");
-	  	}else if( data.field.use_condition<data.field.decrease){
+	  	}else if( parseInt(data.field.use_condition) < parseInt(data.field.decrease)){
+	  		alert(data.field.use_condition+"   "+data.field.decrease);
 	  		layer.msg("满减不合法");
 	  	}else{
 	  		$.ajax({
@@ -332,6 +336,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     })
 	  	}
 	    return false;
+	  });
+	});
+	</script>
+	<script>
+	//执行一个laydate实例
+	layui.use('laydate', function(){
+	  var laydate = layui.laydate;
+	  
+	  //执行一个laydate实例
+	  laydate.render({
+	    elem: '.startdate' //指定元素
+ 		 ,showBottom: false
+	  });
+	  laydate.render({
+	    elem: '.enddate' //指定元素
+ 		 ,showBottom: false
 	  });
 	});
 	</script>

@@ -123,7 +123,11 @@
 										div2.appendChild(time);
 										var catediv=document.createElement("h6");
 											catediv.style="float: left;"
-											catediv.innerHTML=c_category+"类使用";
+											if(data[i].c_category!="ALL"){
+												catediv.innerHTML=data[i].c_category+"类使用";
+											}else{
+												catediv.innerHTML="全场通用";
+											}	
 										div2.appendChild(catediv);
 											
 									

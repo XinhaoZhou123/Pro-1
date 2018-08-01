@@ -45,6 +45,8 @@ public class CouponHandler {
 					break;
 			case 4: category = "Python";
 					break;
+			case 5: category = "ALL";
+					break;
 		}
 		List<Coupon> list =  couponService.selectCouponByPage(qid,uid, from, count, category, "未使用");
 		
@@ -68,6 +70,8 @@ public class CouponHandler {
 					break;
 			case 4: category = "Python";
 					break;
+			case 5: category = "ALL";
+					break;
 		}
 		List<Coupon> list =  couponService.selectCouponList(qid, from, count, category, "可兑换");
 		System.out.print(from+"*************");
@@ -89,6 +93,7 @@ public class CouponHandler {
 	/*
 	 * 后台操作
 	 */
+	
 	@RequestMapping(value="/BackEnd/coupon/getCoupons")
 	@ResponseBody
 	public Map<String,Object> selectCouponByCondition(HttpSession session,Integer page,Integer limit,CouponCondition condition) throws Exception{
