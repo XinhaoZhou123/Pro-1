@@ -18,7 +18,9 @@
 		<if test="uid!=null and uid!=''">
 			and user_coupon.u_id = #{uid}
 		</if>
-		limit #{start},#{length}
+		<if test = "start!=null and length !=null">
+			limit #{start},#{length}		
+		</if>
 	</select>
 	
 	<select id="findCouponList" parameterType="map" resultType="com.neusoft.po.Coupon">

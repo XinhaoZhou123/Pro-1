@@ -82,7 +82,11 @@ public class CourseServiceBean implements CourseService {
 	
 	
 	
-	
+	@Override
+	public void deleteLessonBranch(int lid) throws Exception {
+		cm.deleteLessonBranch(lid);
+		
+	}
 	
 	
 	

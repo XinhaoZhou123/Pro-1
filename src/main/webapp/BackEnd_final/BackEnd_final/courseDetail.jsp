@@ -5,7 +5,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
 request.setAttribute("path", basePath);  
 %> 
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 
 	<head>
@@ -111,7 +111,10 @@ request.setAttribute("path", basePath);
 						<div class="layui-card">
 							<div class="layui-card-header layui-colla-title">开设分部</div>
 							<div class="layui-card-body layui-colla-content layui-show">
-							  <%=request.getAttribute("branchName") %>
+							  
+							  <c:forEach items="${requestScope.branches }" var="b">
+							  	<h5>${b.branch}</h5>
+							  </c:forEach>
 							</div>
 						</div>
 					</div>

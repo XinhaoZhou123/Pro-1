@@ -28,7 +28,7 @@ public class FreeListenBookServiceBean implements FreeListenBookService {
 	@Override
 	public List<FreeListenBook> selectFreeListenBooks(Page page, String tel, int qid) throws Exception {
 		
-		Gson gson = new Gson();
+		/*Gson gson = new Gson();
 		
 		Jedis jedis = jedisPool.getResource();
 		String clist =jedis.hget("freelisten","freelisten"+tel+"-"+page.getCurrentPage());
@@ -44,12 +44,12 @@ public class FreeListenBookServiceBean implements FreeListenBookService {
 		}else{
 			List<FreeListenBook> lists = gson.fromJson(clist, new TypeToken<List<FreeListenBook>>(){}.getType());
 			return lists;
-		}/*
+		}*/
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("page", page);
 		map.put("tel", tel);
 		map.put("qid", qid);
-		return freeMapper.getFreeListenBook(map);*/
+		return freeMapper.getFreeListenBook(map);
 	}
 	@Override
 	public List<FreeListenBook> selectFreeListenBooksByStatus(Page page, String tel, String status, int qid)

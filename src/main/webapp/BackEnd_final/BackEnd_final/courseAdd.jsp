@@ -181,17 +181,16 @@ request.setAttribute("path", basePath);
 														<c:redirect url="/BackEnd/initBranch" />
 													</c:if>
 													<c:forEach items="${requestScope.branches }" var="b">
-														<c:if test="${branch!=null}">
-															<c:if test="${branch!=b.radioID}">
-																<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" />
+													
+															<c:if test="${b.choosed==1}">
+																<input type="checkbox" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" >
+																<%-- <input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" /> --%>
 															</c:if>
-															<c:if test="${branch==b.radioID}">
-																<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" checked=true/>
+															<c:if test="${b.choosed==0}">
+																 <input type="checkbox" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" checked=true>
+																<%-- <input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}"  checked=true/> --%>
 															</c:if>
-														</c:if>
-														<c:if test="${branch==null}">
-															<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" />
-														</c:if>
+														
 													</c:forEach>
 										  </div>
 										</div>

@@ -8,7 +8,7 @@ import com.neusoft.vo.CouponCondition;
 
 public interface CouponService {
 	
-	public List<Coupon> selectCouponByPage(int qid,Integer uid,int start , int length, String category , String status) throws Exception;
+	public List<Coupon> selectCouponByPage(int qid,Integer uid,Integer start , Integer length, String category , String status) throws Exception;
 	
 	public List<Coupon> selectCouponList(int qid,int start , int length, String category , String status) throws Exception;
 	

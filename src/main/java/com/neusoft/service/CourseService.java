@@ -51,4 +51,5 @@ public interface CourseService {
 		public void deleteFreeListen(int id) throws Exception;
 		
 		public boolean saveCoursePagesImgs(String path,MultipartFile[] upload,int qid) throws Exception;
+		public void deleteLessonBranch(int lid) throws Exception;
 }

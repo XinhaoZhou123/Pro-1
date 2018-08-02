@@ -17,7 +17,7 @@ public class CouponServiceBean implements CouponService {
 	@Autowired
 	private CouponMapper couponMapper;
 	
-	public List<Coupon> selectCouponByPage(int qid,Integer uid, int start, int length, String category, String status)
+	public List<Coupon> selectCouponByPage(int qid,Integer uid, Integer start, Integer length, String category, String status)
 			throws Exception {
 		
 		Map<String, Object> map = new HashMap<String, Object>();

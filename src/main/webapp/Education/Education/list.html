@@ -67,11 +67,11 @@
 		});
 	
 	
-	
+		var over = 0;
 		function pullupRefresh() {
 			setTimeout(function() {
 			
-			
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh((over> 0)); //参数为true代表没有更多数据了。
 				
 				//上拉  一次加载这么多
 				var table = document.body.querySelector('.mui-table-view');
@@ -91,14 +91,8 @@
 					dataType:"json",
 					success:function(data){
 						
-						if(data.length==0){
-							
-						
-							mui('#pullrefresh').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。不能上拉了
-							return;
-						}
 					
-					
+						mui('#pullrefresh').pullRefresh().endPullupToRefresh(false); //参数为true代表没有更多数据了。不能上拉了
 						for(var i=0;i<data.result.length;i++){
 							var lid = data.result[i].lid;
 							var url= data.result[i].url;
@@ -114,7 +108,11 @@
 							
 						}
 					
-						
+						if(document.body.querySelectorAll('.showcourse').length==data.total){
+							
+							over++;
+							//alert("取完了");
+						}
 					
 					}
 				});
