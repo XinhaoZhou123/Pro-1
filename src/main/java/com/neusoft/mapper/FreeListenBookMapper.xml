@@ -245,6 +245,9 @@
 				and DATE_FORMAT(booktime, '%Y-%c-%d' )&lt;= STR_TO_DATE(#{condition.endDate},'%Y-%c-%d')			
 				</if>
 			</if>
+			<if test="field!=null and field!='' and order!=null and order!=''">
+			order by ${field} ${order} 
+			</if>
 			limit #{page.start},#{page.end}
 	</select>
 </mapper>

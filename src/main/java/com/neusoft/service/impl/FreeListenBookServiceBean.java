@@ -119,12 +119,19 @@ public class FreeListenBookServiceBean implements FreeListenBookService {
 	 * 通过条件查找一页预约
 	 */
 	@Override
-	public List<FreeListenBook> findPageByCondition(ReservationCondition condition, Page page,int qid)
+	public List<FreeListenBook> findPageByCondition(ReservationCondition condition,String field,String order ,Page page,int qid)
 			throws Exception {
 		Map<String, Object> m = new HashMap<String,Object>();
 		m.put("condition",condition);
 		m.put("page", page);
 		m.put("qid", qid);
+		if(field!=null)
+			field=field.toLowerCase();
+		if(order!=null)
+			order=order.toLowerCase();
+		
+		m.put("field", field);
+		m.put("order", order);
 		return freeMapper.findPageByCondition(m);
 	}
 	/*

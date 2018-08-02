@@ -32,7 +32,7 @@ public interface FreeListenBookService {
 		//处理预约
 		public void dealReservation(int id) throws Exception;
 		//通过条件查找一页预约
-		public List<FreeListenBook> findPageByCondition(ReservationCondition condition
+		public List<FreeListenBook> findPageByCondition(ReservationCondition condition,String field,String order
 				,Page page,int qid) throws Exception;
 		//通过条件查找预约数量
 		public int findReservationCountByCondition(ReservationCondition condition,int qid) throws Exception;

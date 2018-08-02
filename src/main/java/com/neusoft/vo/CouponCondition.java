@@ -6,6 +6,9 @@ public class CouponCondition {
 	String c_status;
 	String startdate;
 	String enddate;
+	
+	
+	
 	public String getName() {
 		return name;
 	}

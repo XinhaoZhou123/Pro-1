@@ -20,7 +20,9 @@ public interface CouponService {
 	
 	public boolean insertCoupon(Coupon coupon) throws Exception;
 	//通过条件查找相应页数的Coupon
-	public List<Coupon> selectCouponByCondition(CouponCondition condition ,int qid,int start,int length) throws Exception;
+	public List<Coupon> selectCouponByCondition(CouponCondition condition ,int qid,int start,int length, String field ,String order) throws Exception;
+	//排序查找
+	//public List<Coupon> selectSortCoupon(CouponCondition condition , int qid ,int start , int length , String field ,String order) throws Exception;
 	//找到某一条件的coupon数目
 	public int selectCountByCondition(int qid,CouponCondition condition) throws Exception;
 	//下架某一款产品

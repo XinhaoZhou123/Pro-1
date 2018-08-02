@@ -46,6 +46,11 @@
 		where uid = #{uid}
 	</update>
 		
+	<update id="updateUseCoupon" parameterType="int">
+		update user_coupon set status="已使用"
+		where id=#{id}
+	</update>
+	
 	<insert id="insertCoupon">
 		insert into coupon(qid,startdate,c_category,name,c_status,decrease,pubtime,use_condition,chan_integral,enddate,remain,totalnum)
 		values(#{qid},#{startdate},#{c_category},#{name},'可兑换',#{decrease},DATE_FORMAT(SYSDATE(),"%Y-%c-%d")
@@ -75,8 +80,12 @@
 		<if test="condition.enddate!=null and condition.enddate!=''">
 		and DATE_FORMAT(enddate, '%Y-%c-%d' )&gt;= STR_TO_DATE(#{condition.enddate},'%Y-%c-%d')				
 		</if>
+		<if test="field!=null and field!='' and order!=null and order!=''">
+		order by ${field} ${order} 
+		</if>
 		limit #{start},#{length}
 	</select>
+	
 	
 	<select id="countCouponByCondition" parameterType="map" resultType="Integer">
 		select count(*) from coupon where

@@ -110,7 +110,7 @@ public class FreeListenBookHandler {
 	 */
 	@RequestMapping(value="/BackEnd/reserve/findPageByCondition")
 	@ResponseBody
-	public Map<String,Object> findPageByCondition(ReservationCondition condition,
+	public Map<String,Object> findPageByCondition(ReservationCondition condition, String field , String order,
 			Integer page,Integer limit,HttpServletRequest request) throws Exception{
 		HttpSession session = request.getSession();
 		int qid = (int) session.getAttribute("qid");
@@ -129,9 +129,9 @@ public class FreeListenBookHandler {
 		Page pa= new FreeListenBackPage(limit,10,page,count);
 		//request.setAttribute("page", pa);
 		
-		pageFrees = free_serv.findPageByCondition(condition, pa,qid);
+		pageFrees = free_serv.findPageByCondition(condition,field,order ,pa,qid);
 		//request.setAttribute("pageFrees", pageFrees);
-		JSONArray array = JSONArray.parseArray(JSON.toJSONString(pageFrees));
+		JSONArray array = JSONArray.parseArray(JSON.toJSONString(pageFrees)); 
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("data", array);
 		map.put("code", 0);

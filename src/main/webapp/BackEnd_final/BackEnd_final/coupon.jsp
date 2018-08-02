@@ -68,6 +68,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			select();
 		});
 	})
+	
+	var condition;
+	
 	function select(){
 		layui.use('table', function(){
 		var table = layui.table;
@@ -78,6 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var c_status = $("#conditionSelect select[name = 'c_status']").val();
 		var startdate = $("#conditionSelect input[name = 'startdate']").val();
 		var enddate = $("#conditionSelect input[name='enddate']").val();
+		condition={name:name,c_category:c_category,c_status:c_status,startdate:startdate,enddate:enddate};
 	  	table.render({
 		    elem: '#coupon_deal'
 		    ,height: 450
@@ -85,21 +89,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    ,page: true //开启分页
 		    ,method:"post"
 		    ,loading:true
-		    ,where:{name:name,c_category:c_category,c_status:c_status,startdate:startdate,enddate:enddate}
+		    ,where:condition
 			,limits:[10,15,20,25,30]
 		    ,cols: [[ //表头
 		      {field: 'c_id', title: 'ID', width:70, sort: true, align : 'center'}
 		      ,{field: 'name', title: '名称', width:100, align : 'center'}
-		      ,{field: 'c_category', title: '使用类别', width: 90, sort: true, align : 'center'}
-		      ,{field: 'c_status', title: '状态', width:90, sort: true, align : 'center'}
+		      ,{field: 'c_category', title: '使用类别', width: 90,  align : 'center'}
+		      ,{field: 'c_status', title: '状态', width:90,  align : 'center'}
 		      ,{field: 'use_condition', title: '使用条件', width:90, align : 'center'} 
 		      ,{field: 'decrease', title: '折减', width: 70, align : 'center'}
 		      ,{field: 'chan_integral', title: '*积分*', width: 80, sort: true,edit:true, align : 'center'}
 		      ,{field: 'totalnum', title: '*总数*', width: 80, sort: true , edit: true, align : 'center'}
 		      ,{field: 'remain', title: '剩余', width: 70, align : 'center'}
 		      ,{field: 'pubtime', title: '发布日期', width: 110, sort: true, align : 'center'}
-		      ,{field: 'startdate', title: '有效日期(始)', width: 120, sort: true, align : 'center'}
-		      ,{field: 'enddate', title: '有效日期(终)', width: 120, sort: true, align : 'center'}
+		      ,{field: 'startdate', title: '有效日期(始)', width: 120,  align : 'center'}
+		      ,{field: 'enddate', title: '有效日期(终)', width: 120,  align : 'center'}
 		      ,{field : 'check', title: '操作', width:150,toolbar:"#barDemo", align: 'center'}
 		    ]]
 		    ,done: function(res, curr, count){
@@ -174,11 +178,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			     
 			  }
 			});
-		  
+			
+		table.on('sort(check_filter)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		  console.log(obj.field); //当前排序的字段名
+		  console.log(obj.type); //当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
+		  console.log(this); //当前排序的 th 对象
+		  console.log(condition);
+		  //尽管我们的 table 自带排序功能，但并没有请求服务端。
+		  //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+		  table.reload('coupon_deal', {
+		    initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。 layui 2.1.1 新增参数
+		    ,url:"<%=request.getContextPath() %>/BackEnd/coupon/getCoupons"
+		    ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+		      field: obj.field //排序字段
+		      ,order: obj.type //排序方式
+		      ,condition:condition
+		    }
+		  });
+		});
+			
 		});
 	}
+	
+	
 	window.onload  = select();
-			
+	
 	
 	</script> 
 	</head>
@@ -222,7 +246,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<table id="coupon_deal" lay-filter="check_filter"></table>
 						<script type="text/html" id="barDemo">
 							<button id="btn_confirm" type="button" class="layui-btn  layui-btn-sm " lay-event="edit">修改</button>
+							{{#  if(d.c_status =="可兑换"){ }}
 							<button id="btn_del" type="button" class="layui-btn  layui-btn-sm " lay-event="down">下架</button>
+  							{{# }else{	 }}
+							<button  type="button" class="layui-btn layui-btn-sm layui-btn-disabled " >下架</button>
+							{{#  } }}	
 						</script>
 					</div>
 				</div>
@@ -266,7 +294,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  </div>
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">使用类别</label>
-		    <div class="layui-input-block" style="width:30%">
+		    <div class="layui-input-block" style="width:27%">
 		      <select name="c_category" lay-verify="unrequired">
 		          <option value="ALL">全部类型</option>
 				  <option value="JAVA">JAVA</option>
@@ -297,7 +325,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    </div>
 		  </div>
 		  <div class="layui-form-item">
-		    <div class="layui-input-block">
+		    <div class="layui-input-block" style="float:right;margin-right:30%">
 		      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
 		      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 		    </div>
@@ -338,6 +366,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    return false;
 	  });
 	});
+	
 	</script>
 	<script>
 	//执行一个laydate实例
@@ -354,5 +383,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		 ,showBottom: false
 	  });
 	});
+	
+	
 	</script>
 </html>

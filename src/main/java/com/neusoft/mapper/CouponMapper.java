@@ -19,6 +19,9 @@ public interface CouponMapper {
 	public int addUserCoupon(User_coupon uc) throws Exception;
 	//扣除一个人的积分
 	public int updateUserInte(Map<String,Object> map) throws Exception;
+	//更新某人的优惠券为已使用
+	public int updateUseCoupon(int id) throws Exception;
+	
 	
 	/*
 	 * 后台
@@ -27,6 +30,8 @@ public interface CouponMapper {
 	public int insertCoupon(Coupon coupon) throws Exception;
 	
 	public Coupon getCouponById(int c_id) throws Exception;
+	//排序查找
+	//public List<Coupon> findSortCoupon(Map<String,Object> map) throws Exception;
 	//qid
 	public List<Coupon> findCouponByCondition(Map<String, Object> map) throws Exception;
 	//找到某一条件下的优惠券数量
@@ -35,5 +40,6 @@ public interface CouponMapper {
 	public int downCoupon(int c_id) throws Exception;
 	//更新某个优惠券qid ,totalnum , chan_integral
 	public int updateCoupon(Map<String, Object> map) throws Exception;
+	
 	
 }

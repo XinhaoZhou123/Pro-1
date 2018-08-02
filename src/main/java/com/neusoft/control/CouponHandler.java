@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.google.gson.Gson;
 import com.neusoft.po.Coupon;
 import com.neusoft.po.User_coupon;
 import com.neusoft.service.CouponService;
@@ -96,14 +97,15 @@ public class CouponHandler {
 	
 	@RequestMapping(value="/BackEnd/coupon/getCoupons")
 	@ResponseBody
-	public Map<String,Object> selectCouponByCondition(HttpSession session,Integer page,Integer limit,CouponCondition condition) throws Exception{
+	public Map<String,Object> selectCouponByCondition(HttpSession session,Integer page,Integer limit,
+			CouponCondition condition, String field ,String order) throws Exception{
 		Map<String,Object> map = new HashMap<String, Object>();
 		int qid = (int)session.getAttribute("qid");
 		//计算start和length
 		page = page==null?1:page;
 		int start = (page-1)*limit;
 		int count = couponService.selectCountByCondition(qid, condition);
-		List<Coupon> list = couponService.selectCouponByCondition(condition, qid, start, limit);
+		List<Coupon> list = couponService.selectCouponByCondition(condition, qid, start, limit,field,order);
 		JSONArray array = JSONArray.parseArray(JSON.toJSONString(list));
 		map.put("code", 0);
 		map.put("data", array);
@@ -112,6 +114,16 @@ public class CouponHandler {
 		return map;
 	}
 	
+	@RequestMapping(value="/BackEnd/coupon/getSortCoupons")
+	@ResponseBody
+	public boolean selectSortCoupons(Integer page,Integer limit,CouponCondition condition,String field,String order) throws Exception{
+		Gson gson = new Gson();
+		String con = gson.toJson(condition);
+		System.out.println(con);
+		System.out.println(field+"    "+order);
+		
+		return false;
+	}
 	//下架商品
 	@RequestMapping(value="/BackEnd/coupon/downCoupon")
 	@ResponseBody
