@@ -1,6 +1,8 @@
 package com.neusoft.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +87,7 @@ public class MessageServiceBean implements MessageService {
 		messageImg.setMid(message.getMid());
 		for(int i=0;i<upload.length;i++){
 			String filename  =System.currentTimeMillis()+upload[i].getOriginalFilename();
+			//InputStream inputStream = upload[i].getInputStream();
 			File dest = new File(path,filename);	
 			messageImg.setImgUrl(filename);
 			count = messageMapper.addMessageImg(messageImg);

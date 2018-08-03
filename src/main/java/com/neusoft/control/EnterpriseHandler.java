@@ -192,6 +192,18 @@ public class EnterpriseHandler {
 		return addresses;
 	}
 	
+	@RequestMapping(value="/test/Handler_frontSelectAddressByQidAndLId")
+	@ResponseBody
+	public List<Address> frontSelectAddressByQidAndLid(HttpServletRequest request,int lid) throws Exception{
+		System.out.println("..........EnterpriseHandler.........frontSelectAddressByQidAndLid.........");
+		HttpSession session = request.getSession();
+		int qid = (Integer)session.getAttribute("qid");
+		List<Address> addresses = enterpriseService.selectAddressByQidAndLid(qid,lid);
+		return addresses;
+	}
+	
+	
+	
 	@RequestMapping(value="/BackEnd/Handler_viewSingleAddressByQidId")
 	public String viewSingleAddressByQidId(String method,int aid,HttpServletRequest request) throws Exception{
 		System.out.println("...........EnterpriseHandler..............viewSingleAddressByQidId.........");
