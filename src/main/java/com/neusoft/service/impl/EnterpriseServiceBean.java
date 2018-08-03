@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.neusoft.mapper.EnterpriseMapper;
 import com.neusoft.po.Enterprise;
 import com.neusoft.po.FirstPageOfTeachers;
@@ -16,11 +18,16 @@ import com.neusoft.vo.SingleAddress;
 import com.neusoft.vo.SinglePage;
 import com.neusoft.vo.SingleTeacher;
 
+import redis.clients.jedis.JedisPool;
+
 @Service
 public class EnterpriseServiceBean implements EnterpriseService {
 	 
 	@Autowired
 	private EnterpriseMapper enterpriseMapper;
+	
+	@Autowired
+	private JedisPool jedisPool;
 	
 	@Override
 	public Enterprise findEnterpriseByQid(int qid) throws Exception {
@@ -30,6 +37,24 @@ public class EnterpriseServiceBean implements EnterpriseService {
 		return list;
 	}
 
+	@Override
+	public List<Swiper> findEnterpriseSwiperList(int qid) throws Exception{
+		System.out.println("..........EnterpriseServiceBean...........findEnterpriseSwiperList......");
+		//List<Swiper> list = enterpriseMapper.findEnterpriseSwiperList(qid);
+
+		String jString = jedisPool.getResource().get("swiperlist"+qid);
+		Gson gson = new Gson();
+		if(jString == null){
+			List<Swiper> list2 = enterpriseMapper.findEnterpriseSwiperList(qid);
+			String jsonstr = gson.toJson(list2);
+			jedisPool.getResource().set("swiperlist"+qid, jsonstr);
+			return list2;
+		}else{
+			List<Swiper> swipers = gson.fromJson(jString, new TypeToken<List<Swiper>>(){}.getType());
+		    return swipers;
+		}
+	}
+	
 	@Override
 	public int updateEnterpriseInfo(Enterprise enterprise) throws Exception {
 		System.out.println(".........EnterpriseServiceBean..........updateEnterpriseInfo......");

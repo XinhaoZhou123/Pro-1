@@ -231,7 +231,7 @@
 	
 		
 		$.ajax({
-			url:"../../test/Handler_frontEndFindEnterpriseByQid",
+			url:"../../test/Handler_frontEndfindEnterpriseSwiperList",
 			type:"post",
 			dataType:"json",
 			success:function(data){
@@ -240,9 +240,9 @@
 				var img = document.getElementById("enterprise_img");
 				cont.innerHTML = "";
 				img.innerHTML = "";
-				img.innerHTML += '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="/uploadImage/'+data.swiperList[data.swiperList.length-1].imgurl+'"/></a></div>';
-				for(var i = 0; i< data.swiperList.length; i++){
-					img.innerHTML+= '<div class="mui-slider-item"><a href="#"><img src="/uploadImage/'+data.swiperList[i].imgurl+'"/></a></div>';
+				img.innerHTML += '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="/uploadImage/'+data[data.length-1].imgurl+'"/></a></div>';
+				for(var i = 0; i< data.length; i++){
+					img.innerHTML+= '<div class="mui-slider-item"><a href="#"><img src="/uploadImage/'+data[i].imgurl+'"/></a></div>';
 					if(i==0){
 						//img.innerHTML+='<div class="mui-slider-item"><a href="#"><img src="/uploadImage/'+data.swiperList[i].imgurl+'"/></a></div>'
 						cont.innerHTML += '<div class="mui-indicator mui-active"></div>';
@@ -252,7 +252,7 @@
 						cont.innerHTML  += '<div class="mui-indicator"></div>';
 					}
 				}
-				img.innerHTML+= '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="/uploadImage/'+data.swiperList[0].imgurl+'"/></a></div>';
+				img.innerHTML+= '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="/uploadImage/'+data[0].imgurl+'"/></a></div>';
 			}
 		});
 		mui.init({

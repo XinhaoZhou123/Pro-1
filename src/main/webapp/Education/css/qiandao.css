@@ -1,0 +1,125 @@
+/* 整体设置 */
+*{margin:0px;padding:0px;}
+ 
+/**
+ * 设置日历的大小
+ */
+.calendar{
+  /*margin-top: 50%;*/
+  width: 80%;
+  height: 80%;
+  display: block;
+  margin-left:10%;
+  /*font-size: 30px;*/
+}
+ 
+/**
+ * 设置日历顶部盒子
+ */
+.calendar .calendar-title-box{
+  font-size: large;
+  margin-top: 10%;
+  /*margin-bottom: 10%;*/
+  position: relative;
+  width: 100%;
+  height: 10%;
+  /*line-height: 10%;*/
+  text-align:center;
+  padding-bottom: 5%;
+  border-bottom: 2px solid #ddd;
+}
+
+#calendarTitle{
+	font-size: 25px;
+}
+ 
+/**
+ * 设置上个月的按钮图标
+ */
+.calendar .prev-month {
+  position: absolute;
+  top: 8px;
+  left: 0px;
+  display: inline-block;
+  width: 0px;
+  height: 0px;
+  border-left: 0px;
+  border-top: 10px solid transparent;
+  border-right: 15px solid #999;
+  border-bottom: 10px solid transparent;
+  cursor: pointer;
+}
+ 
+/**
+ * 设置下个月的按钮图标
+ */
+.calendar .next-month {
+  position: absolute;
+  top: 8px;
+  right: 0px;
+  display: inline-block;
+  width: 0px;
+  height: 0px;
+  border-right: 0px;
+  border-top: 10px solid transparent;
+  border-left: 15px solid #999;
+  border-bottom: 10px solid transparent;
+  cursor: pointer;
+}
+
+/*.calendar-body-box{
+	height: 500px;
+}
+ */
+/* 设置日历表格样式 */
+.calendar-table{
+  margin-top: 2%;
+  width: 100%;
+  height: 250px;
+  /*background-color: #EC971F;*/
+  border-collapse: collapse;
+  text-align:center;
+}
+ 
+/* 表格行高 */
+.calendar-table tr{
+  /*height: ;*/
+  /*background-color: #8A6DE9;*/
+  /*line-height: 2px;*/
+  font-size: 120%;
+}
+
+
+/* 当前天 颜色特殊显示 */
+.currentDay {
+  /*background-color: rgb(255, 128, 142);*/
+  /*border-radius: 5px;*/
+  color: red;
+}
+ 
+/* 本月 文字颜色 */
+.currentMonth {
+  color: #999;
+}
+ 
+/* 其他月颜色 */
+.otherMonth{
+  color: #ede;
+}
+
+.order {  
+	margin-top: 2%;
+    height: 60px;  
+    line-height: 60px;  
+    text-align: center;  
+}  
+.order .line {  
+   display: inline-block;  
+    width: 25%;  
+    border-top: 3px solid #DD524D;  
+}  
+.order .txt {  
+    color: #555;  
+    vertical-align: middle;  
+    font-size: 120%;
+}

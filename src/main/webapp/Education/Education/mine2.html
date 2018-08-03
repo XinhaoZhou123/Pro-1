@@ -1,12 +1,13 @@
 <!doctype html>
 <html>
 
+	<!DOCTYPE html>
+<html>
 <head>
 	<meta charset="utf-8">
 	<meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="renderer" content="webkit">
-    <script src="../js/jquery-3.2.0.min.js"></script>
 	<title>个人中心</title>
 	<!--<link href="css/bootstrap.min.css" rel="stylesheet">-->
 <!--	<link href="css/style.css" rel="stylesheet">-->
@@ -14,7 +15,6 @@
 	<script src="../js/mui.min.js"></script>
 <!--必要样式-->
 <!--<link rel="stylesheet" type="text/css" href="css/menu_elastic.css" />-->
-	<link rel="stylesheet" type="text/css" href="../css/iconfont.css">
 	<style type="text/css">
 	
 			
@@ -92,6 +92,25 @@
 			display: block;
 		}
 	</style>
+	
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+	<script>
+		$(function(){
+			var icon = sessionStorage.getItem("iconUrl");
+			var url;
+			var li;
+			if(icon!=undefined && icon!="null"){
+				url ="/img/"+icon;
+			}else{
+				url="../img/logo.png";
+			}
+			li = '<img src='+url+' style="height:77px;width:77px;">'
+			$(".touxiang").append(li);
+			var uid = sessionStorage.getItem("uid");
+			var u = 'uid:'+uid;
+			$(".vipcenter .name").append(u);
+		})
+	</script>
 </head>
 <body style="height: 100%;">
 	<header class="mui-bar mui-bar-nav">
@@ -104,8 +123,8 @@
 	
 	<div class="vipcenter">
 		  <div class="vipheader">
-		    <div class="touxiang"><img src="img/logo.png" alt=""></div>
-		    <div class="name">uid:123456</div>
+		    <div class="touxiang"></div>
+		    <div class="name"></div>
 		  </div> 
 	</div>
 	<hr />
@@ -124,23 +143,6 @@
 		                    <span class="mui-icon mui-icon-chatbubble"></span>
 		                    <div class="mui-media-body">联系我们</div></a></li>
 		        </ul> 
-		         <ul class="mui-table-view mui-grid-view mui-grid-9">
-		        	  <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="width: 33.33333333%;">
-		        	  		<a  href="couponlist.html">
-		                    <span class="mui-icon iconfont icon-liwu"></span>
-		                    <div class="mui-media-body">优惠券兑换</div></a>
-		              </li>
-		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="width: 33.33333333%;">
-		            		<a id="todayqiandao" href="">
-		                    <span class="mui-icon iconfont icon-qiandao"></span>
-		                    <div class="mui-media-body">签到送豪礼</div></a>
-		            </li>
-		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="width: 33.33333333%;">
-		                   <a  href="coupon.html">
-		                    <span class="mui-icon iconfont icon-youhuiquan"></span>
-		                    <div class="mui-media-body">我的优惠券</div></a>
-		            </li>
-		         </ul>
 		</div>
 	<span class="blank" style="height:60px;"></span>
 <style type="text/css">
@@ -188,21 +190,5 @@
 	    </div>
 	</div>
 </body>
-	<script>
-		
-		
-		var date = getDateStr(new Date());
-		$("#todayqiandao").attr('href','../../test/QianDao/insertDateUserID?date='+date);
-		
-		function getDateStr(date) {
-		    var _year = date.getFullYear();
-		    var _month = date.getMonth() + 1;    // 月从0开始计数
-		    var _d = date.getDate();
-		     
-		    _month = (_month > 9) ? ("" + _month) : ("0" + _month);
-		    _d = (_d > 9) ? ("" + _d) : ("0" + _d);
-		    return _year + _month + _d;
-		  
-		}
-	</script>
+</html>
 </html>
