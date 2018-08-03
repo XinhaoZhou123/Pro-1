@@ -164,4 +164,7 @@
  	    where qid=#{qid};
  	</delete>
  	
+ 	<select id="getAddressByQidAndLid" parameterType="Map" resultType="com.neusoft.po.Address">
+ 		SELECT * from address  JOIN (SELECT * FROM lessonbranch where lid = #{lid}) t on address.aid = t.branchid where address.qid = #{qid}
+ 	</select>
 </mapper>

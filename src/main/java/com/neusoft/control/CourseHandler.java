@@ -367,6 +367,14 @@ public class CourseHandler {
 			return result;
 		}
 		
+		@RequestMapping(value="FrontEnd/getCourseDetail")
+		@ResponseBody		
+		public Lesson getCourseDetail(HttpServletRequest request,int lid) throws Exception{
+			Lesson lesson = courseService.getLession(lid);
+			return lesson;
+		}
+		
+		
 		@RequestMapping(value="FrontEnd/getFreeListenPosition")
 		@ResponseBody		
 		public String loadFreeListenDetail(HttpServletRequest request){
@@ -416,6 +424,7 @@ public class CourseHandler {
 			List<String> result = new ArrayList<String>();
 			result.add(""+l.getLprice());
 			result.add(l.getLname());
+			result.add(""+l.getLid());
 			return result;
 
 			

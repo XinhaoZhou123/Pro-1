@@ -39,4 +39,5 @@ public interface EnterpriseService {
 //		public List<Teacher> selectAllTeachers(int qid) throws Exception;
 //		public List<Address> selectAllAddress(int qid) throws Exception;
 //		//public List<Address> selectAllAddressWithFreeLessons(int qid) throws Exception;
+		public List<Address> selectAddressByQidAndLid(int qid,int lid);
 }

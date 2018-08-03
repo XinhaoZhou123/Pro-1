@@ -1,6 +1,8 @@
 package com.neusoft.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -189,5 +191,14 @@ public class EnterpriseServiceBean implements EnterpriseService {
 		System.out.println("........EnterpriseServiceBean.......deleteFirstPageOfTeachers.........");
 		int deleteNum = enterpriseMapper.deleteFirstPageOfTeachers(qid);
 		return deleteNum;
+	}
+
+	@Override
+	public List<Address> selectAddressByQidAndLid(int qid,int lid) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("lid", lid);
+		map.put("qid", qid);
+		List<Address> addresses = enterpriseMapper.getAddressByQidAndLid(map);
+		return addresses;
 	}
 }
