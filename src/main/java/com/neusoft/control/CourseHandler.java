@@ -385,20 +385,10 @@ public class CourseHandler {
 		
 		@RequestMapping(value="FrontEnd/getCourseDetail")
 		@ResponseBody		
-		public Lesson loadCourseDetail2(HttpServletRequest request){
-			int lid=Integer.parseInt(request.getParameter("lid"));
-			
-			Lesson l=null;
-			
-		
-			try {
-				 l=courseService.getLession(lid);
-			
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return l;
+
+		public Lesson getCourseDetail(HttpServletRequest request,int lid) throws Exception{
+			Lesson lesson = courseService.getLession(lid);
+			return lesson;
 		}
 		
 		@RequestMapping(value="FrontEnd/getFreeListenPosition")
@@ -450,23 +440,8 @@ public class CourseHandler {
 			List<String> result = new ArrayList<String>();
 			result.add(""+l.getLprice());
 			result.add(l.getLname());
-			System.out.println(l.getCategory()+"***********");
-			switch(l.getCategory()) {
-			case	"Python":
-				result.add(4+"");
-				break;
-			case	"HTML5":
-				result.add(2+"");
-				break;
-			case	"JAVA":
-				result.add(1+"");
-				break;
-			case	"C++":
-				result.add(3+"");
-				break;
-			default:
-				result.add(0+"");
-		}
+
+			result.add(""+l.getLid());
 
 			return result;
 

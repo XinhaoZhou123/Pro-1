@@ -60,7 +60,9 @@
 	  		<filter-name>LoginFilter</filter-name>
 	  		<url-pattern>/FrontEnd/*</url-pattern>
 	  </filter-mapping> -->
-	  <!-- <filter>
+
+	 <!--  <filter>
+
 	  		<filter-name>BackEndLoginFilter</filter-name>
 	  		<filter-class>com.neusoft.filter.BackEndLoginFilter</filter-class>
 	  		<init-param>
@@ -71,8 +73,10 @@
 	  <filter-mapping>
 	  		<filter-name>BackEndLoginFilter</filter-name>
 	  		<url-pattern>/BackEnd_final/BackEnd_final/*</url-pattern>
-	  </filter-mapping>
-	 -->
+
+	  </filter-mapping> -->
+	
+
 	
 	
   <welcome-file-list>
