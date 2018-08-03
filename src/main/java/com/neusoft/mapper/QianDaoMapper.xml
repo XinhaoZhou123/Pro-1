@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.mapper.QianDaoMapper">
+    
+   <insert id="insertDateUserID" parameterType="com.neusoft.po.QianDao">
+       insert into qiandao (id, qid, date, uid)
+       values (null, #{qid}, #{date}, #{uid})
+   </insert>
+   
+   <select id="findByUserIDQidDate" parameterType="com.neusoft.po.QianDao" resultType="Integer">
+       select id
+       from qiandao
+       where qid=#{qid} and uid=#{uid} and date=#{date}
+   </select>
+ 	
+   <update id="addIntegralByUid" parameterType="com.neusoft.vo.UserVo">
+        update user
+		set integral= integral + (select oneintegral
+						  from integralvalue)
+		where uid=#{uid} and qid=#{qid}      
+   </update>
+   
+   <update id="decreaseIntegralByUidQid" parameterType="com.neusoft.vo.UserVo">
+       	update user
+		set integral= integral - (select buintegral
+						  from integralvalue)
+		where uid=#{uid} and qid=#{qid}
+   </update>
+   
+   <select id="findIntegralByUidQid" parameterType="com.neusoft.vo.UserVo" resultType="Integer">
+       select integral
+       from user
+       where uid=#{uid} and qid=#{qid}
+   </select>
+   
+   <select id="findDateByUidQid" parameterType="com.neusoft.po.QianDao" resultType="String">
+       select date
+       from qiandao
+       where uid=#{uid} and qid=#{qid} and date!=#{date}
+   </select>
+   
+   <select id="findDateAll" parameterType="com.neusoft.vo.UserVo" resultType="String">
+       select date
+       from qiandao
+       where uid=#{uid} and qid=#{qid}
+   </select>
+   
+   <update id="increaseIntegralByUidQid" parameterType="com.neusoft.vo.UserVo">
+       	update user
+		set integral= integral + (select sevenintegral
+						  from integralvalue)
+		where uid=#{uid} and qid=#{qid} 
+   </update>
+     
+   <select id="getOneIntegral" resultType="int">
+       select oneintegral 
+       from integralvalue
+   </select>
+   
+   <select id="getBuIntegral" resultType="int">
+       select buintegral
+       from integralvalue
+   </select>
+   
+   <select id="getSevenIntegral" resultType="int">
+       select sevenintegral
+       from integralvalue
+   </select>
+   
+   <update id="updateIntegral" parameterType="com.neusoft.po.IntegralValue">
+       update integralvalue
+		set oneintegral=#{oneintegral},buintegral=#{buintegral},sevenintegral=#{sevenintegral}
+		where id=1
+   </update>
+   
+</mapper>

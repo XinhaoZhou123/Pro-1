@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<link rel='stylesheet' href='../../Education/css/qiandao.css' />
+		<link rel='stylesheet' href="../../Education/css/iconfont.css">
+		<script src="../../Education/js/jquery-3.2.0.min.js"></script>
+		<script src="../../Education/js/mui.min.js"></script>
+		<link rel="stylesheet" href="../../Education/css/mui.min.css">
+	</head>
+		<style>
+		#headqiandao{
+			height: 200px;
+			background-image: url(../../Education/img/84558PICb79.jpg);
+			background-size: 100% 200px;
+			padding-top: 10px;
+			margin-top:45px;
+		}
+		.all_list_brands_title_details_btn{
+			position:absolute;
+		    width: 122px;
+		    height: 122px;
+		    text-align: center;
+		    font-size: 25px;
+		    /*line-height: 1.428571429;*/
+		    border-radius: 50%;
+		    /*padding-top: 100px;*/
+		    /*float:left;*/
+		    background-color: white;
+		    border: 2px solid #DD524D;
+		}
+		.all_list_brands_title_details_btn1{
+		    position:absolute;
+			margin-top: 30px;
+			width: 136px;
+		    height: 136px;
+			border-radius: 50%;
+			padding: 2px;
+			border: 5px solid #CF2D28;
+			margin-left: 30%;
+		}
+		#glyphicon{
+			position: absolute;
+			margin-top:30px;
+			margin-left:10px;
+		}
+		#glyphicondown{
+			position: absolute;
+			margin-top: 70px;
+			margin-left:-100px;
+		}
+		#qiandaoline{
+			display: inline-block;  
+			margin-top: 60px;
+		    width: 100px;  
+		    border-top: 3px solid #DD524D; 
+		}
+	</style>
+	<body style="height: 100%;">
+	<header class="mui-bar mui-bar-nav">
+		 <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		 <p align="center" style="margin-top:5%;margin-bottom:5%;font: '微软雅黑'; font-size: large;color: black;">签到</p>
+	</header>	 
+		 <div id="headqiandao">
+			<div  class="all_list_brands_title_details_btn1">
+				<div class="all_list_brands_title_details_btn" id="brands_button" >
+    				<span id="glyphicon">已签到</span>
+    				<span id="qiandaoline"></span>
+    				<span id="glyphicondown">连续<span id="qiandaodays"></span>天</span>
+				</div>
+			</div>
+		</div>
+		<div class="mui-card" style="margin-top: 10px; border:2px solid #DD524D; padding-top:5px;" >			
+			<div class="mui-card-content" style="width:80%; height:28px; font-size: large; font-style: italic; margin-top:5px; margin-bottom:5px; margin-left: 25%;">恭喜您总积分: <span id="totalintegral"></span>分</div>
+		</div>
+		<div class="calendar" id="calendar"></div>
+		<script src="../../Education/js/qiandao.js"></script>
+		<div class="order">
+        <span style="white-space:pre">   </span><span class="line"></span>
+        <span style="white-space:pre">   </span><span class="txt">签到赢大奖</span>
+        <span style="white-space:pre">   </span><span class="line"></span>
+      	<div style="margin-top: 10px; border:2px solid #DD524D; width:95%; margin-left:2%;">			
+			<div id="qiandaorules" style="width:100%; font-size: large; font-style: italic; margin-top:5px; margin-bottom:5px;">
+			
+			</div>
+		</div>
+       
+    	</div>
+    	<!--<img src="对号.svg"/>-->
+    	<!--<script>
+    		var trheight = $(".currentMonth").height();
+//  		console.log("testWidth"+$("#calendar").width());
+//  		console.log("height:"+trheight);
+    		var trwidth = $(".currentMonth").width();
+//  		console.log("width:"+trwidth);
+    		
+    	</script>-->
+    	<!--<div class="iconfont icon-duihao-copy" style="color: lawngreen;"></div>-->
+	</body>
+	<script>
+		var oneintegral;
+		var buintegral;
+		var sevenintegral;
+		$(function(){
+			$.ajax({
+				url:"../../test/QianDao/findByUserIDQidDate",
+	  			type:"post",
+				dataType:"json",
+				data:{
+					date:getTodayDateStr(new Date())
+				},
+				success:function(data){					
+					if(data.result == 'empty record'){
+						$.ajax({
+				  			url:"../../test/QianDao/continueQianDao",
+				  			type:"post",
+							dataType:"json",
+							data:{
+								date:getTodayDateStr(new Date())
+							},
+							success:function(data){					
+								document.getElementById("qiandaodays").innerHTML=data;
+								if(data==7){
+									mui.toast("恭喜您连续签到7天，收获"+sevenintegral+"积分！");
+								}
+							},
+							error:function(data){
+								alert(data.result);
+								//alert("error")
+							}
+				  		});
+					}
+					if(data.result == 'has record'){
+						$.ajax({
+				  			url:"../../test/QianDao/continueQianDao",
+				  			type:"post",
+							dataType:"json",
+							data:{
+								date:getTodayDateStr(new Date())
+							},
+							success:function(data){					
+								document.getElementById("qiandaodays").innerHTML=data;								
+							},
+							error:function(data){
+								alert(data.result);
+								//alert("error")
+							}
+				  		});
+					}
+				},
+				error:function(data){
+					alert(data.result);
+					//alert("error")
+				}
+			});
+			
+			$.ajax({
+	  			url:"../../test/QianDao/findIntegralByQidUid",
+	  			type:"post",
+				dataType:"json",
+				success:function(data){					
+					document.getElementById("totalintegral").innerHTML=data;					
+				},
+				error:function(data){
+					alert(data.result);
+					//alert("error")
+				}
+	  		});
+			
+			$.ajax({
+	  			url:"../../test/QianDao/getIntegral",
+	  			type:"post",
+				dataType:"json",
+				success:function(data){		
+					console.log(data);
+					oneintegral = data.oneintegral;
+					buintegral = data.buintegral;
+					sevenintegral = data.sevenintegral;
+					document.getElementById("qiandaorules").innerHTML='签到规则：<br/>1. 每日签到获取'+oneintegral+'积分<br/>2. 花费'+buintegral+'积分补签<br/>3. 每七天为一个周期<br/>4.连续签到7天获得'+sevenintegral+'积分奖励<br/>';
+				},
+				error:function(data){
+					alert(data.result);
+					//alert("error")
+				}
+	  		});
+			
+			$.ajax({
+	  			url:"../../test/QianDao/findDateAll",
+	  			type:"post",
+				dataType:"json",
+				success:function(data){	
+					console.log(data.length);
+					var array = document.getElementsByClassName("currentMonth");
+					var trheight = $("td").height()*0.5;
+			 		var trwidth = $("td").width()*0.5;
+					console.log(array.length);
+					//console.log(array[0].getAttribute('data'));
+					document.getElementsByClassName("currentDay")[0].innerHTML = '<img src="../../Education/img/duihao.svg" style="width:'+trwidth+'px; height'+trheight+'px;"/>';
+					for(var i = 0; i<array.length; i++){
+						console.log("11");
+						for(var j=0; j<data.length; j++){
+							console.log("222");
+							console.log(array[i].getAttribute('data')+"   "+data[j]);
+							if(array[i].getAttribute('data')== data[j]){
+								
+								array[i].innerHTML = '<img src="../../Education/img/duihao.svg" style="width:'+trwidth+'px; height'+trheight+'px;"/>';
+							}
+						}
+					}
+				},
+				error:function(data){
+					alert(data.result);
+					//alert("error")
+				}
+	  		});
+			
+		});
+	</script>
+	
+	<script>
+	$("#prevMonth").click(function(){
+		$.ajax({
+  			url:"../../test/QianDao/findDateAll",
+  			type:"post",
+			dataType:"json",
+			success:function(data){		
+				//var prevMonth = document.getElementById("prevMonth");
+			 //   addEvent(prevMonth, 'click', toPrevMonth);
+				console.log(data.length);
+				var array = document.getElementsByClassName("currentMonth");
+				var trheight = $("td").height()*0.5;
+		 		var trwidth = $("td").width()*0.5;
+				console.log(array.length);
+				//console.log(array[0].getAttribute('data'));
+				if(document.getElementsByClassName("currentDay").length!=0){
+					document.getElementsByClassName("currentDay")[0].innerHTML = '<img src="../../Education/img/duihao.svg" style="width:'+trwidth+'px; height'+trheight+'px;"/>';
+				}				
+				for(var i = 0; i<array.length; i++){
+					console.log("11");
+					for(var j=0; j<data.length; j++){
+						console.log("222");
+						console.log(array[i].getAttribute('data')+"   "+data[j]);
+						if(array[i].getAttribute('data')== data[j]){							
+							array[i].innerHTML = '<img src="../../Education/img/duihao.svg" style="width:'+trwidth+'px; height'+trheight+'px;"/>';
+						}
+					}
+				}
+			},
+			error:function(data){
+				alert(data.result);
+				//alert("error")
+			}
+  		});
+	});
+	$("#nextMonth").click(function(){
+		$.ajax({
+  			url:"../../test/QianDao/findDateAll",
+  			type:"post",
+			dataType:"json",
+			success:function(data){	
+				//var nextMonth = document.getElementById("nextMonth");
+			 //   addEvent(nextMonth, 'click', toNextMonth);
+				console.log(data.length);
+				var array = document.getElementsByClassName("currentMonth");
+				var trheight = $("td").height()*0.5;
+		 		var trwidth = $("td").width()*0.5;
+				console.log(array.length);
+				//console.log(array[0].getAttribute('data'));
+				if(document.getElementsByClassName("currentDay").length!=0){
+					document.getElementsByClassName("currentDay")[0].innerHTML = '<img src="../../Education/img/duihao.svg" style="width:'+trwidth+'px; height'+trheight+'px;"/>';
+				}
+				for(var i = 0; i<array.length; i++){
+					console.log("11");
+					for(var j=0; j<data.length; j++){
+						console.log("222");
+						console.log(array[i].getAttribute('data')+"   "+data[j]);
+						if(array[i].getAttribute('data')== data[j]){
+							
+							array[i].innerHTML = '<img src="../../Education/img/duihao.svg" style="width:'+trwidth+'px; height'+trheight+'px;"/>';
+						}
+					}
+				}
+			},
+			error:function(data){
+				alert(data.result);
+				//alert("error")
+			}
+  		});
+	});
+	</script>
+	
+	<script>
+	
+  function clicktoqiandao(obj){
+  	if(obj.className == 'currentMonth' || obj.className == 'currentDay'){
+  		var trheight = $("td").height()*0.5;
+ 		var trwidth = $("td").width()*0.5;
+ 		console.log(trheight+" "+trwidth);
+  		console.log(obj.getAttribute('data'));
+  		$.ajax({
+  			url:"../../test/QianDao/findByUserIDQidDate",
+  			type:"post",
+			dataType:"json",
+			data:{
+				date:obj.getAttribute('data'),
+			},
+			success:function(data){
+				//alert(data.result);
+				//alert("success");
+				//if(data.result== t)
+				//var todaydate =  getTodayDateStr(new Date());
+				
+				if(data.result=="empty record"){
+					dbltobuqian(obj);
+			     }
+			},
+			error:function(data){
+				alert(data.result);
+				//alert("error")
+			}
+  		});
+  	}
+  }
+ 
+	</script>
+	
+	<script>
+	
+		function dbltobuqian(obj){
+			var todaydate =  getTodayDateStr(new Date());
+			console.log(todaydate);
+			var trheight = $("td").height()*0.5;
+	 		var trwidth = $("td").width()*0.5;
+			if(parseInt(todaydate)-parseInt(obj.getAttribute('data'))>0){
+			var btnArray = ['是','否'];
+			mui.confirm('是否确认用'+buintegral+'积分补签？','提示',btnArray, function(e){
+				if(e.index == 0){
+					$.ajax({
+			  			url:"../../test/QianDao/BuQianByDateUidQid",
+			  			type:"post",
+						dataType:"json",
+						data:{
+							date:obj.getAttribute('data'),
+						},
+						success:function(data){
+							//alert(data.result);
+							//alert("success");
+							//if(data.result== t)
+							if(data.result=="success"){
+								mui.toast("补签成功！");
+								obj.innerHTML = '<img src="../../Education/img/duihao.svg" style="width:'+trwidth+'px; height'+trheight+'px;"/>';
+								$.ajax({
+						  			url:"../../test/QianDao/continueQianDao",
+						  			type:"post",
+									dataType:"json",
+									data:{
+										date:getTodayDateStr(new Date())
+									},
+									success:function(data){					
+										document.getElementById("qiandaodays").innerHTML=data;
+										if(data==7){
+											mui.toast("恭喜您连续签到7天，收获"+sevenintegral+"积分！");
+										}
+									},
+									error:function(data){
+										alert(data.result);
+										//alert("error")
+									}
+						  		});
+								$.ajax({
+						  			url:"../../test/QianDao/findIntegralByQidUid",
+						  			type:"post",
+									dataType:"json",
+									success:function(data){					
+										document.getElementById("totalintegral").innerHTML=data;					
+									},
+									error:function(data){
+										alert(data.result);
+										//alert("error")
+									}
+						  		});
+							}
+							if(data.result=="not enough integral"){
+								mui.toast("积分不足无法补签！");
+							}
+						},
+						error:function(data){
+							alert(data.result);
+							//alert("error")
+						}
+			  		});
+					
+				}
+			})
+			}
+		}
+		
+		mui.init({
+			gestureConfig:{
+				longtap:true
+			}
+		}			
+		);
+		mui("body").on('tap','td',function(){
+			//console.log("tap");
+			clicktoqiandao(this);
+		});
+		/*mui("body").on('longtap','td',function(){
+			//console.log("longtap");
+			dbltobuqian(this);
+		});*/
+		
+		function getTodayDateStr(date) {
+		    var _year = date.getFullYear();
+		    var _month = date.getMonth() + 1;    // 月从0开始计数
+		    var _d = date.getDate();
+		     
+		    _month = (_month > 9) ? ("" + _month) : ("0" + _month);
+		    _d = (_d > 9) ? ("" + _d) : ("0" + _d);
+		    return _year + _month + _d;
+		  }
+	</script>
+	
+
+</html>

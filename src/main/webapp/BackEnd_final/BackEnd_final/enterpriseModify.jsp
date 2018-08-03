@@ -18,6 +18,25 @@
 		<script type="text/javascript" charset="utf-8" src="<%=request.getContextPath() %>/BackEnd_final/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
 		<script type="text/javascript" src="<%=request.getContextPath() %>/BackEnd_final/layui/layui.js"></script>
 		<script type="text/javascript" src="<%=request.getContextPath() %>/BackEnd_final/layui/layui.all.js"></script>
+		<script type="text/javascript">
+            function IFrameResize()
+            {
+                    //得到父页面的iframe框架的对象
+                var obj = parent.document.getElementById("myFrame");
+                    //把当前页面内容的高度动态赋给iframe框架的高
+                obj.height = this.document.body.scrollHeight +50;
+            
+                //看看这个是修改页面还是上传页面    
+                var jczs = '<%=request.getAttribute("jczs")%>';
+    			
+    			if(jczs!=null){
+    				UE.getEditor('editor').ready(function(){
+    					UE.getEditor('editor').setHeight(500);
+    					UE.getEditor('editor').setContent(jczs);
+    				});
+    			}
+            } 
+        </script>
 		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
 		<style>
 			.layui-card {margin: 35px 45px 45px 0; text-align: center; border-radius: 10px;}
@@ -31,25 +50,7 @@
 			img {height: 80px;}
 			#btn_upload {margin-left: 20%; margin-top: 20px;}
 		</style>
-		<script type="text/javascript">
-            function IFrameResize()
-            {
-                    //得到父页面的iframe框架的对象
-                var obj = parent.document.getElementById("myFrame");
-                    //把当前页面内容的高度动态赋给iframe框架的高
-                //obj.height = this.document.body.scrollHeight;
-                obj.height = '2000px';
-                //看看这个是修改页面还是上传页面    
-                var ue = UE.getEditor("editor");
-                var jczs = '<%=request.getAttribute("jczs")%>';
-    			//alert(jczs);
-    			ue.ready(function(){
-    				if(jczs!="null"){
-    					ue.setContent(jczs);
-    				}
-    			});
-            } 
-        </script>
+		
 	</head>
 
 	<body class="layui-layout-body" 

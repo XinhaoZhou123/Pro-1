@@ -61,6 +61,15 @@ public class EnterpriseHandler {
 		return list;
 	}
 	
+	@RequestMapping(value="/test/Handler_frontEndfindEnterpriseSwiperList")
+	@ResponseBody
+	public List<Swiper> findEnterpriseSwiperList() throws Exception{
+		System.out.println("........EnterpriseHandler..........findEnterpriseSwiperList..........");
+		int qid = 1;
+		List<Swiper> list = enterpriseService.findEnterpriseSwiperList(qid);
+		return list;
+	}
+	
 	@RequestMapping(value="/BackEnd/Handler_updateEnterpriseInfo")
 	@ResponseBody
 	public String updateEnterpriseInfo(String enterprise_name,String enterprise_introduction, String jczs, HttpServletRequest request)throws Exception{

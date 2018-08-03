@@ -13,6 +13,7 @@ import com.neusoft.vo.SingleTeacher;
 
 public interface EnterpriseMapper {
 		public Enterprise findEnterpriseByQid(int qid) throws Exception;
+		public List<Swiper> findEnterpriseSwiperList(int qid) throws Exception;
 		public int updateEnterpriseInfo(Enterprise enterprise) throws Exception;
 		public int deleteEnterpriseImgById(Swiper swiper) throws Exception;
 		public int addImgToSwiperByQid(Swiper swiper) throws Exception;
