@@ -1,5 +1,6 @@
 package com.neusoft.service;
 
+import java.util.List;
 import java.util.Map;
 
 public interface BackIndexService {
@@ -20,4 +21,13 @@ public interface BackIndexService {
 			public Map<String,Object> selectSix(int qid) throws Exception;
 			
 			public int seleceMaxLessonId(int qid) throws Exception;
+			
+			//查找一年中12个月的流水
+			public List<Double> selectYearProfit(int year,int qid) throws Exception;
+			//查找一年中12个月预约的数量
+			public List<Integer> selectYearFLBN(int year,int qid) throws Exception;
+			//查找一年中12个月的订单数量
+			public List<Integer> selectYearOrderNum(int year,int qid) throws Exception;
+			//查找一年中某状态的订单数量
+			public Integer selectYearOSN(int year,int qid,String status) throws Exception;
 }

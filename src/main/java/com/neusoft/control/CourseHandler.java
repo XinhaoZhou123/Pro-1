@@ -105,7 +105,9 @@ public class CourseHandler {
 		l.setImgUrl(request.getParameter("imgurl"));
 		l.setCategory(request.getParameter("classification"));
 		
-		int qid=branchService.getqidByBranchName(request.getParameter("sub"));
+		String[] subs=request.getParameterValues("sub");
+		System.out.print(subs[1]+"*************");
+		int qid=branchService.getqidByBranchName(subs[0]);
 		l.setQid(qid);
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		l.setPubTime(df.format(System.currentTimeMillis()));
@@ -117,17 +119,21 @@ public class CourseHandler {
 			l.setLid(Integer.parseInt(request.getParameter("l_id")));
 			courseService.updateLesson(l);
 		}
-		int bid=branchService.getBranchIdByBranchName(request.getParameter("sub"));
+	
 		LessonBranch lb=new LessonBranch();
 		lb.setLid(l.getLid());
-		lb.setBranchid(bid);
 		
-		if(request.getParameter("l_id")==null) {
-			courseService.saveLessonBranch(lb);
-		}
-		else {
+		
+		if(request.getParameter("l_id")!=null) {
 			System.out.println("这是修改  开始修改");
-			courseService.updateLessonBranch(lb);
+			//首先删除原来的lessonbranch
+			courseService.deleteLessonBranch(l.getLid());
+			
+		}
+		for(int k=0;k<subs.length;k++) {
+			int bid=branchService.getBranchIdByBranchName(subs[k]);
+			lb.setBranchid(bid);
+			courseService.saveLessonBranch(lb);
 		}
 		
 		
@@ -185,9 +191,10 @@ public class CourseHandler {
 		request.setAttribute("ldesc", l.getLdesc());
 		request.setAttribute("category", l.getCategory());
 		System.out.println(l.getLdesc()+"-------------------");
-		String branchName=branchService.getBranchNameBylid(l.getLid());
+		List<Address> branches=branchService.getBranchesByLid(l.getLid());
+		System.out.print("打印这个课程所有的分部"+branches.get(0).getBranch());
 		
-		request.setAttribute("branchName",branchName );
+		request.setAttribute("branches",branches );
 		
 		return "forward:/BackEnd_final/BackEnd_final/courseDetail.jsp";
 		
@@ -239,10 +246,19 @@ public class CourseHandler {
 			List<Address> branches=branchService.selectAllAddress(qid);
 			List<AddressVo> result =new ArrayList<>();
 			int i=0;
+			List<Address> choosed_branches=branchService.getBranchesByLid(l.getLid());
 			for(Address address:branches) {
 				//为了方便，我们把address的id稍作修改，作为jsp页面的branch单选框的ID
-				result.add(new AddressVo(address.getBranch(),"branch"+address.getAid()));
-				System.out.println(result.get(i++));
+				boolean exist=false;
+				for(Address a:choosed_branches){
+					if(a.getBranch().equals(address.getBranch()))
+						exist=true;		
+				}
+				if(exist==true)
+					result.add(new AddressVo(address.getBranch(),"branch"+address.getAid(),1));
+				else
+					result.add(new AddressVo(address.getBranch(),"branch"+address.getAid(),0));
+				
 			}
 			request.setAttribute("branches", result);
 			
@@ -278,7 +294,7 @@ public class CourseHandler {
 			int i=0;
 			for(Address address:branches) {
 				//为了方便，我们把address的id稍作修改，作为jsp页面的branch单选框的ID
-				result.add(new AddressVo(address.getBranch(),"branch"+address.getAid()));
+				result.add(new AddressVo(address.getBranch(),"branch"+address.getAid(),0));
 				System.out.println(result.get(i++));
 			}
 			request.setAttribute("branches", result);
@@ -304,7 +320,7 @@ public class CourseHandler {
 			List<AddressVo> result =new ArrayList<>();
 			for(Address address:branches) {
 				//为了方便，我们把address的id稍作修改，作为jsp页面的branch单选框的ID
-				result.add(new AddressVo(address.getBranch(),"branch"+address.getAid()));
+				result.add(new AddressVo(address.getBranch(),"branch"+address.getAid(),0));
 			}
 			request.setAttribute("branches", result);
 			System.out.println("我要跳转！！");
@@ -329,7 +345,7 @@ public class CourseHandler {
 			List<AddressVo> result =new ArrayList<>();
 			for(Address address:branches) {
 				//为了方便，我们把address的id稍作修改，作为jsp页面的branch单选框的ID
-				result.add(new AddressVo(address.getBranch(),"branch"+address.getAid()));
+				result.add(new AddressVo(address.getBranch(),"branch"+address.getAid(),0));
 			}
 			request.setAttribute("branches", result);
 			System.out.println("我要跳转！！");
@@ -369,11 +385,11 @@ public class CourseHandler {
 		
 		@RequestMapping(value="FrontEnd/getCourseDetail")
 		@ResponseBody		
+
 		public Lesson getCourseDetail(HttpServletRequest request,int lid) throws Exception{
 			Lesson lesson = courseService.getLession(lid);
 			return lesson;
 		}
-		
 		
 		@RequestMapping(value="FrontEnd/getFreeListenPosition")
 		@ResponseBody		
@@ -424,7 +440,9 @@ public class CourseHandler {
 			List<String> result = new ArrayList<String>();
 			result.add(""+l.getLprice());
 			result.add(l.getLname());
+
 			result.add(""+l.getLid());
+
 			return result;
 
 			

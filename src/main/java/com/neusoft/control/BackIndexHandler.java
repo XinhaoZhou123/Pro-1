@@ -1,5 +1,7 @@
 package com.neusoft.control;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,5 +57,32 @@ public class BackIndexHandler {
 		map.put("monthMessage", monthMessage);
 		*/
 		return ba_index_serv.selectSix(qid);
+	}
+	
+	@RequestMapping(value = "/BackEnd/index/getStatics")
+	@ResponseBody
+	public Map<String,Object> getStatiscs(Integer year,HttpServletRequest request) throws Exception{
+		HttpSession session = request.getSession();
+		Integer qid = (Integer)session.getAttribute("qid");
+		Map<String,Object> map=new HashMap<String, Object>();
+		
+		List<Integer> yearFLBN = ba_index_serv.selectYearFLBN(year, qid);
+		List<Integer> yearOrderNum = ba_index_serv.selectYearOrderNum(year, qid);
+		List<Double> yearProfit = ba_index_serv.selectYearProfit(year, qid);
+		Integer used =ba_index_serv.selectYearOSN(year, qid, "已使用");
+		Integer waitPay = ba_index_serv.selectYearOSN(year, qid, "待付款");
+		Integer paid = ba_index_serv.selectYearOSN(year, qid, "已付款");
+		Integer returning = ba_index_serv.selectYearOSN(year, qid, "退款中");
+		Integer returned = ba_index_serv.selectYearOSN(year, qid, "已退款");
+		map.put("FLBN",yearFLBN);
+		map.put("orderNum", yearOrderNum);
+		map.put("profit", yearProfit);
+		map.put("used", used);
+		map.put("waitPay", waitPay);
+		map.put("paid", paid);
+		map.put("returning", returning);
+		map.put("returned", returned);
+		return map;
+		
 	}
 }

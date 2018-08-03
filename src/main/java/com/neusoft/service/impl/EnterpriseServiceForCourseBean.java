@@ -150,6 +150,12 @@ public class EnterpriseServiceForCourseBean implements EnterpriseServiceForCours
 		System.out.println(s.getCategory()+"+++++++++++++++++++++++");
 		return enterpriseMapper.getSwiperByCategory(s);
 	}
+
+	@Override
+	public List<Address> getBranchesByLid(int lid) throws Exception {
+		// TODO Auto-generated method stub
+		return enterpriseMapper.getBranchesBylid(lid);
+	}
 	
 
 }

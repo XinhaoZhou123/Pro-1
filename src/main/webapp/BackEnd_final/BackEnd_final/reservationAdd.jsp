@@ -30,36 +30,11 @@ request.setAttribute("path", basePath);
 			.layui-textarea {overflow-x: hidden; color: #697882;}
 		</style>
 		<script type="text/javascript">
+				
+		
             function IFrameResize()
             {
-                  <%--   //得到父页面的iframe框架的对象
-                var obj = parent.document.getElementById("myFrame");
-                    //把当前页面内容的高度动态赋给iframe框架的高
-                obj.height = this.document.body.scrollHeight;
-            	
-                    
-                    //看看这是修改还是上传
-                var fdesc = '<%=request.getAttribute("fdesc")%>';
-        		
-    			if(fdesc!="null"){
-    				UE.getEditor('editor').setContent(fdesc);
-    			}
-    			
-    			var ue = UE.getEditor('editor');
-             
-                ue.addListener("contentChange",function(){
-                	refreshHeight();
-                });
-                ue.addListener("blur",function(){
-                	refreshHeight();
-                });
-                ue.addListener("change",function(){
-                	refreshHeight();
-                });
-              
-                window.addEventListener('DOMMouseScroll',refreshHeight(),false);
-                window.addEventListener('onMouseWheel',refreshHeight(),false);
-              --%>
+                
             //得到父页面的iframe框架的对象
               var obj = parent.document.getElementById("myFrame");
                   //把当前页面内容的高度动态赋给iframe框架的高
@@ -72,9 +47,6 @@ request.setAttribute("path", basePath);
   			if(fdesc!="null"){
   				UE.getEditor('editor').setContent(fdesc);
   			}
-  			
-  	
-           
             }
         
             function refreshHeight(){

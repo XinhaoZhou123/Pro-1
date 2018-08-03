@@ -46,6 +46,16 @@ public class UserServiceBean implements UserService {
 			return true;
 		else
 			return false;
-		
+	}
+	@Override
+	public boolean updateNickName(String uid, String nickName) throws Exception {
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("uid", uid);
+		map.put("nickName", nickName);
+		int result = u_mapper.updateNickName(map);
+		if(result>0)
+			return true;
+		else
+			return false;
 	}
 }

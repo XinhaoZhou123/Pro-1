@@ -122,8 +122,10 @@
 					price=data[0];
 					document.getElementById("buy_price").innerHTML=data[0];
 					document.getElementById("course_name").innerText=data[1];
+
 					//document.getElementById("back").href="course_detail.html?lid="+data[2];
 					document.getElementById("branch").href="branch.html?lid="+data[2];
+
 					lesson_code=data[2];
 				
 				}
@@ -213,10 +215,12 @@
 			
 			
 			<form class="mui-input-group" id="user_info">
+
 		<button type="button" class="mui-btn mui-btn-block"><a href="branch.html"  id="branch">选择分部地址</a></button>
 			<!-- 	<div>
 					选择分部：尚未实现
 				</div> -->
+
 				
 			<div id="course_info">
 				<h4 align="center">课程名称</h4>
@@ -229,6 +233,7 @@
 					</p>
 				</div>
 				<p>需要您填写一些信息：</p>
+
 					<div class="mui-input-row">
 						<label>电话：</label>
 						<input type="text" class="mui-input-clear">
@@ -246,17 +251,20 @@
 				<div align="center" style="padding: 10% ;">
 					<button class="mui-btn mui-btn-success" id="buy" style="width: 50%;">￥ <span id="buy_price"></span>    立即购买</button>
 				</div>
+
 			</div>
+		</div>
 	
 		<div id="middlePopover" class="mui-popover">
 			<div class="mui-popover-arrow"></div>
 			<div class="mui-scroll-wrapper">
 				<div class="mui-scroll">
 					<ul class="mui-table-view" id="branchlist">
-				
+
 					</ul>
 				</div>
 			</div>
+
 		</div>
 		<!--右下角弹出菜单-->
 		

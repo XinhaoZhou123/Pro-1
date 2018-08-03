@@ -13,7 +13,7 @@
 	</select>
 	
 	<select id="getAllAddresses"  parameterType="int" resultType="com.neusoft.po.Address" >
-		select * from address where qid=#{qid}
+		select * from address where qid=#{qid} and isDeleted=0
 	</select>
 	
 	<select id="getBranchidBylid" parameterType="int" resultType="int" >
@@ -45,6 +45,14 @@
 				SELECT * FROM swiper where qid=#{qid} and category=#{category} order by id desc limit 0,4;
 		</select>
 	
+	<delete	id="deleteLessonBranch" parameterType="int">
+		delete from lessonbranch where lid=#{lid}
+	</delete>
 	
+	<select id="getBranchesBylid" parameterType="int" resultType="com.neusoft.po.Address">
+		select Address.* 
+		from Address,Lesson,LessonBranch
+		where lesson.lid=#{lid} and lesson.lid=lessonbranch.lid and lessonbranch.branchid=address.aid
+	</select>
 	
 </mapper>

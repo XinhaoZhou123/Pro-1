@@ -69,6 +69,7 @@ public class OrderServiceForCourseBean implements OrderServiceForCourse {
 		// TODO Auto-generated method stub
 		System.out.println(s.getOrderTime()+"*******");
 		om.addBuyOrder(s);
+		
 	}
 
 }

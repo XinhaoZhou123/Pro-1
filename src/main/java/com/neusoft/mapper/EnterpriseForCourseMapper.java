@@ -45,6 +45,6 @@ public interface EnterpriseForCourseMapper {
 		public List<Swiper> getSwiperByCategory(Swiper s) throws Exception;
 		
 
-
+		public List<Address> getBranchesBylid(int lid) throws Exception;
 		
 }

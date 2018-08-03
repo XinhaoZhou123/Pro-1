@@ -21,9 +21,15 @@
 	
 	<select id="findEnterpriseByQid" parameterType="int" resultMap="Enterprise_Swiper_info">
 	        select enterprise.*,swiper.id,swiper.imgurl,swiper.category
-			from enterprise left join swiper
+			from enterprise right join swiper
 			on enterprise.qid = swiper.qid
-			where enterprise.qid=#{qid} and category = 'A';
+			where enterprise.qid=#{qid} and swiper.category='A';
+	</select>
+	
+	<select id="findEnterpriseSwiperList" parameterType="int" resultType="com.neusoft.po.Swiper">
+	    select *
+	    from swiper
+	    where qid = #{qid} and category = 'A';
 	</select>
 	
 	<update id="updateEnterpriseInfo" parameterType="com.neusoft.po.Enterprise">
