@@ -28,10 +28,12 @@
 	<classpathentry kind="lib" path="src/main/webapp/BackEnd_final/utf8-jsp/jsp/lib/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/BackEnd_final/utf8-jsp/jsp/lib/json.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/BackEnd_final/utf8-jsp/jsp/lib/ueditor-1.1.2.jar"/>
-
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/fastdfs-client-java-1.27.0.0.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jedis-2.9.0.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/json.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/gson-2.8.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
-
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>

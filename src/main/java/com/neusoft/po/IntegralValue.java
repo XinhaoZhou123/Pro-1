@@ -1,11 +1,19 @@
 package com.neusoft.po;
 
 public class IntegralValue {
-	
+	private int qid;
 	private int oneintegral;
 	private int buintegral;
 	private int sevenintegral;
 	
+	
+	
+	public int getQid() {
+		return qid;
+	}
+	public void setQid(int qid) {
+		this.qid = qid;
+	}
 	public int getOneintegral() {
 		return oneintegral;
 	}

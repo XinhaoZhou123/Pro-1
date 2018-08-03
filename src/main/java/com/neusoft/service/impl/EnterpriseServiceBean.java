@@ -56,7 +56,7 @@ public class EnterpriseServiceBean implements EnterpriseService {
 		    return swipers;
 		}
 	}
-	
+	/*
 	@Override
 	public List<Swiper> findEnterpriseSwiperList(int qid) throws Exception{
 		System.out.println("..........EnterpriseServiceBean...........findEnterpriseSwiperList......");
@@ -74,7 +74,7 @@ public class EnterpriseServiceBean implements EnterpriseService {
 		    return swipers;
 		}
 	}
-	
+	*/
 	@Override
 	public int updateEnterpriseInfo(Enterprise enterprise) throws Exception {
 		System.out.println(".........EnterpriseServiceBean..........updateEnterpriseInfo......");

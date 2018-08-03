@@ -122,7 +122,7 @@
 							},
 							success:function(data){					
 								document.getElementById("qiandaodays").innerHTML=data;
-								if(data==7){
+								if(data%=7){
 									mui.toast("恭喜您连续签到7天，收获"+sevenintegral+"积分！");
 								}
 							},
@@ -327,8 +327,7 @@
 	</script>
 	
 	<script>
-	
-		function dbltobuqian(obj){
+	function dbltobuqian(obj){
 			var todaydate =  getTodayDateStr(new Date());
 			console.log(todaydate);
 			var trheight = $("td").height()*0.5;
@@ -349,6 +348,7 @@
 							//alert("success");
 							//if(data.result== t)
 							if(data.result=="success"){
+								
 								mui.toast("补签成功！");
 								obj.innerHTML = '<img src="../../Education/img/duihao.svg" style="width:'+trwidth+'px; height'+trheight+'px;"/>';
 								$.ajax({
@@ -356,12 +356,37 @@
 						  			type:"post",
 									dataType:"json",
 									data:{
-										date:getTodayDateStr(new Date())
+										date:obj.getAttribute('data')
 									},
 									success:function(data){					
 										document.getElementById("qiandaodays").innerHTML=data;
-										if(data==7){
-											mui.toast("恭喜您连续签到7天，收获"+sevenintegral+"积分！");
+										if(data%7==0){
+											$.ajax({
+									  			url:"../../test/QianDao/increaseIntegralByUidQid",
+									  			type:"post",
+												dataType:"json",
+												success:function(data){	
+													$.ajax({
+											  			url:"../../test/QianDao/findIntegralByQidUid",
+											  			type:"post",
+														dataType:"json",
+														success:function(data){	
+															document.getElementById("totalintegral").innerHTML=data;
+															mui.toast("恭喜您连续签到7天，收获"+sevenintegral+"积分！");
+														},
+														error:function(data){
+															alert(data.result);
+															//alert("error")
+														}
+											  		});
+												},
+												error:function(data){
+													alert(data.result);
+													//alert("error")
+												}
+									  		});
+											
+											
 										}
 									},
 									error:function(data){

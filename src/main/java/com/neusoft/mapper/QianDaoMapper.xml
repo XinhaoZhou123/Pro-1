@@ -18,14 +18,14 @@
    <update id="addIntegralByUid" parameterType="com.neusoft.vo.UserVo">
         update user
 		set integral= integral + (select oneintegral
-						  from integralvalue)
+						  from integralvalue  where qid=#{qid})
 		where uid=#{uid} and qid=#{qid}      
    </update>
    
    <update id="decreaseIntegralByUidQid" parameterType="com.neusoft.vo.UserVo">
        	update user
 		set integral= integral - (select buintegral
-						  from integralvalue)
+						  from integralvalue where qid=#{qid})
 		where uid=#{uid} and qid=#{qid}
    </update>
    
@@ -50,29 +50,29 @@
    <update id="increaseIntegralByUidQid" parameterType="com.neusoft.vo.UserVo">
        	update user
 		set integral= integral + (select sevenintegral
-						  from integralvalue)
+						  from integralvalue  where qid=#{qid})
 		where uid=#{uid} and qid=#{qid} 
    </update>
      
-   <select id="getOneIntegral" resultType="int">
+   <select id="getOneIntegral" resultType="int" parameterType="int">
        select oneintegral 
-       from integralvalue
+       from integralvalue  where qid=#{qid}
    </select>
    
-   <select id="getBuIntegral" resultType="int">
+   <select id="getBuIntegral" resultType="int" parameterType="int">
        select buintegral
-       from integralvalue
+       from integralvalue where qid=#{qid}
    </select>
    
-   <select id="getSevenIntegral" resultType="int">
+   <select id="getSevenIntegral" resultType="int" parameterType="int">
        select sevenintegral
-       from integralvalue
+       from integralvalue where qid=#{qid}
    </select>
    
    <update id="updateIntegral" parameterType="com.neusoft.po.IntegralValue">
        update integralvalue
 		set oneintegral=#{oneintegral},buintegral=#{buintegral},sevenintegral=#{sevenintegral}
-		where id=1
+		where qid=#{qid}
    </update>
    
 </mapper>
