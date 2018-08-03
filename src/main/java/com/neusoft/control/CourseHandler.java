@@ -396,9 +396,11 @@ public class CourseHandler {
 			System.out.println(l.getFdesc().replace("\"", "\\\""));
 			String result="{\"code\":\"0\","
 					+ "\"detail\":\""+l.getFdesc().replace("\"", "\\\"")+"\","
+					+ "\"title\":\""+l.getTitle()+"\","
 					+ "\"longitude\":\""+adr.getLongitude()+"\","
 					+ "\"address\":\""+adr.getAddress()+"\","
 					+ "\"phone\":\""+adr.getTel()+"\","
+					+ "\"imgurl\":\""+l.getImgUrl()+"\","
 					+ "\"latitude\":\""+adr.getLatitude()+"\"}";
 			
 			System.out.println(result);
