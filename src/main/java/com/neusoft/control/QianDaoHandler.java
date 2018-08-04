@@ -37,20 +37,21 @@ public class QianDaoHandler {
 		QianDao qianDao = new QianDao();
 		qianDao.setQid(qid);
 		qianDao.setDate(date);
-		qianDao.setUid(uid);		
-		Integer findnum = qianDaoService.findByUserIDQidDate(qianDao);
+		qianDao.setUid(uid);	
 		UserVo userVo = new UserVo();
 		userVo.setQid(qid);
 		userVo.setUid(uid);
+		Integer findnum = qianDaoService.findByUserIDQidDate(qianDao);		
 		if(findnum==null){
 			int insertnum = qianDaoService.insertDateUserID(qianDao);
 			int updatenum = qianDaoService.addIntegralByUid(userVo);
 			if(insertnum>0){
-				return "forward:/Education/Education/qiandao.html";
+				return "{\"result\":true}";
 			}	
 		}
-		return "forward:/Education/Education/qiandao.html";
+		return "{\"result\":false}";
 	}
+
 	
 	@RequestMapping(value="/test/QianDao/findByUserIDQidDate")
 	@ResponseBody
