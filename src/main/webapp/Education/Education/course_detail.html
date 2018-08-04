@@ -12,7 +12,12 @@
 		#allmap{height:500px;width:100%;}
 		#r-result{width:100%; font-size:14px;}
 	    .footer{width:100%;background-color: #f7f7f7;}
+	    .course_intro img{
+	    	width:100%;
+	    	height:auto;
+	    }
 	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=UHQW9LTezLKzKE5BPcGOwbMtT2O1qRx1"></script>
 	<script type="application/javascript" src="../js/jquery-3.2.0.min.js"></script>
 	<script src="../js/mui.zoom.js"></script>
 	
@@ -40,7 +45,7 @@
 			var reserv_id=getUrlParam("id");
 			if(reserv_id!=null&&lession_id==null){
 				$("#buyreserve").text("预约");
-	
+				document.getElementById("address_info").hidden ="";
 				$.ajax({
 					url:"../../FrontEnd/getFreeListenPosition",
 					type:"get",
@@ -52,16 +57,23 @@
 						var longitude=result.longitude;
 						var latitude=result.latitude;
 						var  desc=result.detail;
-						
+						var title=divide+result.title;
+						var  phone=result.phone;
+						var  address=result.address;
+						var imgurl = result.imgurl;
 						baidumap(longitude,latitude);
-						$("#detail").html(desc);
-						
+						$("#title").html(title);
+						$("#desc").html(desc);
+						$("#phone").html(phone);
+						$("#address").html(address);
+						document.getElementById("pic").src= imgurl;
 						//alert(longitude,latitude);
 					}
 				});
 			}
 			if(lession_id!=null&&reserv_id==null){
 				$("#buyreserve").text("购买");	
+				//document.getElementById("pic_info").hidden ="";
 				$.ajax({
 					url:"../../FrontEnd/getCourseDetail",
 					type:"get",
@@ -72,8 +84,7 @@
 						var title=divide+result.lname;
 						var price='￥'+result.lprice;
 						var desc = result.ldesc;
-						
-						//$("#pic").html(pic);
+						document.getElementById("pic").src= pic;
 						$("#title").html(title);
 						$("#price").html(price);
 						$("#desc").html(desc);
@@ -87,7 +98,12 @@
 		    var r = window.location.search.substr(1).match(reg);  // 匹配目标参数
 		    if (r != null) return unescape(r[2]); return null; // 返回参数值
 		}
-		
+	 	function baidumap(longitude,latitude){
+			// 百度地图API功能
+			var map = new BMap.Map("allmap");
+			map.centerAndZoom(new BMap.Point(longitude,latitude),16);
+			map.enableScrollWheelZoom(true);
+		}
 		</script>
 	<link rel="stylesheet" href="../css/mui.min.css">
 	<link rel="stylesheet" href="../css/course_detail.css">
@@ -102,10 +118,12 @@
 			<h1 class="mui-title">课程详情</h1>
 		</header>
 	<div>
-		<div class="course_pic">
-			<img id="pic" src="../img/1.jpg" />	
-		</div>
-		
+	<div class="course_pic"  id="pic_info">
+			<img  id="pic"  />	
+				
+	</div>
+	
+
 		<div class="course_info">
 			<div id="course_title">
 				<p id="title"></p>
@@ -116,19 +134,29 @@
 			
 		</div>
 		<hr style="margin-top: 0px;margin-bottom: 3px;" />
-		<div class="course_intro" id="desc">
+		<div class="course_intro" id="desc" style="width:100%">
 			
 		</div>
+		<div id="address_info" hidden="hidden">
+		<div style="padding: 0px,0px;">
+			<div style="background-color:white">
+				<p id="address" align="center" style="color: black"></p>
+				<p id="phone" align="center" style="color: black"></p>			
+			</div>
+			<div id="allmap" style="padding: 0px,0px;height:200px;" ></div>
+		</div>			
+	</div>
 	</div>
 	
 	<span class="blank"></span>
 	<nav class="mui-bar mui-bar-tab " style="height: 53px;" > 	
 		<button onclick="chat()" style="width: 15%;height: 100%;"> <span class="mui-icon-extra mui-icon-extra-custom"></span></button>
-		<button id="buyreserve" type="button"  class="mui-btn mui-btn-warning mui-btn-block" style="height:50px;margin-top: -5px;width: 85%;float: right;">购买</button>
+		<button id="buyreserve" type="button"  class="mui-btn mui-btn-warning mui-btn-block" style="height:50px;margin-top: -5px;width: 85%;float: right;"></button>
  	</nav>
  	
  	
  	<script src="../js/mui.min.js"></script>
+
  	<script type='text/javascript'>
     (function(m, ei, q, i, a, j, s) {
         m[i] = m[i] || function() {

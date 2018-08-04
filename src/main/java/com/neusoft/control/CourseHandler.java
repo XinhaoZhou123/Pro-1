@@ -1,3 +1,4 @@
+
 package com.neusoft.control;
 
 import java.io.File;
@@ -385,7 +386,6 @@ public class CourseHandler {
 		
 		@RequestMapping(value="FrontEnd/getCourseDetail")
 		@ResponseBody		
-
 		public Lesson getCourseDetail(HttpServletRequest request,int lid) throws Exception{
 			Lesson lesson = courseService.getLession(lid);
 			return lesson;
@@ -412,15 +412,18 @@ public class CourseHandler {
 			System.out.println(l.getFdesc().replace("\"", "\\\""));
 			String result="{\"code\":\"0\","
 					+ "\"detail\":\""+l.getFdesc().replace("\"", "\\\"")+"\","
+					+ "\"title\":\""+l.getTitle()+"\","
 					+ "\"longitude\":\""+adr.getLongitude()+"\","
 					+ "\"address\":\""+adr.getAddress()+"\","
 					+ "\"phone\":\""+adr.getTel()+"\","
+					+ "\"imgurl\":\""+l.getImgUrl()+"\","
 					+ "\"latitude\":\""+adr.getLatitude()+"\"}";
 			
 			System.out.println(result);
 			System.out.println(result);
 			return result;
 		}
+		
 		
 		@RequestMapping(value="FrontEnd/getLesson111")
 		@ResponseBody		
@@ -900,3 +903,4 @@ public class CourseHandler {
 				}
 			}		
 }
+
