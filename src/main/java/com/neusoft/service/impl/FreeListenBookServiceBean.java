@@ -7,17 +7,44 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.neusoft.mapper.FreeListenBookMapper;
 import com.neusoft.po.FreeListenBook;
 import com.neusoft.service.FreeListenBookService;
 import com.neusoft.tools.Page;
 import com.neusoft.vo.ReservationCondition;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 @Service
 public class FreeListenBookServiceBean implements FreeListenBookService {
 	@Autowired
 	FreeListenBookMapper freeMapper;
+	
+	@Autowired
+	JedisPool jedisPool;
+	
 	@Override
 	public List<FreeListenBook> selectFreeListenBooks(Page page, String tel, int qid) throws Exception {
+		
+		/*Gson gson = new Gson();
+		
+		Jedis jedis = jedisPool.getResource();
+		String clist =jedis.hget("freelisten","freelisten"+tel+"-"+page.getCurrentPage());
+		if(clist ==null){
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("page", page);
+			map.put("tel", tel);
+			map.put("qid", qid);
+			List<FreeListenBook> lists = freeMapper.getFreeListenBook(map);
+			String json_str = gson.toJson(lists);
+			jedis.hset("freelisten","freelisten"+tel+"-"+page.getCurrentPage(), json_str);
+			return lists; 
+		}else{
+			List<FreeListenBook> lists = gson.fromJson(clist, new TypeToken<List<FreeListenBook>>(){}.getType());
+			return lists;
+		}*/
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("page", page);
 		map.put("tel", tel);
@@ -92,12 +119,19 @@ public class FreeListenBookServiceBean implements FreeListenBookService {
 	 * 通过条件查找一页预约
 	 */
 	@Override
-	public List<FreeListenBook> findPageByCondition(ReservationCondition condition, Page page,int qid)
+	public List<FreeListenBook> findPageByCondition(ReservationCondition condition,String field,String order ,Page page,int qid)
 			throws Exception {
 		Map<String, Object> m = new HashMap<String,Object>();
 		m.put("condition",condition);
 		m.put("page", page);
 		m.put("qid", qid);
+		if(field!=null)
+			field=field.toLowerCase();
+		if(order!=null)
+			order=order.toLowerCase();
+		
+		m.put("field", field);
+		m.put("order", order);
 		return freeMapper.findPageByCondition(m);
 	}
 	/*

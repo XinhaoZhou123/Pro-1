@@ -14,47 +14,47 @@ function getRootPath(){
 function responseComment(mid){
 	// console.log($(this).index());
 
-// 获取回复按钮集合,getElementByClassName;
-var btn_reply ='btn_reply'+mid;
-var user_reply ='user_reply'+mid;
-var m
-= document.getElementById(btn_reply);
-
-var n
-= document.getElementById(user_reply);
-
-console.log('回复按钮集合'
-+ m);
-
-// 获取回复按钮的索引
-
-var index
-= $('#'+btn_reply).index($(this));
-
-console.log(index);
-
-$('#'+user_reply).eq(index).css("display",
-"block");
-var id_commentTxt = 'commentTxt'+mid
-document.getElementById(id_commentTxt).focus();
+	// 获取回复按钮集合,getElementByClassName;
+	var btn_reply ='btn_reply'+mid;
+	var user_reply ='user_reply'+mid;
+	var m
+	= document.getElementById(btn_reply);
+	
+	var n
+	= document.getElementById(user_reply);
+	
+	console.log('回复按钮集合'
+	+ m);
+	
+	// 获取回复按钮的索引
+	
+	var index
+	= $('#'+btn_reply).index($(this));
+	
+	console.log(index);
+	
+	$('#'+user_reply).eq(index).css("display",
+	"block");
+	var id_commentTxt = 'commentTxt'+mid
+	document.getElementById(id_commentTxt).focus();
 }
 
 $(document).on("click",".btn-cancel",function()
  {
 
-var m
-= document.getElementsByClassName("btn-reply");
-
-var n
-= document.getElementsByClassName("user-reply");
-
-var index
-= $(".btn-cancel").index($(this));
-
-console.log(index);
-
-$(".user-reply").eq(index).css("display",
-"none");
+	var m
+	= document.getElementsByClassName("btn-reply");
+	
+	var n
+	= document.getElementsByClassName("user-reply");
+	
+	var index
+	= $(".btn-cancel").index($(this));
+	
+	console.log(index);
+	
+	$(".user-reply").eq(index).css("display",
+	"none");
 
 });
 function trim(s){

@@ -131,7 +131,9 @@
 	
 	
 	
-	
+	<delete	id="deleteLessonBranch" parameterType="int">
+		delete from lessonbranch where lid=#{lid}
+	</delete>
 
 	
 	

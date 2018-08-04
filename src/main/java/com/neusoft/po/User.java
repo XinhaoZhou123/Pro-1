@@ -7,10 +7,17 @@ public class User {
 	String tel;			//手机号作为id
 	String nickName;	//昵称
 	String iconUrl;		//头像url
-
+	int integral;		//积分
 	int qid;			//企业id
 	String pwd;
 	
+	
+	public int getIntegral() {
+		return integral;
+	}
+	public void setIntegral(int integral) {
+		this.integral = integral;
+	}
 	public String getPwd() {
 		return pwd;
 	}

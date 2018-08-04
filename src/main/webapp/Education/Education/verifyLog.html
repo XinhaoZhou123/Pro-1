@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>登录</title>
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link  rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../assets/css/amazeui.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.enterfocus.js"></script>
+		<script src="../js/app.js"></script>
+	    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+		<style>
+			.area {
+				margin: 20px auto 0px auto;
+			}
+			
+			.mui-input-group {
+				margin-top: 10px;
+			}
+			
+			.mui-input-group:first-child {
+				margin-top: 20px;
+			}
+			
+			.mui-input-group label {
+				width: 22%;
+			}
+			
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {
+				width: 78%;
+			}
+			
+			.mui-checkbox input[type=checkbox],
+			.mui-radio input[type=radio] {
+				top: 6px;
+			}
+			
+			.mui-content-padded {
+				margin-top: 25px;
+			}
+			
+			.mui-btn {
+				padding: 10px;
+			}
+			
+			.link-area {
+				display: block;
+				margin-top: 25px;
+				text-align: center;
+			}
+			
+			.spliter {
+				color: #bbb;
+				padding: 0px 8px;
+			}
+			
+			.oauth-area {
+				position: absolute;
+				bottom: 20px;
+				left: 0px;
+				text-align: center;
+				width: 100%;
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			.oauth-area .oauth-btn {
+				display: inline-block;
+				width: 50px;
+				height: 50px;
+				background-size: 30px 30px;
+				background-position: center center;
+				background-repeat: no-repeat;
+				margin: 0px 20px;
+				/*-webkit-filter: grayscale(100%); */
+				border: solid 1px #ddd;
+				border-radius: 25px;
+			}
+			
+			.oauth-area .oauth-btn:active {
+				border: solid 1px #aaa;
+			}
+			
+			.oauth-area .oauth-btn.disabled {
+				background-color: #ddd;
+			}
+		</style>
+
+	<script>"undefined"==typeof CODE_LIVE&&(!function(e){var t={nonSecure:"8123",secure:"8124"},c={nonSecure:"http://",secure:"https://"},r={nonSecure:"127.0.0.1",secure:"gapdebug.local.genuitec.com"},n="https:"===window.location.protocol?"secure":"nonSecure";script=e.createElement("script"),script.type="text/javascript",script.async=!0,script.src=c[n]+r[n]+":"+t[n]+"/codelive-assets/bundle.js",e.getElementsByTagName("head")[0].appendChild(script)}(document),CODE_LIVE=!0);</script></head>
+
+	<body data-genuitec-lp-enabled="false" data-genuitec-file-id="wc1-161" data-genuitec-path="/NeuEduPro3/src/main/webapp/Education/Education/login.html">
+		<header class="mui-bar mui-bar-nav" data-genuitec-lp-enabled="false" data-genuitec-file-id="wc1-161" data-genuitec-path="/NeuEduPro3/src/main/webapp/Education/Education/login.html">
+			<h1 class="mui-title">登录</h1>
+		</header>
+		<div class="mui-content">
+			<form id='login-form' class="mui-input-group">
+				<div class="mui-input-row ">
+					<label>账号</label>
+					<div class="am-input-group">
+				        <input type="text" id="account" class="am-form-field">
+				        <span class="am-input-group-btn" >
+				        <button class="am-btn am-btn-default"id="sendCode" type="button" style="margin-top: 1px;">发送验证码</button>
+				        </span>
+			        </div>
+				</div>
+				<div class="mui-input-row">
+					<label>验证码</label>
+					<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
+				</div>
+			</form>
+			<div class="mui-content-padded">
+				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+				
+			</div>
+			<div class="mui-content-padded oauth-area">
+
+			</div>
+		</div>
+		<script>
+			function getRootPath(){
+				//获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+				var curWwwPath=window.document.location.href;
+				//获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+				var pathName=window.document.location.pathname;
+				var pos=curWwwPath.indexOf(pathName);
+				//获取主机地址，如： http://localhost:8083
+				var localhostPaht=curWwwPath.substring(0,pos);
+				//获取带"/"的项目名，如：/uimcardprj
+				var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+				return(localhostPaht+projectName);
+			}
+			function getUrlParam(name) {
+	            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+	            if (r != null) return unescape(r[2]); return null; //返回参数值
+	        }
+			
+			var verifyTel;
+			var returnCode;
+			$(document).on("tap","#sendCode",function(){
+				verifyTel=$("#account").val();
+				$.ajax({
+					type:"post",
+					url:getRootPath()+"/user/sendCode",
+					async:false,
+					data:{tel:verifyTel},
+					success:function(data){
+						console.log(data);
+						if(data.code==200){
+							returnCode = data.obj;
+							//alert(returnCode);
+						}else{
+							mui.toast("验证码发送失败,请重试");
+						}
+					}
+				});
+			})
+			$(document).on("tap","#login",function(){
+				var account = $("#account").val();
+				if(account == verifyTel){
+					var qid = getUrlParam("qid");
+					var code = $("#password").val();
+					//验证码输入正确
+					if(code == returnCode){
+						//alert("account:"+account+" pwd:"+pwd+" qid:"+qid);
+						$.ajax({
+							url:getRootPath()+'/user/verifyLog',
+							data:{tel:account,qid:qid},
+							success:function(data){
+								console.log(data);
+								if(data.msg){
+									mui.toast("登录成功");
+									setTimeout(function(){
+										sessionStorage.setItem("nickName", data.user.nickName);
+										sessionStorage.setItem("iconUrl", data.user.iconUrl);
+										sessionStorage.setItem("tel", data.user.tel);
+										sessionStorage.setItem("uid", data.user.uid);
+										sessionStorage.setItem("tomcatPath",data.tomcatPath);
+										window.location.href="index.html";
+									},1000)			
+								}else{
+									mui.toast("登录失败，服务器出错");
+								}
+							}
+						})
+					}else{
+						mui.toast("登录失败，验证码不正确");
+					}
+				}else{
+					mui.toast("请勿修改账号");
+				}
+				
+				
+			})
+			$(document).on("click","#reg",function(){
+				window.location.href = "reg.html?qid="+getUrlParam("qid");
+			})
+		</script>
+		
+<script>
+    //懒人建站，服务于【个人站长】【网页设计师】和【web开发从业者】的代码素材与设计素材网站。
+    //懒人建站http://www.51xuediannao.com/
+    //jquery倒计时按钮常用于验证码倒计
+    function buttonCountdown($el, msNum, timeFormat) {
+        var text = $el.data("text") || $el.text(),
+                timer = 0;
+        $el.prop("disabled", true).addClass("disabled")
+                .on("bc.clear", function () {
+                    clearTime();
+                });
+
+        (function countdown() {
+            var time = showTime(msNum)[timeFormat];
+            $el.text(time + '后失效');
+            if (msNum <= 0) {
+                msNum = 0;
+                clearTime();
+            } else {
+                msNum -= 1000;
+                timer = setTimeout(arguments.callee, 1000);
+            }
+        })();
+
+        function clearTime() {
+            clearTimeout(timer);
+            $el.prop("disabled", false).removeClass("disabled").text(text);
+        }
+
+        function showTime(ms) {
+            var d = Math.floor(ms / 1000 / 60 / 60 / 24),
+                    h = Math.floor(ms / 1000 / 60 / 60 % 24),
+                    m = Math.floor(ms / 1000 / 60 % 60),
+                    s = Math.floor(ms / 1000 % 60),
+                    ss = Math.floor(ms / 1000);
+
+            return {
+                d: d + "天",
+                h: h + "小时",
+                m: m + "分",
+                ss: ss + "秒",
+                "d:h:m:s": d + "天" + h + "小时" + m + "分" + s + "秒",
+                "h:m:s": h + "小时" + m + "分" + s + "秒",
+                "m:s": m + "分" + s + "秒"
+            };
+        }
+
+        return this;
+    }
+
+    //使用演示 显示为 秒
+    $("#sendCode").on("click",function(){
+        buttonCountdown($(this), 1000 * 60 * 3, "ss");
+    });
+
+    /*//使用演示 显示为 分:秒
+    $("#test2").on("click",function(){
+        buttonCountdown($(this), 1000 * 60 * 3, "m:s");
+    });
+
+    //使用演示 显示为 时:分:秒
+    $("#test3").on("click",function(){
+        buttonCountdown($(this), 1000 * 60 * 3, "h:m:s");
+    });
+
+    //使用演示 显示为 天:时:分:秒
+    $("#test4").on("click",function(){
+        buttonCountdown($(this), 1000 * 60 * 3, "d:h:m:s");
+    });
+*/
+    //清理$("#test1")的倒计时  比如请求出错或者什么原因要清理倒计时按钮
+    /*$("#test1-clear").on("click",function(){
+        $("#test1").trigger("bc.clear");
+    });*/
+</script>
+	</body>
+
+</html>

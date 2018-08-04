@@ -54,5 +54,5 @@ public interface CourseMapper {
 		
 		public void deleteFreeListen(int id) throws Exception;
 		
-	
+		public void deleteLessonBranch(int lid) throws Exception;
 }

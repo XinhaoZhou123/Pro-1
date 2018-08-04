@@ -54,7 +54,7 @@ public interface EnterpriseServiceForCourse {
 		
 		
 		
-		
+		public List<Address> getBranchesByLid(int lid) throws Exception;
 		
 		
 

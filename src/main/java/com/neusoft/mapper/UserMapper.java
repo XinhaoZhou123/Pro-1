@@ -13,4 +13,6 @@ public interface UserMapper {
 	public int findCountByTelQid(Map<String,Object> map) throws Exception;
 	//url ,tel ,qid
 	public int updateIcon(Map<String,Object> map) throws Exception;
+	//uid , nickName
+	public int updateNickName(Map<String,Object> map) throws Exception;
 }

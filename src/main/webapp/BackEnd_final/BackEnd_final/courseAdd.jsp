@@ -70,7 +70,7 @@ request.setAttribute("path", basePath);
 								<div class="layui-card-body layui-colla-content layui-show" style="padding-left: 3%;">
 									<div class="layui-upload-list">
 										<c:if test="${cover!=null}">
-											<img class="layui-upload-img" style="width:100%;height:400px;" id="cover" name="cover1" src="/webapps/../upload/cover/${cover}" }>
+											<img class="layui-upload-img" style="width:100%;height:400px;" id="cover" name="cover1" src="/webapps/../upload/cover/${cover}" >
 											<p id="demoText"></p>
 											<input type="hidden" name="imgurl" id="coverurl" value="${cover}"/>
 										</c:if>
@@ -181,17 +181,16 @@ request.setAttribute("path", basePath);
 														<c:redirect url="/BackEnd/initBranch" />
 													</c:if>
 													<c:forEach items="${requestScope.branches }" var="b">
-														<c:if test="${branch!=null}">
-															<c:if test="${branch!=b.radioID}">
-																<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" />
+													
+															<c:if test="${b.choosed==1}">
+																<input type="checkbox" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" >
+																<%-- <input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" /> --%>
 															</c:if>
-															<c:if test="${branch==b.radioID}">
-																<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" checked=true/>
+															<c:if test="${b.choosed==0}">
+																 <input type="checkbox" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" checked=true>
+																<%-- <input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}"  checked=true/> --%>
 															</c:if>
-														</c:if>
-														<c:if test="${branch==null}">
-															<input type="radio" name="sub" value="${b.branchname}" id="${b.radioID}" title="${b.branchname}" />
-														</c:if>
+														
 													</c:forEach>
 										  </div>
 										</div>

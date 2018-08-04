@@ -72,6 +72,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				select();
 			});
 		})
+		var condition;
 		function select(){
 			layui.use('table', function(){
 				var table = layui.table;
@@ -81,12 +82,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				var startDate = $("#conditionSelect input[name='startDate']").val();
 				var endDate = $("#conditionSelect input[name='endDate']").val();
 				var url = '<%=request.getContextPath() %>/BackEnd/reserve/findPageByCondition';
+				condition={fid:fid,nickName:nickName,status:status,starDate:startDate,endDate:endDate};
 				//第一个实例
 				table.render({
 					elem : '#reserv_table',
 					height : 415,
 					url : url, //数据接口
-					where :{fid:fid,nickName:nickName,status:status,startDate:startDate,endDate:endDate},
+					where :condition,
 					page : true,
 					method: "post",
 					limits:[10,15,20,25,30],
@@ -114,31 +116,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					  }
 				});
 				table.on('tool(check_filter)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-				        	var data = obj.data; //获得当前行数据
-				        	var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-	
-				        	if(layEvent === 'edit'){ //查看
-				        		$.ajax({
-				        		url: '<%=request.getContextPath() %>/BackEnd/reserve/dealReservation',
-				        			type: 'post',
-				        			data: {id: data.id},
-				        			dataType: 'json',
-				        			success: function(data){
-				        				if(data.state == 1){
-				        					obj.update({
-				        						status : "已处理"
-				        					})
-				        					layer.msg('处理成功');
-				        				}
-				        			 	else{
-				        					layer.msg('处理失败');
-				        				}
-				        			}
-				        	   });
-				           } 
-				       });
-				})	
-			}
+		        	var data = obj.data; //获得当前行数据
+		        	var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+
+		        	if(layEvent === 'edit'){ //查看
+		        		$.ajax({
+		        		url: '<%=request.getContextPath() %>/BackEnd/reserve/dealReservation',
+		        			type: 'post',
+		        			data: {id: data.id},
+		        			dataType: 'json',
+		        			success: function(data){
+		        				if(data.state == 1){
+		        					obj.update({
+		        						status : "已处理"
+		        					})
+		        					layer.msg('处理成功');
+		        				}
+		        			 	else{
+		        					layer.msg('处理失败');
+		        				}
+		        			}
+		        	   });
+			      	} 
+		       	});
+		       	table.on('sort(check_filter)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+				  console.log(obj.field); //当前排序的字段名
+				  console.log(obj.type); //当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
+				  console.log(this); //当前排序的 th 对象
+				  console.log(condition);
+				  //尽管我们的 table 自带排序功能，但并没有请求服务端。
+				  //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+				  table.reload('reserv_table', {
+				    initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。 layui 2.1.1 新增参数
+				    ,url:url
+				    ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+				      field: obj.field //排序字段
+				      ,order: obj.type //排序方式
+				      ,condition:condition
+				    }
+				  });
+				});
+			})	
+		}
 			window.onload  = select();
 	</script>
 	</head>

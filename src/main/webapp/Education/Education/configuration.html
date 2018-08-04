@@ -10,6 +10,7 @@
 		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<link rel="stylesheet" href="../layui/css/modules/layer/default/layer.css">
+		<link rel="stylesheet" href="../layui/css/layui.css"  media="all">
 		<script src="../layui/layui.js"></script>
 		<script src="../layui/lay/modules/layer.js"></script>
 		
@@ -210,9 +211,7 @@
 							<li class="mui-table-view-cell mui-media">
 								<a class="mui-navigate-right" href="#account">
 									<img class="mui-media-object mui-pull-left head-img" id="head-img" src="">
-									<div class="mui-media-body">
-										Hello MUI
-										<p class='mui-ellipsis'>账号:hellomui</p>
+									<div class="mui-media-body" id = "accountNick">
 									</div>
 								</a>
 							</li>
@@ -268,7 +267,7 @@
 							</a>
 							</li>
 							<li class="mui-table-view-cell">
-								<a>姓名<span class="mui-pull-right">Hbuilder</span></a>
+								<a id="nickName">昵称<span class="mui-pull-right"></span></a>
 							</li>
 							<li class="mui-table-view-cell">
 								<a>HBuilder账号<span class="mui-pull-right">hbuilder@dcloud.io</span></a>
@@ -279,7 +278,7 @@
 								<a>QQ号<span class="mui-pull-right">88888888</span></a>
 							</li>
 							<li class="mui-table-view-cell">
-								<a>手机号<span class="mui-pull-right">18601234567</span></a>
+								<a>手机号<span class="mui-pull-right" id="telephone"></span></a>
 							</li>
 							<li class="mui-table-view-cell">
 								<a>邮箱地址<span class="mui-pull-right">hbuilder@dcloud.io</span></a>
@@ -569,6 +568,21 @@
 	<script src='../js/feedback.js'></script>
 	<script>
 		mui.init();
+		
+		function initAccount(){
+			$("#nickName span").append(sessionStorage.getItem("nickName"));
+			var accountNick = sessionStorage.getItem("nickName")+
+											'<p class="mui-ellipsis">uid:'+sessionStorage.getItem("uid")+'</p>';
+			$("#accountNick").append(accountNick);
+			$("#telephone").append(sessionStorage.getItem("tel"));
+		}
+		
+		function removeAccount(){
+			$("#nickName span").empty();
+			$("#accountNick").empty();
+			$("#telephone").empty();
+		}
+		initAccount();
 		//初始化单页view
 		var viewApi = mui('#app').view({
 			defaultPage: '#setting'
@@ -786,7 +800,7 @@
 						url:getRootPath()+"/user/logout",
 						success:function(){
 							mui.toast("登出成功");
-							window.location.href="login.html?qid=1"						
+							window.location.href="login.html?qid=1";			
 						}
 						})
 					})
@@ -907,6 +921,52 @@ function openBrowse(){
 				})
 			}
 		}
-})	
+})
+	$(document).on("tap","#nickName",function(){
+		var obj = document.getElementById('modifyNick');
+		obj.style.cssText = "text-align: center; display: block";
+		var uid = sessionStorage.getItem("uid");
+		layer.open({
+			btnAlign: 'c',
+			type:1,
+			title:'修改昵称',
+			area: '250px',
+			content:$("#modifyNick"),
+			btn:['提交','取消'],
+			yes:function(index,layero){
+				//alert(mark);
+				$(function(){
+					var nickName = $("#modifyNick input[name=nick]").val();
+					$.ajax({
+						url:getRootPath()+'/user/modifyNick',
+						data:{uid:uid,nickName:nickName},//id为点击的订单的id，mark为打分结果
+						success:function(data){
+							console.log(data);
+							if(data.result == true){
+								mui.toast('修改成功');
+								sessionStorage.setItem("nickName",nickName);
+								removeAccount();
+								initAccount();
+							}
+							else
+								mui.toast('修改失败');
+						}
+					})
+				})
+				layer.close(index); //如果设定了yes回调，需进行手工关闭
+				var obj = document.getElementById("modifyNick");
+				   obj.style.cssText = "display:none;"
+			},
+			btn2:function(index,layero){
+				var obj = document.getElementById("modifyNick");
+				   obj.style.cssText = "display:none;"
+			},
+			cancel:function(){
+				var obj = document.getElementById("modifyNick");
+				   obj.style.cssText = "display:none;"
+			}
+		});
+	})	
 </script>
+<div class="mui-input-row" id="modifyNick" style="diplay:none"><label>昵称:</label><input type="text" name="nick"placeholder="请输入新的昵称"></div>	
 </html>
