@@ -188,7 +188,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div class="layui-form layui-border-box layui-table-view" lay-filter="LAY-table-1" style="height: auto;">
 							<table id="reserv_table" lay-filter="check_filter"></table>
 							<script type="text/html" id="barDemo">
+							{{#  if(d.status =="待处理"){ }}
 								<button id="btn_confirm" type="button" class="layui-btn  layui-btn-sm " lay-event="edit">处理</button>
+  							{{# }else{	 }}
+								<button  type="button" class="layui-btn layui-btn-sm layui-btn-disabled " >处理</button>
+							{{#  } }}
+
+							
 							</script>
 						</div>
 				</div>
