@@ -66,7 +66,8 @@
 						$("#desc").html(desc);
 						$("#phone").html(phone);
 						$("#address").html(address);
-						document.getElementById("pic").src= imgurl;
+						//document.getElementById("pic").src= imgurl;
+						document.getElementById("pic").src= "localhost:8080/upload/cover/"+imgurl;
 						//alert(longitude,latitude);
 					}
 				});
@@ -84,7 +85,8 @@
 						var title=divide+result.lname;
 						var price='￥'+result.lprice;
 						var desc = result.ldesc;
-						document.getElementById("pic").src= pic;
+						//document.getElementById("pic").src= pic;
+						document.getElementById("pic").src= "/../upload/cover/15316561964983D3C5400FF2317BB44874CA333E47CC083a10c964fb510a9e71ed47567901ad1.jpg";
 						$("#title").html(title);
 						$("#price").html(price);
 						$("#desc").html(desc);
