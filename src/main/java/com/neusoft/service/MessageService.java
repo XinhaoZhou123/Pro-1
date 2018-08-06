@@ -25,8 +25,8 @@ public interface MessageService {
 		public int selectTotalNumOfMessageReplys(int mid) throws Exception;		
 		public List<MessageReply> selectMessageReplys(Page page,int mid) throws Exception;	
 		public boolean  saveMessage(Message messgae,MultipartFile[] upload) throws Exception;
-		public boolean  deleteMessage(int mid,String path) throws Exception;
-		public boolean  deleteMessageImgs(int mid,String path) throws Exception;	
+		public boolean  deleteMessage(int mid) throws Exception;
+		public boolean  deleteMessageImgs(int mid) throws Exception;	
 		public boolean  deleteMessageReplys(int[] replyids) throws Exception;
 		
 		

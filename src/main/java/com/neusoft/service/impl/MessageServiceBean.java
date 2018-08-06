@@ -101,11 +101,11 @@ public class MessageServiceBean implements MessageService {
 }
 
 	@Override
-	public boolean deleteMessage(int mid,String path) throws Exception {
+	public boolean deleteMessage(int mid) throws Exception {
 		System.out.println(".....MessageServiceBean........deleteMessage().........");
 		messageMapper.deleteMessageLikeByMid(mid);
 		messageMapper.deleteMessageReplyByMid(mid);
-		if(deleteMessageImgs(mid,path)){
+		if(deleteMessageImgs(mid)){
 			messageMapper.deleteMessageImgByMid(mid);
 		}
 		int count = messageMapper.deleteMessageByMid(mid);	
@@ -114,7 +114,7 @@ public class MessageServiceBean implements MessageService {
 	}
 
 	@Override
-	public boolean deleteMessageImgs(int mid,String path) throws Exception {
+	public boolean deleteMessageImgs(int mid) throws Exception {
 		System.out.println(".....MessageServiceBean........deleteMessage().........");
 		List<MessageImg> messageImgs = messageMapper.getMessageImgs(mid);
 		if(messageImgs.isEmpty()){
@@ -123,8 +123,9 @@ public class MessageServiceBean implements MessageService {
 		else{
 			for(MessageImg messageImg:messageImgs){
 				String filename = messageImg.getImgUrl();
-				File img = new File(path,filename);	
-				img.delete();
+				//File img = new File(path,filename);	
+				 FileManager.DeleteFile(filename);
+				//img.delete();
 			}
 			return true;
 		}

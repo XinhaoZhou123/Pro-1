@@ -74,10 +74,7 @@ public String messagelist_Handler(HttpServletRequest request) throws Exception{
 @RequestMapping(value="/BackEnd/message/messagedelete")
 public String messagedelete_Handler(HttpServletRequest request,int mid,int currentPage) throws Exception{
 		System.out.println(".........MessageHandler..........messagedelete_Handler()........");
-		String path = request.getServletContext().getRealPath("/");
-		String ppath = new File(path).getParent();
-		path = ppath+"/upload/messageimgs";
-		boolean isOK = messageService.deleteMessage(mid, path);
+		boolean isOK = messageService.deleteMessage(mid);
 		return "forward:/BackEnd/message/messagelist";
 }
 
