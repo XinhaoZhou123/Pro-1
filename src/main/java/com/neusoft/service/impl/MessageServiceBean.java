@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.neusoft.FastDFS.FileManager;
 import com.neusoft.mapper.MessageMapper;
 import com.neusoft.po.Message;
 import com.neusoft.po.MessageImg;
@@ -79,22 +80,19 @@ public class MessageServiceBean implements MessageService {
 	}
 
 	@Override
-	public boolean saveMessage(Message message, MultipartFile[] upload,String path) throws Exception {
+	public boolean saveMessage(Message message, MultipartFile[] upload) throws Exception {
 		System.out.println(".....MessageServiceBean........saveMessage().........");
 		int count = messageMapper.addMessage(message);
 		if(count==1){
 		MessageImg messageImg = new MessageImg();
 		messageImg.setMid(message.getMid());
 		for(int i=0;i<upload.length;i++){
-			String filename  =System.currentTimeMillis()+upload[i].getOriginalFilename();
-			//InputStream inputStream = upload[i].getInputStream();
-			File dest = new File(path,filename);	
+			String filename = FileManager.upload(upload[i].getBytes(), upload[i].getOriginalFilename());
 			messageImg.setImgUrl(filename);
 			count = messageMapper.addMessageImg(messageImg);
 			if(count!=1){
 				return false;
 			}
-			upload[i].transferTo(dest);
 		}
 		}else{
 			return false;

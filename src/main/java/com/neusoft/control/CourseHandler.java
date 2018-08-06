@@ -23,6 +23,7 @@ import com.neusoft.po.LessonBranch;
 import com.neusoft.po.Message;
 import com.neusoft.po.Sorder;
 import com.neusoft.po.Swiper;
+import com.neusoft.FastDFS.FileManager;
 import com.neusoft.po.Address;
 import com.neusoft.po.FreeListen;
 import com.neusoft.service.BackIndexService;

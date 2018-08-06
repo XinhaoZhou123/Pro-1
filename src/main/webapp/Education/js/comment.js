@@ -363,7 +363,7 @@ function responseGood(mid,goodtype){
 function getImgs(imgs,mid){
 	
 	if(imgs.length==1){
-	var img_url = '../../../upload/messageimgs/'+imgs[0].imgUrl;	 
+	var img_url =imgs[0].imgUrl;	 
 	
 	var img = new Image();	 
 	img.src = img_url;
