@@ -37,20 +37,21 @@ public class QianDaoHandler {
 		QianDao qianDao = new QianDao();
 		qianDao.setQid(qid);
 		qianDao.setDate(date);
-		qianDao.setUid(uid);		
-		Integer findnum = qianDaoService.findByUserIDQidDate(qianDao);
+		qianDao.setUid(uid);	
 		UserVo userVo = new UserVo();
 		userVo.setQid(qid);
 		userVo.setUid(uid);
+		Integer findnum = qianDaoService.findByUserIDQidDate(qianDao);		
 		if(findnum==null){
 			int insertnum = qianDaoService.insertDateUserID(qianDao);
 			int updatenum = qianDaoService.addIntegralByUid(userVo);
 			if(insertnum>0){
-				return "forward:/Education/Education/qiandao.html";
+				return "{\"result\":true}";
 			}	
 		}
-		return "forward:/Education/Education/qiandao.html";
+		return "{\"result\":false}";
 	}
+
 	
 	@RequestMapping(value="/test/QianDao/findByUserIDQidDate")
 	@ResponseBody
@@ -106,11 +107,12 @@ public class QianDaoHandler {
 		qianDao.setUid(uid);
 		qianDao.setQid(qid);
 		Integer num = qianDaoService.findByUserIDQidDate(qianDao);
-		//ĳ��û��ǩ��
+		//某天没有签到
 		if(num == null){
 			int integral = qianDaoService.findIntegralByUidQid(userVo);
-			if(integral>50){
+			if(integral>qianDaoService.getBuIntegral(qid)){
 				int insertnum = qianDaoService.insertDateUserID(qianDao);
+				int updatenum = qianDaoService.addIntegralByUid(userVo);
 				int integralnum = qianDaoService.decreaseIntegralByUidQid(userVo);
 				return "{\"result\":\"success\"}";
 			}else{
@@ -122,7 +124,7 @@ public class QianDaoHandler {
 	
 	@RequestMapping(value="/test/QianDao/continueQianDao")
 	@ResponseBody
-	public int continueQianDao(HttpSession	session, String date) throws Exception{
+	public int continueQianDao(HttpSession session, String date) throws Exception{
 		System.out.println("............QianDaoHandler..........continueQianDao............");
 		int qid = (int) session.getAttribute("qid");
 		int uid = (int) session.getAttribute("uid");
@@ -166,7 +168,7 @@ public class QianDaoHandler {
 			return count;
 		}
 		else if(count%7==0){
-			if(qianDaoService.findByUserIDQidDate(qianDao)==0){
+			if(qianDaoService.findByUserIDQidDate(qianDao)==null){
 				int updatenum = qianDaoService.increaseIntegralByUidQid(userVo);
 				return count;
 			}else{
@@ -176,6 +178,7 @@ public class QianDaoHandler {
 		System.out.println(count);
 		return count;
 	}
+
 	
 	@RequestMapping(value="/test/QianDao/findIntegralByQidUid")
 	@ResponseBody
@@ -207,23 +210,26 @@ public class QianDaoHandler {
 	
 	@RequestMapping(value="/test/QianDao/getIntegral")
 	@ResponseBody
-	public IntegralValue getIntegral(HttpServletRequest request) throws Exception{
+	public IntegralValue getIntegral(HttpSession	session) throws Exception{
 		System.out.println(".........QianDaoHandler.........getIntegral............");
+		int qid = (int)session.getAttribute("qid");
 		IntegralValue integralValue = new IntegralValue();
-		integralValue.setOneintegral(qianDaoService.getOneIntegral());
-		integralValue.setBuintegral(qianDaoService.getBuIntegral());
-		integralValue.setSevenintegral(qianDaoService.getSevenIntegral());
+		integralValue.setOneintegral(qianDaoService.getOneIntegral(qid));
+		integralValue.setBuintegral(qianDaoService.getBuIntegral(qid));
+		integralValue.setSevenintegral(qianDaoService.getSevenIntegral(qid));
 		return integralValue;
 	}
 	
 	@RequestMapping(value="/test/QianDao/updateIntegral")
 	@ResponseBody
-	public String updateIntegral(Integer oneintegral, Integer buintegral, Integer sevenintegral) throws Exception{
+	public String updateIntegral(HttpSession session,Integer oneintegral, Integer buintegral, Integer sevenintegral) throws Exception{
 		System.out.println("..........QianDaoHander.........updateIntegral..........");
+		int qid = (int)session.getAttribute("qid");
 		IntegralValue integralValue = new IntegralValue();
 		integralValue.setOneintegral(oneintegral);
 		integralValue.setBuintegral(buintegral);
 		integralValue.setSevenintegral(sevenintegral);
+		integralValue.setQid(qid);
 		int updatenum = qianDaoService.updateIntegral(integralValue);
 		if(updatenum>0){
 			return "{\"result\":true}";
@@ -239,4 +245,21 @@ public class QianDaoHandler {
 		}
 	}
 	
+	@RequestMapping(value="/test/QianDao/increaseIntegralByUidQid")
+	@ResponseBody
+	public String increaseIntegralByUidQid(HttpSession session)throws Exception{
+		System.out.println("..........QianDaoHandler.........increaseIntegralByUidQid.......");
+		
+		int qid = (int) session.getAttribute("qid");
+		int uid = (int) session.getAttribute("uid");
+		UserVo userVo = new UserVo();
+		userVo.setQid(qid);
+		userVo.setUid(uid);
+		Integer updatenum = qianDaoService.increaseIntegralByUidQid(userVo);
+		if(updatenum>0){
+			return "{\"result\":true}";
+		}
+		return "{\"result\":false}";
+	}
+
 }

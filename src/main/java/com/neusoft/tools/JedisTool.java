@@ -3,6 +3,7 @@ package com.neusoft.tools;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+
 public class JedisTool {
 	//redis的ip地址
 	private static String ADDR="10.25.39.164";

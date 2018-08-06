@@ -92,6 +92,23 @@
 			display: block;
 		}
 	</style>
+	<script>
+		$(function(){
+			var icon = sessionStorage.getItem("iconUrl");
+			var url;
+			var li;
+			if(icon!=undefined && icon!="null"){
+				url ="/img/"+icon;
+			}else{
+				url="../img/logo.png";
+			}
+			li = '<img src='+url+' style="height:77px;width:77px;">'
+			$(".touxiang").append(li);
+			var uid = sessionStorage.getItem("uid");
+			var u = 'uid:'+uid;
+			$(".vipcenter .name").append(u);
+		})
+	</script>
 </head>
 <body style="height: 100%;">
 	<header class="mui-bar mui-bar-nav">
@@ -104,8 +121,8 @@
 	
 	<div class="vipcenter">
 		  <div class="vipheader">
-		    <div class="touxiang"><img src="img/logo.png" alt=""></div>
-		    <div class="name">uid:123456</div>
+		    <div class="touxiang"></div>
+		    <div class="name"></div>
 		  </div> 
 	</div>
 	<hr />
@@ -192,7 +209,7 @@
 		
 		
 		var date = getDateStr(new Date());
-		$("#todayqiandao").attr('href','../../test/QianDao/insertDateUserID?date='+date);
+		$("#todayqiandao").attr('href','qiandao.html');
 		
 		function getDateStr(date) {
 		    var _year = date.getFullYear();

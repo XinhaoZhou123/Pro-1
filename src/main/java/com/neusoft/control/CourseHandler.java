@@ -732,12 +732,14 @@ public class CourseHandler {
 		
 			List<Address> branches = branchService.selectAllAddress(qid);
 			
-			int aid=Integer.parseInt(request.getParameter("aid"));
-			if(aid==0) {
+			int aid;
+			if(request.getParameter("aid")==null) {
 				
 				 aid=branches.get(0).getAid();
 			}
-
+			else{
+				aid=Integer.parseInt(request.getParameter("aid"));
+			}
 			request.setAttribute("branches", branches);
 			request.setAttribute("current_branch", branches.get(0));
 			if(aid==0) {
@@ -779,10 +781,13 @@ public class CourseHandler {
 				
 			List<Address> branches =  branches=branchService.selectAllAddress(qid);
 			
-			int aid=Integer.parseInt(request.getParameter("aid"));
-			if(aid==0) {
+			int aid;
+			if(request.getParameter("aid")==null) {
 				
 				 aid=branches.get(0).getAid();
+			}
+			else{
+				aid=Integer.parseInt(request.getParameter("aid"));
 			}
 
 			request.setAttribute("branches", branches);

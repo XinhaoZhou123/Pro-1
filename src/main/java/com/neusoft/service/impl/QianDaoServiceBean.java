@@ -73,23 +73,23 @@ public class QianDaoServiceBean implements QianDaoService{
 	}
 
 	@Override
-	public Integer getOneIntegral() throws Exception {
+	public Integer getOneIntegral(int qid ) throws Exception {
 		System.out.println(".........QianDaoServiceBean..........getOneIntegral............");
-		int oneintegral = qianDaoMapper.getOneIntegral();
+		int oneintegral = qianDaoMapper.getOneIntegral(qid );
 		return oneintegral;
 	}
 
 	@Override
-	public Integer getBuIntegral() throws Exception {
+	public Integer getBuIntegral(int qid ) throws Exception {
 		System.out.println(".........QianDaoServiceBean.........getBuIntegral...........");
-		int buintegral = qianDaoMapper.getBuIntegral();
+		int buintegral = qianDaoMapper.getBuIntegral(qid );
 		return buintegral;
 	}
 
 	@Override
-	public Integer getSevenIntegral() throws Exception {
+	public Integer getSevenIntegral(int qid ) throws Exception {
 		System.out.println("........QianDaoServiceBean..........getSevenIntegral..........");
-		int sevenintegral = qianDaoMapper.getSevenIntegral();
+		int sevenintegral = qianDaoMapper.getSevenIntegral(qid );
 		return sevenintegral;
 	}
 

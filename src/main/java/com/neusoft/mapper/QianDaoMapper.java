@@ -15,8 +15,8 @@ public interface QianDaoMapper {
 	public List<String> findDateByUidQid(QianDao qianDao) throws Exception;
 	public int increaseIntegralByUidQid(UserVo userVo) throws Exception;
 	public List<String> findDateAll(UserVo userVo) throws Exception;
-	public Integer getOneIntegral() throws Exception;
-	public Integer getBuIntegral() throws Exception;
-	public Integer getSevenIntegral() throws Exception;
+	public Integer getOneIntegral(int qid) throws Exception;
+	public Integer getBuIntegral(int qid) throws Exception;
+	public Integer getSevenIntegral(int qid) throws Exception;
 	public int updateIntegral(IntegralValue integralValue) throws Exception;
 }

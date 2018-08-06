@@ -114,23 +114,61 @@
 				success:function(data){					
 					if(data.result == 'empty record'){
 						$.ajax({
-				  			url:"../../test/QianDao/continueQianDao",
-				  			type:"post",
+							url:"../../test/QianDao/insertDateUserID",
+							type:"post",
 							dataType:"json",
 							data:{
 								date:getTodayDateStr(new Date())
 							},
-							success:function(data){					
-								document.getElementById("qiandaodays").innerHTML=data;
-								if(data==7){
-									mui.toast("恭喜您连续签到7天，收获"+sevenintegral+"积分！");
-								}
+							success:function(data){
+								$.ajax({
+						  			url:"../../test/QianDao/continueQianDao",
+						  			type:"post",
+									dataType:"json",
+									data:{
+										date:getTodayDateStr(new Date())
+									},
+									success:function(data){					
+										document.getElementById("qiandaodays").innerHTML=data;
+										if(data%7==0){
+											$.ajax({
+									  			url:"../../test/QianDao/increaseIntegralByUidQid",
+									  			type:"post",
+												dataType:"json",
+												success:function(data){	
+													$.ajax({
+											  			url:"../../test/QianDao/findIntegralByQidUid",
+											  			type:"post",
+														dataType:"json",
+														success:function(data){	
+															document.getElementById("totalintegral").innerHTML=data;
+															mui.toast("恭喜您连续签到7天，收获"+sevenintegral+"积分！");
+														},
+														error:function(data){
+															alert(data.result);
+															//alert("error")
+														}
+											  		});
+												},
+												error:function(data){
+													alert(data.result);
+													//alert("error")
+												}
+									  		});
+											
+										}
+									},
+									error:function(data){
+										alert(data.result);
+										//alert("error")
+									}
+						  		});
 							},
 							error:function(data){
-								alert(data.result);
-								//alert("error")
+								alert(data);
 							}
-				  		});
+							
+						});
 					}
 					if(data.result == 'has record'){
 						$.ajax({
@@ -141,7 +179,8 @@
 								date:getTodayDateStr(new Date())
 							},
 							success:function(data){					
-								document.getElementById("qiandaodays").innerHTML=data;								
+								document.getElementById("qiandaodays").innerHTML=data;	
+								
 							},
 							error:function(data){
 								alert(data.result);
@@ -349,6 +388,7 @@
 							//alert("success");
 							//if(data.result== t)
 							if(data.result=="success"){
+								
 								mui.toast("补签成功！");
 								obj.innerHTML = '<img src="../../Education/img/duihao.svg" style="width:'+trwidth+'px; height'+trheight+'px;"/>';
 								$.ajax({
@@ -356,12 +396,37 @@
 						  			type:"post",
 									dataType:"json",
 									data:{
-										date:getTodayDateStr(new Date())
+										date:obj.getAttribute('data')
 									},
 									success:function(data){					
 										document.getElementById("qiandaodays").innerHTML=data;
-										if(data==7){
-											mui.toast("恭喜您连续签到7天，收获"+sevenintegral+"积分！");
+										if(data%7==0){
+											$.ajax({
+									  			url:"../../test/QianDao/increaseIntegralByUidQid",
+									  			type:"post",
+												dataType:"json",
+												success:function(data){	
+													$.ajax({
+											  			url:"../../test/QianDao/findIntegralByQidUid",
+											  			type:"post",
+														dataType:"json",
+														success:function(data){	
+															document.getElementById("totalintegral").innerHTML=data;
+															mui.toast("恭喜您连续签到7天，收获"+sevenintegral+"积分！");
+														},
+														error:function(data){
+															alert(data.result);
+															//alert("error")
+														}
+											  		});
+												},
+												error:function(data){
+													alert(data.result);
+													//alert("error")
+												}
+									  		});
+											
+											
 										}
 									},
 									error:function(data){

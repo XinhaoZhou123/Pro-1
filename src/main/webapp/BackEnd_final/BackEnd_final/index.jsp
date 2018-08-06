@@ -125,6 +125,15 @@
 					  
 					</dl>
 				  </li>
+				  <li class="layui-nav-item">
+					<a href="javascript:;">优惠券管理</a>
+					<dl class="layui-nav-child">
+					  <dd>
+						<a href="<%=request.getContextPath() %>/BackEnd_final/BackEnd_final/coupon.jsp"  target="myFrame">&nbsp;优惠券管理</a>
+					  </dd>
+					  
+					</dl>
+				  </li>
 				</ul>
 			</div>
 
