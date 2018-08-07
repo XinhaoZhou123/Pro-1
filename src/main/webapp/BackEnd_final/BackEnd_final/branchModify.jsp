@@ -18,7 +18,7 @@
 				border-top-left-radius: 10px;
 				border-top-right-radius: 10px;
 			}
-			#allmap {width: 100%;height: 400px;margin:0;font-family:"微软雅黑"}
+			#l-map {width: 100%;height: 400px;margin:0;font-family:"微软雅黑"}
 			
 		</style>
 		<script type="text/javascript">
@@ -50,13 +50,12 @@
 								<div class="layui-card-header layui-colla-title">分部地址</div>
 								<div class="layui-card-body layui-colla-content layui-show" 
 									style="padding-left: 3%;">
-									<div class="layui-input-inline" style="padding-bottom: 10px;">
-									      <input type="tel" id="branch_address" class="layui-input" 
-									      	value="${address.address }">
-									      
-									</div><br />
-						         	<!-- 地图-->
-						         	<div id="allmap"></div>
+									
+						         		
+									      		<input type="text" id="suggestId" size="20" class="layui-input" value="${address.address }"/></div>
+									      	<div id="l-map"></div>
+	
+						         
 								</div>
 							</div>
 				      	</div>
@@ -81,6 +80,7 @@
 								<div class="layui-card-body layui-colla-content layui-show" 
 									style="text-align: left;">
 									<input class="layui-input" id="branch_tel" type="text" value="${address.tel }"/>
+									
 								</div>
 							</div>
 						</div>
@@ -108,35 +108,49 @@
 	</body>
 	<script type="text/javascript">
 			// 百度地图API功能
-			var map = new BMap.Map("allmap");    // 创建Map实例
-			var new_point = new BMap.Point(<%=request.getAttribute("longitude")%>,<%= request.getAttribute("latitude")%>);
-			map.centerAndZoom(new_point, 18);  // 初始化地图,设置中心点坐标和地图级别
-			//添加地图类型控件
+			function G(id) {
+				return document.getElementById(id);
+			}
+		
+			var map = new BMap.Map("l-map");
+		//	map.centerAndZoom("北京",12);                   // 初始化地图,设置城市和地图级别。
+		
+			var new_point = new BMap.Point(<%= request.getAttribute("longitude")%>,<%= request.getAttribute("latitude")%>);
+			map.centerAndZoom(new_point, 18);
+			
 			map.addControl(new BMap.MapTypeControl({
 				mapTypes:[
 		            BMAP_NORMAL_MAP,
 		            BMAP_HYBRID_MAP
 		        ]}));	  
-			map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+			map.setCurrentCity("沈阳");          // 设置地图显示的城市 此项是必须设置的
 			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 			var marker = new BMap.Marker(new_point);  // 创建标注
 			map.addOverlay(marker);              // 将标注添加到地图中
 			map.panTo(new_point); 
 			
-			var newlongitude = <%=request.getAttribute("longitude")%>;
-			var newlatitude = <%= request.getAttribute("latitude")%>;
+			var geoc = new BMap.Geocoder();
 			map.addEventListener("click",function(e){
 				alert(e.point.lng+","+e.point.lat);
-				newlongitude = e.point.lng;
-				newlatitude = e.point.lat;
-			})
-	</script>
+				longitude = e.point.lng;
+				latitude = e.point.lat;
+				var pt = e.point;
+				geoc.getLocation(pt,function(rs){
+					var addComp = rs.addressComponents;
+					document.getElementById("suggestId").setAttribute("value",addComp.province+""+addComp.city+""+addComp.district+""+addComp.street+""+addComp.streetNumber);
+				});
+			});
+		</script>	
+		<script>
+		console.log(document.getElementById("suggestId"));		
+	//	document.getElementById("suggestId").setAttribute('value','666');
+		</script>	
 	<script src="<%=request.getContextPath() %>/BackEnd_final/jquery-3.2.0.min.js"></script>
 	<script>
 		$("#saveBranchInfo").click(function(){
 			
 			var branch = $("#branch_branch").val();
-			var address = $("#branch_address").val();
+			var address = $("#suggestId").val();
 			var tel = $("#branch_tel").val();
 			//console.log(newlongitude);
 			
@@ -144,12 +158,12 @@
 				url:"Handler_updateBranchInfoByQidId",
 				type:"post",
 				data:{
-					id: <%= request.getAttribute("id")%>,
+					aid: <%= request.getAttribute("id")%>,
 					branch:branch,
 					address:address,
 					tel:tel,
-					longitude:newlongitude,
-					latitude: newlatitude
+					longitude:longitude,
+					latitude: latitude
 				},
 				dataType:"json",
 				success:function(data){
